@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NFT Grid Visualizer</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            height: 100vh;
+        }
+        #drawing-container {
+            
+            position: relative;
+        }
+        #sidebar {
+            width: 300px;
+            background-color: #f3f3f3;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .nft-info {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .remaining-nfts {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<body>
+    <div id="drawing-container"></div>
+    <div id="sidebar">
+        <h2>Minting Information</h2>
+        <p class="remaining-nfts">Remaining NFTs: </p>
+        <!-- Container for dynamically added minting info -->
+        <div id="mint-info-container"></div>
+    </div>    
+    <script src="tree.js"></script>
+</body>
+</html>
