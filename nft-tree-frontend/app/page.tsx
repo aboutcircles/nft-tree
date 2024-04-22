@@ -1,21 +1,26 @@
+"use client"; //TODO move down component tree
+
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
+import useDonations from "@/hooks/use-donations";
 
 function DonationBlock() {
   return (
-    <div className="w-full lg:p-4">
-      <p>Recent Donations</p>
+    <div className="w-full p-4">
+      <p className="mb-2">Recent Donations</p>
       <Donations />
-      <p>Top Donations</p>
+      <p className="mt-4 mb-2">Top Donations</p>
+      <Donations />
     </div>
   );
 }
 
 function NFTInfo() {
+  const { totalSupply } = useDonations();
   return (
     <div className="flex flex-col items-end lg:items-start">
       <p>NFTS MINTED</p>
-      <p>0/1000</p>
+      <p>{totalSupply}/1000</p>
       <div className="w-32 h-32 border-2"></div>
     </div>
   );
