@@ -1,10 +1,12 @@
+import Donations from "@/components/donations";
 import Tree from "@/components/tree";
 
 function DonationBlock() {
   return (
-    <div>
-      <p>Top Donations</p>
+    <div className="w-full lg:p-4">
       <p>Recent Donations</p>
+      <Donations />
+      <p>Top Donations</p>
     </div>
   );
 }
