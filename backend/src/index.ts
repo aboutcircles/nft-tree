@@ -8,7 +8,6 @@ const runTasks = async () => {
   try {
     await fetchData()
     await processTransfers()
-    console.log('Both fetchData and processTransfers have completed.');
   } catch (error) {
     console.error('An error occurred:', error);
   }

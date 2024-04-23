@@ -19,18 +19,20 @@ export async function fetchData(): Promise<void> {
     if (response.data && response.data.result) {
       response.data.result.forEach((transfer: any) => {
         const { transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber } = transfer;
-        const insertQuery = `
+        if (BigInt(amount) >= 4000000000000000n) {
+          const insertQuery = `
           INSERT INTO transfers (transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber)
           SELECT ?, ?, ?, ?, ?, ?
           WHERE NOT EXISTS (
             SELECT 1 FROM transfers WHERE transactionHash = ?
           )`;
-        db.run(insertQuery,
-          [transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber, transactionHash], (err) => {
-            if (err) {
-              console.error('Error inserting data into the database', err);
-            }
-          });
+          db.run(insertQuery,
+            [transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber, transactionHash], (err) => {
+              if (err) {
+                console.error('Error inserting new transfers data into the database', err);
+              }
+            });
+        }
       });
     }
   } catch (error) {
