@@ -1,5 +1,6 @@
 "use client"; //TODO move down component tree
 
+import Circles from "@/components/circles";
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
 import useDonations from "@/hooks/use-donations";
@@ -21,7 +22,7 @@ function NFTInfo() {
     <div className="flex flex-col items-end lg:items-start">
       <p>NFTS MINTED</p>
       <p>{totalSupply}/1000</p>
-      <div className="w-32 h-32 border-2"></div>
+      <div className="w-32 h-32 border-2"><Circles /></div>
     </div>
   );
 }
