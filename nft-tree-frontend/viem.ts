@@ -1,7 +1,7 @@
 import { createPublicClient, http } from 'viem'
-import { gnosisChiado } from 'viem/chains'
+import { gnosis, gnosisChiado } from 'viem/chains'
  
 export const publicClient = createPublicClient({ 
-  chain: gnosisChiado, 
-  transport: http("https://rpc.chiadochain.net"),
+  chain: gnosis, 
+  transport: http("https://rpc.gnosischain.com/"),
 }) 

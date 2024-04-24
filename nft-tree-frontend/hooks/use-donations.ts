@@ -1,7 +1,11 @@
 import circlesTreeABI from "@/utils/abis/CirclesTree";
 import { publicClient } from "@/viem";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Address } from "viem";
+
+const BLOCK_RANGE_SIZE = 50000;
+const SMART_CONTRACT_BLOCK = BigInt(33595668);
+const circlesTreeAddress = "0x564a69708A19F8e6842E2484b2de4fadEdA9b315";
 
 function useDonations() {
   const [totalSupply, setTotalSupply] = useState(0);
@@ -11,7 +15,7 @@ function useDonations() {
     async function fetchTotalSupply() {
       try {
         const result = await publicClient.readContract({
-          address: "0x992d9e030fF8187F950298f89Fb52745764bdEEF",
+          address: circlesTreeAddress,
           abi: circlesTreeABI,
           functionName: "totalSupply",
         });
@@ -24,9 +28,36 @@ function useDonations() {
     fetchTotalSupply();
   }, [donors]);
 
+  const fetchMints = useCallback(async () => {
+    const toBlock = await publicClient.getBlockNumber();
+    let fromBlock = SMART_CONTRACT_BLOCK;
+    let allEvents = [];
+
+    while (fromBlock <= toBlock) {
+      const nextBlock = fromBlock + BigInt(BLOCK_RANGE_SIZE) > toBlock ? toBlock : fromBlock + BigInt(BLOCK_RANGE_SIZE);
+      const events = await publicClient.getContractEvents({
+        abi: circlesTreeABI,
+        address: circlesTreeAddress,
+        eventName: "Transfer",
+        fromBlock: fromBlock,
+        toBlock: nextBlock,
+      });
+
+      allEvents.push(...events);
+      fromBlock = nextBlock + BigInt(1);
+    }
+
+    const newDonors = allEvents.map((event) => event.args.to).filter((to) => to !== undefined) as Address[];
+    setDonors(newDonors);
+  }, []);
+
+  useEffect(() => {
+    fetchMints();
+  }, [fetchMints]);
+
   useEffect(() => {
     const unwatch = publicClient.watchContractEvent({
-      address: "0x992d9e030fF8187F950298f89Fb52745764bdEEF",
+      address: circlesTreeAddress,
       abi: circlesTreeABI,
       eventName: "Transfer",
       pollingInterval: 2000,

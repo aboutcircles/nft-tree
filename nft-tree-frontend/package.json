@@ -9,15 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@splinetool/loader": "^1.1.5",
+    "@splinetool/react-spline": "^2.2.6",
+    "@splinetool/runtime": "^1.1.5",
     "next": "14.2.1",
     "react": "^18",
     "react-dom": "^18",
+    "three": "^0.163.0",
     "viem": "^2.9.20"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/three": "^0.163.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.1",
     "postcss": "^8",
