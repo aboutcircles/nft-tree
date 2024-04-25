@@ -10,8 +10,6 @@ function DonationBlock() {
     <div className="w-full p-4">
       <p className="mb-2">Recent Donations</p>
       <Donations />
-      <p className="mt-4 mb-2">Top Donations</p>
-      <Donations />
     </div>
   );
 }
