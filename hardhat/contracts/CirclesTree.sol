@@ -14,11 +14,18 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Strings for uint256;
     uint256 private _tokenIdCounter;
 
+    //enable start and end time
+    // uint256 public startTime;
+    // uint256 public endTime;
+
     constructor(address initialOwner)
 
         ERC721("CirclesTree", "CTR")
         Ownable(initialOwner)
-    { _tokenIdCounter = 1;} // Start token ID from 1
+       { _tokenIdCounter = 1;} // Start token ID from 1
+       //     startTime = _startTime;
+       //     endTime = _endTime;
+
 
     function generateSVG(uint256 tokenId) public pure returns (string memory) {
     bytes memory svg = abi.encodePacked(
@@ -69,6 +76,7 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         _tokenIdCounter += 1;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, getTokenURI(tokenId));
+        // require(block.timestamp >= startTime && block.timestamp <= endTime, "Contract is not available at the moment");
     }
 
     function transferFrom(
