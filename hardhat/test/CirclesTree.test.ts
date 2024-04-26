@@ -3,7 +3,7 @@ import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import hre from "hardhat";
 
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 describe("Circles Tree NFT collection", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -16,7 +16,7 @@ describe("Circles Tree NFT collection", function () {
     const NFT = await hre.ethers.getContractFactory("CirclesTree");
     const nft = await NFT.deploy(owner);
 
-    await nft.connect(owner).safeMint(account1)
+    await nft.connect(owner).safeMint(account1);
 
     return { nft, deployer, owner, account1, account2 };
   }
@@ -37,20 +37,20 @@ describe("Circles Tree NFT collection", function () {
 
     it("Token id autoincrements", async function () {
       const { nft, owner, account1 } = await loadFixture(deploy);
-      expect(await nft.balanceOf(account1)).to.equal(1);
-      expect(await nft.ownerOf(0)).to.equal(account1);
 
-      await nft.connect(owner).safeMint(account1)
-      expect(await nft.balanceOf(account1)).to.equal(2);
+      expect(await nft.balanceOf(account1)).to.equal(1);
       expect(await nft.ownerOf(1)).to.equal(account1);
+
+      await nft.connect(owner).safeMint(account1);
+      expect(await nft.balanceOf(account1)).to.equal(2);
+      expect(await nft.ownerOf(2)).to.equal(account1);
     });
 
     it("Only owner can mint", async function () {
       const { nft, account1, account2 } = await loadFixture(deploy);
 
-      await expect(nft.connect(account1).safeMint(account2)).to.be.reverted
+      await expect(nft.connect(account1).safeMint(account2)).to.be.reverted;
     });
-
   });
 
   describe("Transfers", function () {
@@ -58,9 +58,9 @@ describe("Circles Tree NFT collection", function () {
       it("Should revert", async function () {
         const { nft, account1, account2 } = await loadFixture(deploy);
 
-        await expect(nft.connect(account1).transferFrom(account1, account2, 0)).to.be.revertedWith(
-          "Transfers are disabled."
-        );
+        await expect(
+          nft.connect(account1).transferFrom(account1, account2, 0)
+        ).to.be.revertedWith("Transfers are disabled.");
       });
     });
 
@@ -70,7 +70,7 @@ describe("Circles Tree NFT collection", function () {
 
         await expect(nft.connect(owner).safeMint(account1))
           .to.emit(nft, "Transfer")
-          .withArgs(ZERO_ADDRESS, account1, "1");
+          .withArgs(ZERO_ADDRESS, account1, "2");
       });
     });
   });
