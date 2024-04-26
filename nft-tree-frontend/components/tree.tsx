@@ -11,8 +11,6 @@ export type Node = {
   id: Address;
   level: number;
   children: Set<Address>;
-  x: number;
-  y: number;
 };
 
 export default function Tree() {
@@ -69,17 +67,7 @@ export default function Tree() {
       }
     }
 
-    p5.setup = () => {
-      p5.createCanvas(550, 900); //TODO find a way to resize responsively the canva
-      p5.smooth();
-      const rootNode = nodes.find((n) => n.id === treasuryAddress);
-      if (rootNode) {
-        paths = Array.from(rootNode.children).map((childAddress) => new Pathfinder(childAddress));
-      }
-    };
-
-    p5.draw = () => {
-      // p5.background(0);
+    function drawTree() {
       if (paths) {
         paths.forEach((path, index) => {
           path.draw();
@@ -94,6 +82,20 @@ export default function Tree() {
           }
         });
       }
+    }
+
+    p5.setup = () => {
+      p5.createCanvas(350, 600); //TODO find a way to resize responsively the canva
+      p5.smooth();
+      const rootNode = nodes.find((n) => n.id === treasuryAddress);
+      if (rootNode) {
+        paths = Array.from(rootNode.children).map((childAddress) => new Pathfinder(childAddress));
+      }
+    };
+
+    p5.draw = () => {
+      // p5.background(0, 30);
+      drawTree();
     };
   };
 

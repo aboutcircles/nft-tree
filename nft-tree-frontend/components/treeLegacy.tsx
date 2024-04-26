@@ -152,7 +152,7 @@ export default function TreeLegacy() {
 
   async function loadData() {
     const data = await fetchFilesData();
-    setNodes(data);
+    // setNodes(data);
     console.log(data);
   }
 
