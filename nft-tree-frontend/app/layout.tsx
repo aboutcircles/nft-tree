@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const space_grotesk = Space_Grotesk({ subsets: ["latin"] });
+const space_mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
   title: "Circles Tree NFT",
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={space_grotesk.className}>
+      <body className={space_mono.className}>
         <div className="bg-black w-full h-full">{children} </div>
       </body>
     </html>
