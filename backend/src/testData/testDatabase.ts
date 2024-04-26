@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-const db = new sqlite3.Database("./transfers.db", (err) => {
+const db = new sqlite3.Database("./test.db", (err) => {
   if (err) {
     console.error("Error opening database", err);
   } else {
@@ -32,7 +32,8 @@ const db = new sqlite3.Database("./transfers.db", (err) => {
     db.run(
       `
       CREATE TABLE IF NOT EXISTS treeData (
-        nftId TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nftId TEXT,
         address TEXT,
         username TEXT,
         imageUrl TEXT,
