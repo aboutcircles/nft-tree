@@ -4,7 +4,7 @@ import axios from "axios";
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 function useTreeData() {
-  const { data, error, mutate } = useSWR("/api/tree-data", fetcher);
+  const { data, error, mutate } = useSWR(["/api/tree-data", id], fetcher);
 
   // Function to refresh data
   const refreshData = async () => {
