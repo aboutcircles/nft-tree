@@ -7,10 +7,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start-server": "node dist/server.js",
-    "dev": "node --loader ts-node/esm src/index.ts",
+    "dev-processes": "node --loader ts-node/esm src/processes/index.ts",
     "dev-server": "node --loader ts-node/esm src/server.ts",
     "db": "node --loader ts-node/esm src/testData/logTablesData.ts",
-    "fill-test-db": "node --loader ts-node/esm src/testData/fillTestData.ts"
+    "fill-test-db": "node --loader ts-node/esm src/testData/fillTestData.ts",
+    "dev": "npm run dev-processes & npm run dev-server"
   },
   "keywords": [],
   "author": "",

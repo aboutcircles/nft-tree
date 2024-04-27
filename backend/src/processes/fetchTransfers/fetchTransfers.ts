@@ -1,16 +1,13 @@
 import axios from "axios";
-import db from "./database.js";
+import db from "../../database.js";
 import { ethers } from "ethers";
 import { crcToTc } from "@circles/timecircles";
 
 const getNftAmount = (crcAmountInWei: string, timestamp: string) => {
   const crcAmount = Number(ethers.formatEther(crcAmountInWei.toString()));
   const tcAmount = crcToTc(Number(timestamp) * 1000, crcAmount);
-  console.log("tcAmount", tcAmount);
 
   const nftAmount = Math.trunc(tcAmount / Number(process.env.NFT_COST_CRC));
-
-  console.log(`nftAmount: ${nftAmount}`);
 
   if (nftAmount < 3) {
     return nftAmount;
