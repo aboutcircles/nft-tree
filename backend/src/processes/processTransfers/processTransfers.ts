@@ -1,4 +1,4 @@
-import db from "./database.js";
+import db from "../../database.js";
 import { mintNfts } from "./mintNfts.js";
 
 export async function processTransfers(): Promise<void> {
