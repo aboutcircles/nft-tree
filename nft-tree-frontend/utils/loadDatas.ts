@@ -4,8 +4,6 @@ import { Address } from "viem";
 type Transfer = {
   from: Address;
   to: Address;
-  tokenOwner: string;
-  value: string;
 };
 
 export async function loadAllData(fileNames: string[]) {
@@ -24,10 +22,10 @@ export function consolidateTransfers(transfers: Transfer[]): Node[] {
 
   transfers.forEach(({ from, to }) => {
     if (!nodesMap.has(from)) {
-      nodesMap.set(from, { id: from, children: new Set(), level: -1, x: 0, y: 0 });
+      nodesMap.set(from, { id: from, children: new Set(), level: -1});
     }
     if (!nodesMap.has(to)) {
-      nodesMap.set(to, { id: to, children: new Set(), level: -1, x: 0, y: 0 });
+      nodesMap.set(to, { id: to, children: new Set(), level: -1});
     }
 
     nodesMap.get(to)?.children.add(from);

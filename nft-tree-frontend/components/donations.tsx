@@ -1,16 +1,23 @@
-"use client";
-
+import { Address } from "viem";
 import Donation from "./donation";
-import useDonations from "@/hooks/use-donations";
 
-export default function Donations() {
-  const { donors } = useDonations();
+interface DonationsProps {
+  donors: Address[];
+}
+
+export default function Donations({ donors }: DonationsProps) {
+  // const { donors } = useDonations();
 
   return (
-    <div className="w-full flex gap-x-1 lg:flex-col text-xs">
-      {donors.map((donor, index) => (
-        <Donation key={index} address={donor} />
-      ))}
+    <div className="w-full lg:p-4">
+      <p className="mb-2">Recent Donations</p>
+      <div className="w-full flex gap-x-1 lg:flex-col text-xs">
+        {donors.slice(0, 10).map((donor, index) => (
+          <div className={`${index >= 3 ? 'hidden sm:block' : ''}`}>
+            <Donation key={index} address={donor} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
