@@ -4,7 +4,7 @@ const app = express();
 const PORT = 8000;
 
 const db = new sqlite3.Database(
-  "./test.db",
+  "./transfers.db",
   sqlite3.OPEN_READONLY,
   (err: Error | null) => {
     if (err) {
