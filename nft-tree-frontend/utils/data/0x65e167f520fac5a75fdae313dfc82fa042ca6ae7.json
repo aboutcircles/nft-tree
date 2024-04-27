@@ -1,0 +1,37 @@
+{
+  "requestedAmount": "100000000000000000000",
+  "flow": "100000000000000000000",
+  "transfers": [
+    {
+      "from": "0x65e167F520faC5A75fDaE313Dfc82fa042ca6aE7",
+      "to": "0x17Ab642CDD69a6B5ee86108dB227D57b52DEF7B3",
+      "tokenOwner": "0x65e167F520faC5A75fDaE313Dfc82fa042ca6aE7",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x17Ab642CDD69a6B5ee86108dB227D57b52DEF7B3",
+      "to": "0x865d4372497265bf6E9a692A81F0Bb4724A3F4E4",
+      "tokenOwner": "0x17Ab642CDD69a6B5ee86108dB227D57b52DEF7B3",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x865d4372497265bf6E9a692A81F0Bb4724A3F4E4",
+      "to": "0x5756634907559Ae331FE8547b75E44a192Ca53B6",
+      "tokenOwner": "0x865d4372497265bf6E9a692A81F0Bb4724A3F4E4",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x5756634907559Ae331FE8547b75E44a192Ca53B6",
+      "to": "0x2cbcCa2d1Df0073C73de414D735cA7a138938785",
+      "tokenOwner": "0x5756634907559Ae331FE8547b75E44a192Ca53B6",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x2cbcCa2d1Df0073C73de414D735cA7a138938785",
+      "to": "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811",
+      "tokenOwner": "0x2cbcCa2d1Df0073C73de414D735cA7a138938785",
+      "value": "100000000000000000000"
+    }
+  ],
+  "isValid": true
+}
