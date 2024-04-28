@@ -3,9 +3,11 @@ import sqlite3 from "sqlite3";
 const app = express();
 const PORT = 8000;
 
+import { spawn } from "child_process";
+
 const db = new sqlite3.Database(
   "./transfers.db",
-  sqlite3.OPEN_READONLY,
+  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
   (err: Error | null) => {
     if (err) {
       console.error("Error opening database", err);
@@ -13,7 +15,19 @@ const db = new sqlite3.Database(
   }
 );
 
+// Start the background task as a separate process
+const background = spawn("node", ["dist/processes/index.js"]);
+
+background.stdout.on("data", (data: Buffer) => {
+  console.log(`Minting task says: ${data.toString()}`);
+});
+
+background.stderr.on("data", (data: Buffer) => {
+  console.error(`Minting task had an error: ${data}`);
+});
+
 app.get("/tree-data", (req: Request, res: Response) => {
+  console.log("🟢 GET /tree-data");
   const lastFetchedId = req.query.id || 0;
   db.all(
     "SELECT * FROM treeData WHERE id > ?",
