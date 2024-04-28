@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-const db = new sqlite3.Database("./transfers.db", (err) => {
+const db = new sqlite3.Database("./test.db", (err) => {
   if (err) {
     console.error("Error opening database", err);
   } else {
