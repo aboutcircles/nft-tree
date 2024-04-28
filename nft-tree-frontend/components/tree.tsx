@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+"use client";
+
 import { type Sketch } from "@p5-wrapper/react";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Address } from "viem";
-import { fetchFilesData } from "@/actions/fetchDatas";
 import p5 from "p5";
+
+interface TreeProps {
+  nodes: Node[];
+}
 
 export const treasuryAddress = "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
 
@@ -13,8 +17,8 @@ export type Node = {
   children: Set<Address>;
 };
 
-export default function Tree() {
-  const [nodes, setNodes] = useState<Node[]>([]);
+export default function Tree({nodes}: TreeProps) {
+  // const [nodes, setNodes] = useState<Node[]>([]);
 
   const sketch: Sketch = (p5) => {
     let paths: Pathfinder[];
@@ -99,14 +103,13 @@ export default function Tree() {
     };
   };
 
-  async function loadData() {
-    const data = await fetchFilesData();
-    setNodes(data);
-    console.log(data);
-  }
+  // async function loadData() {
+  //   const data = await fetchFilesData();
+  //   setNodes(data);
+  // }
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
   return <NextReactP5Wrapper sketch={sketch} />;
 }

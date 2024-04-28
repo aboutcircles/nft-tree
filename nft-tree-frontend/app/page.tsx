@@ -1,39 +1,16 @@
-"use client"; //TODO move down component tree
-
-import Circles from "@/components/circles";
+import { fetchServerData } from "@/actions/fetchDatas";
+import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
-import useDonations from "@/hooks/use-donations";
 import Image from "next/image";
 
-function DonationBlock() {
-  return (
-    <div className="w-full lg:p-4">
-      <p className="mb-2">Recent Donations</p>
-      <Donations />
-    </div>
-  );
-}
-
-function NFTInfo() {
-  const { totalSupply } = useDonations();
-  return (
-    <div className="flex flex-col items-end lg:items-start">
-      <p className="text-sm lg:text-2xl">NFTS MINTED</p>
-      <p className="text-lg lg:text-4xl">{totalSupply}/1000</p>
-      <div className="w-28 h-28 lg:w-44 lg:h-44 border-2 mt-2">
-        <Circles />
-      </div>
-    </div>
-  );
-}
-
-export default function Home() {
+export default async function Home() {
+  const { consolidateTransfer, donors, supply } = await fetchServerData();
   return (
     <main className="flex h-screen flex-col items-center lg:flex-row">
       <div className="h-full w-full flex flex-col p-4 relative lg:justify-between">
         <div className="hidden lg:flex flex-col">
-          <NFTInfo />
+          <CirclesInfo supply={supply} />
         </div>
         <div className="w-full hidden lg:flex p-4">
           <div className="w-1/4">
@@ -52,20 +29,20 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-col lg:hidden">
-          <DonationBlock />
+          <Donations donors={donors} />
         </div>
         <div className="h-full flex flex-col justify-end lg:hidden">
-          <Tree />
+          <Tree nodes={consolidateTransfer} />
         </div>
         <div className="z-10 absolute bottom-4 right-4 flex lg:hidden">
-          <NFTInfo />
+          <CirclesInfo supply={supply} />
         </div>
       </div>
       <div className="hidden h-full w-full lg:flex">
         <div className="h-full flex flex-col justify-end">
-          <Tree />
+          <Tree nodes={consolidateTransfer} />
         </div>
-        <DonationBlock />
+        <Donations donors={donors} />
       </div>
       <div className="w-full flex border-t-2 p-4 lg:hidden">
         <div className="w-2/6">
