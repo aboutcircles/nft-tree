@@ -1,8 +1,48 @@
 import { ethers } from "ethers";
+
 import db from "../../database.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
 
-const erc721ABI = ["function safeMint(address to) external"];
+const erc721ABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "safeMint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "Transfer",
+    type: "event",
+  },
+];
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || "", provider);
 const contract = new ethers.Contract(
@@ -33,11 +73,13 @@ export async function mintNfts(transfer: Transfer) {
   if (toMint === 0) return;
   let minted = 0;
 
+  const transferId = transfer.transactionHash.slice(-5);
+
   try {
-    // Update the database to mark the transfer as processed
-    db.run("UPDATE transfers SET processed = 1 WHERE transactionHash = ?", [
-      transfer.transactionHash,
-    ]);
+    // // Update the database to mark the transfer as processed
+    // db.run("UPDATE transfers SET processed = 1 WHERE transactionHash = ?", [
+    //   transfer.transactionHash,
+    // ]);
 
     const steps = await getTransferSteps(
       transfer.transactionHash,
@@ -46,79 +88,68 @@ export async function mintNfts(transfer: Transfer) {
     const checksumAddress = ethers.getAddress(transfer.fromAddress);
     const senderData = await getUserData(checksumAddress);
 
-    let currentNonce = await provider.getTransactionCount(
-      wallet.address,
-      "pending"
-    );
-
     for (let i = 0; i < toMint; i++) {
-      currentNonce++;
-
-      const gasPrice =
-        ((await provider.getFeeData()).gasPrice ||
-          ethers.parseUnits("4", "gwei")) +
-        ethers.parseUnits(String(i), "gwei");
-
-      const estimatedGasLimit = await contract.safeMint.estimateGas(
-        checksumAddress,
-        {
-          nonce: currentNonce,
-          gasPrice: gasPrice,
-        }
-      );
-      const adjustedGasLimit = estimatedGasLimit + BigInt(1000 * i);
-
       try {
+        const currentNonce = await provider.getTransactionCount(
+          wallet.address,
+          "pending"
+        );
+
+        // console.log(`   ${transferId} nonce: ${currentNonce}`);
         const tx = await contract.safeMint(checksumAddress, {
           nonce: currentNonce,
-          gasPrice: gasPrice,
-          gasLimit: adjustedGasLimit,
         });
 
-        console.log("   MINTING STARTED, WAITING FOR RECEIPT");
-        console.log("   Transaction Hash:", tx.hash);
-
-        // Handling the case where the receipt might never come
-        const receipt = await Promise.race([
-          tx.wait(),
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Receipt timeout")), 30000)
-          ),
-        ]);
-
-        const transferEvent = receipt.events?.find(
-          (event: TransferEvent) => event.event === "Transfer"
+        console.log(
+          `   ${transferId} ${
+            i + 1
+          } of ${toMint} minting started, waiting for receipt`
         );
-        const tokenId = transferEvent?.args?.tokenId;
-        // const tokenId = "108";
+        console.log(`   ${transferId} Minting tx hash: ${tx.hash}`);
 
-        console.log("   Token minted successfully with ID:", tokenId);
-        minted++;
+        const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for 5 confirmations or 30 seconds
+        if (!txReceipt) {
+          console.log(
+            `   ${transferId} Transaction ${tx.hash} is not confirmed...`
+          );
+          throw new Error("Transaction not confirmed");
+        } else {
+          console.log(
+            `   ${transferId} Transaction ${tx.hash} confirmed in block ${txReceipt.blockNumber}`
+          );
 
-        const sql = `
+          const parsedLog = contract.interface.parseLog(txReceipt.logs[0]);
+          const tokenId = parsedLog?.args.tokenId.toString();
+
+          console.log(
+            `   ${transferId} Token minted successfully with ID: ${tokenId}`
+          );
+          minted++;
+
+          const sql = `
           INSERT INTO treeData (nftId, address, username, imageUrl, steps)
           VALUES (?, ?, ?, ?, ?)`;
-        db.run(sql, [
-          tokenId,
-          checksumAddress,
-          senderData.username,
-          senderData.avatarUrl,
-          JSON.stringify(steps),
-        ]);
+          db.run(sql, [
+            tokenId,
+            checksumAddress,
+            senderData.username,
+            senderData.avatarUrl,
+            JSON.stringify(steps),
+          ]);
 
-        console.log(
-          `   Successfully inserted token ID ${tokenId} into the database.`
-        );
+          // console.log(
+          //   `   ${transferId} Successfully inserted token ID ${tokenId} into the database.`
+          // );
+        }
       } catch (error) {
-        console.error("   ERROR MINTING TOKEN TO", checksumAddress);
+        console.error(
+          `   ${transferId} ERROR MINTING TOKEN ${
+            i + 1
+          } of ${toMint} to ${checksumAddress}`
+        );
         console.error(error);
       }
     }
-
-    console.log(`   RESULT`, minted);
-    console.log("processed", minted === toMint);
-    console.log("nftMinted", transfer.nftMinted + minted);
-    console.log("toMint", transfer.nftAmount);
 
     db.run(
       "UPDATE transfers SET processed = ?, nftMinted = ? WHERE transactionHash = ?",
@@ -129,7 +160,9 @@ export async function mintNfts(transfer: Transfer) {
       ]
     );
   } catch (error) {
-    console.error(`   ERROR MINTING TOKENS TO ${transfer.fromAddress}`);
+    console.error(
+      `   ${transferId} ERROR MINTING TOKENS TO ${transfer.fromAddress}`
+    );
     console.error(error);
   }
 }
