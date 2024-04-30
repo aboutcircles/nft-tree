@@ -8,7 +8,7 @@ import { Address } from "viem";
 type TreeData = {
   id: number;
   nftId: string;
-  address: string;
+  address: Address;
   username: string;
   imageUrl: string;
   steps: string;
@@ -18,6 +18,12 @@ type TreeData = {
 type Transfer = {
   from: Address;
   to: Address;
+};
+
+export type Donor = {
+  address: Address;
+  imageUrl: string;
+  username: string;
 };
 
 export async function fetchFilesData() {
@@ -33,17 +39,21 @@ export async function fetchFilesData() {
 }
 
 export async function fetchServerData() {
-  const res = await fetch("https://tree-server-test-2.onrender.com/tree-data");
+  const res = await fetch("https://tree-server-test.onrender.com/tree-test");
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
 
   const dataArray: TreeData[] = await res.json();
+  console.log(dataArray);
 
-  const donors: Address[] = dataArray.map(item => {
-    const steps = JSON.parse(item.steps) as Transfer[];
-    return steps[0].from;
+  const donors: Donor[] = dataArray.map((item) => {
+    return {
+      address: item.address,
+      imageUrl: item.imageUrl,
+      username: item.username,
+    };
   });
 
   const transfers: Transfer[] = dataArray.reduce((acc, item) => {
