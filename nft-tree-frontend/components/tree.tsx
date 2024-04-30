@@ -4,6 +4,7 @@ import { type Sketch } from "@p5-wrapper/react";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Address } from "viem";
 import p5 from "p5";
+import { useEffect, useState } from "react";
 
 interface TreeProps {
   nodes: Node[];
@@ -18,7 +19,30 @@ export type Node = {
 };
 
 export default function Tree({nodes}: TreeProps) {
-  // const [nodes, setNodes] = useState<Node[]>([]);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const canvaWrapper = document.getElementById('CanvaWrapper');
+    if (canvaWrapper) {
+      console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
+      setDimensions({
+        width: canvaWrapper.offsetWidth,
+        height: canvaWrapper.offsetHeight
+      });
+    }
+
+    const handleResize = () => {
+      setDimensions({
+        width: canvaWrapper?.offsetWidth || 0,
+        height: canvaWrapper?.offsetHeight || 0
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const sketch: Sketch = (p5) => {
     let paths: Pathfinder[];
@@ -89,7 +113,7 @@ export default function Tree({nodes}: TreeProps) {
     }
 
     p5.setup = () => {
-      p5.createCanvas(350, 600); //TODO find a way to resize responsively the canva
+      p5.createCanvas(dimensions.width, dimensions.height); //TODO find a way to resize responsively the canva
       p5.smooth();
       const rootNode = nodes.find((n) => n.id === treasuryAddress);
       if (rootNode) {
@@ -103,13 +127,5 @@ export default function Tree({nodes}: TreeProps) {
     };
   };
 
-  // async function loadData() {
-  //   const data = await fetchFilesData();
-  //   setNodes(data);
-  // }
-
-  // useEffect(() => {
-  //   loadData();
-  // }, []);
-  return <NextReactP5Wrapper sketch={sketch} />;
+  return <div className="w-full h-full" id="CanvaWrapper"><NextReactP5Wrapper sketch={sketch} /></div>;
 }
