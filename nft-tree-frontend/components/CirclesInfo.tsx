@@ -1,4 +1,3 @@
-
 import Circles from "./circles";
 
 interface CirclesInfoProps {
@@ -6,7 +5,6 @@ interface CirclesInfoProps {
 }
 
 export default function CirclesInfo({ supply }: CirclesInfoProps) {
-  // const { totalSupply } = useDonations();
   return (
     <div className="flex flex-col items-end lg:items-start">
       <p className="text-sm lg:text-2xl">NFTS MINTED</p>
