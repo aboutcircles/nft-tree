@@ -26,7 +26,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col landscape:hidden">
+        <div className="w-full flex flex-col landscape:hidden">
           <Donations donors={donors} />
         </div>
         <div className="h-full flex flex-col justify-end landscape:hidden">
