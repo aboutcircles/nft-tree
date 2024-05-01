@@ -1,4 +1,3 @@
-import { Address } from "viem";
 import Donation from "./donation";
 import { Donor } from "@/actions/fetchDatas";
 
@@ -8,7 +7,7 @@ interface DonationsProps {
 
 export default function Donations({ donors }: DonationsProps) {
   return (
-    <div className="w-full max-w-52 lg:p-4">
+    <div className="w-full max-w-60 lg:p-4">
       <p className="mb-2">Recent Donations</p>
       <div className="w-full flex gap-x-1 lg:flex-col text-xs">
         {donors.slice(0, 10).map((donor, index) => (
