@@ -1,13 +1,11 @@
 import axios from "axios";
 import db from "../../database.js";
-import { ethers } from "ethers";
-import { crcToTc } from "@circles/timecircles";
 import { mintNfts } from "../processTransfers/mintNfts.js";
+import convertToHumanCrc from "../../utils/convertToHumanCrc.js";
+// import { ethers } from "ethers";
 
 const getNftAmount = (crcAmountInWei: string, timestamp: string) => {
-  const crcAmount = Number(ethers.formatEther(crcAmountInWei.toString()));
-  const tcAmount = crcToTc(Number(timestamp) * 1000, crcAmount);
-
+  const tcAmount = convertToHumanCrc(crcAmountInWei, timestamp);
   const nftAmount = Math.trunc(tcAmount / Number(process.env.NFT_COST_CRC));
 
   if (nftAmount < 3) {
@@ -25,6 +23,30 @@ const checkIfTransferExists = (transactionHash: string): Promise<boolean> => {
         reject(err);
       } else {
         resolve(row ? true : false); // If row is found, return true, otherwise false
+      }
+    });
+  });
+};
+
+interface TransferRow {
+  nftAmount: number | null;
+}
+
+const getTotalNftAmountForAddress = async (
+  fromAddress: string
+): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT * FROM transfers WHERE fromAddress = ?`;
+    db.all(query, [fromAddress], (err, rows: TransferRow[]) => {
+      if (err) {
+        console.error("Error fetching NFT amounts", err);
+        reject(err);
+      } else {
+        let totalNftAmount = 0;
+        rows.forEach((row) => {
+          totalNftAmount += row.nftAmount || 0;
+        });
+        resolve(totalNftAmount);
       }
     });
   });
@@ -120,19 +142,25 @@ export async function fetchTransfers(): Promise<void> {
         } = transfer;
 
         const transferExists = await checkIfTransferExists(transactionHash);
-        if (transferExists) continue;
+        if (transferExists) continue; // already processed
 
         const transferId = transactionHash.slice(-5);
 
-        console.log("✨✨✨🚀");
-        console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
-
-        const nftAmount = getNftAmount(amount, timestamp);
-
-        // TODO check if total nft amount for address not more than 3
-        // and maybe save info about donations not eligible for NFT minting
+        const nftAmountFromTransfer = getNftAmount(amount, timestamp);
+        const nftAlreadyMinted = await getTotalNftAmountForAddress(fromAddress);
+        // max 3 NFTs per address
+        const maxNftsPerAddress = 3;
+        const remainingNftQuota = maxNftsPerAddress - nftAlreadyMinted;
+        const nftAmount = Math.min(
+          nftAmountFromTransfer,
+          remainingNftQuota,
+          maxNftsPerAddress
+        );
 
         if (nftAmount > 0) {
+          console.log("✨✨✨🚀");
+          console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
+
           const insertQuery = `
           INSERT INTO transfers (transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber, processed, nftAmount, nftMinted)
           SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
@@ -162,21 +190,21 @@ export async function fetchTransfers(): Promise<void> {
               }
             }
           );
-        }
 
-        console.log(`   ${transferId} NFT amount: ${nftAmount}`);
-        try {
-          await mintNfts({
-            transactionHash,
-            fromAddress,
-            amount,
-            nftAmount,
-            nftMinted: 0,
-          });
-          console.log(`${transferId} - FINISH`);
-        } catch (error) {
-          console.log(`${transferId} ERROR PROCESSING TRANSFER`);
-          console.log(error);
+          // console.log(`   ${transferId} NFT amount: ${nftAmount}`);
+          try {
+            await mintNfts({
+              transactionHash,
+              fromAddress,
+              amount,
+              nftAmount,
+              nftMinted: 0,
+              timestamp,
+            });
+          } catch (error) {
+            console.log(`${transferId} ERROR PROCESSING TRANSFER`);
+            console.log(error);
+          }
         }
       }
     }
