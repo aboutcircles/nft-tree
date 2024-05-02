@@ -106,9 +106,9 @@ export default function Home() {
 export default async function Home() {
   const { consolidateTransfer, donors, supply } = await fetchServerData();
   return (
-    <main className="flex h-screen flex-col justify-between items-center">
+    <main className="flex h-screen w-full flex-col justify-between items-center">
       <div></div>
-      <div>
+      <div className="w-full">
         <div className="w-full flex border-t-2 p-4 landscape:hidden">
 >>>>>>> 3d415f1 (feat: add gallery button on main page)
           <div className="min-w-24 min-h-24 border-2 p-2">
