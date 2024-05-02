@@ -9,6 +9,7 @@ interface Transfer {
   amount: string;
   nftAmount: number;
   nftMinted: number;
+  timestamp: string;
 }
 
 export async function processTransfers(): Promise<void> {

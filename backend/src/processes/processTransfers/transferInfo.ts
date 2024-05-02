@@ -1,5 +1,4 @@
 import axios from "axios";
-// import { ethers } from "ethers";
 
 export async function getTransferSteps(
   transactionHash: string,

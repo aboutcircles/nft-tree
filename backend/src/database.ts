@@ -33,7 +33,8 @@ const db = new sqlite3.Database("./transfers.db", (err) => {
       `
       CREATE TABLE IF NOT EXISTS treeData (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nftId TEXT,
+        nftIds TEXT,
+        crcAmount TEXT,
         address TEXT,
         username TEXT,
         imageUrl TEXT,
