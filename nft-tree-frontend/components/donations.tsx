@@ -12,11 +12,11 @@ export default function Donations({ donors }: DonationsProps) {
     <div className="w-full flex flex-col landscape:max-w-60 landscape:p-4">
       <Link className="w-full flex items-center mb-2" href={"/dashboard"}>
         Recent Donations
-        <ArrowRightIcon width={20} height={20} className="ml-2" />
+        <ArrowRightIcon width={20} height={20} className="ml-1" />
       </Link>
       <div className="w-full flex gap-x-1 landscape:flex-col text-xs">
         {donors.slice(0, 10).map((donor, index) => (
-          <div key={index} className={`${index >= 3 ? "hidden landscape:block" : ""}`}>
+          <div key={index} className={`${index >= 2 ? "w-full hidden landscape:block" : ""}`}>
             <Donation key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} />
           </div>
         ))}
