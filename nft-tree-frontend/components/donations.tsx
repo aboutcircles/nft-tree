@@ -9,7 +9,7 @@ interface DonationsProps {
 
 export default function Donations({ donors }: DonationsProps) {
   return (
-    <div className="w-full flex flex-col landscape:max-w-60 landscape:p-4">
+    <div className="w-full flex flex-col landscape:min-w-60 landscape:p-4">
       <Link className="w-full flex items-center mb-2" href={"/dashboard"}>
         Recent Donations
         <ArrowRightIcon width={20} height={20} className="ml-1" />
