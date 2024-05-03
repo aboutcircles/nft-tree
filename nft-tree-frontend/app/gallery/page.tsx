@@ -7,9 +7,9 @@ import Link from "next/link";
 export default async function Home() {
   const { consolidateTransfer, donors, supply } = await fetchServerData();
   return (
-    <main className="flex h-screen w-full flex-col justify-between items-center">
-      GALLERY
-      <div className="w-full p-4 grid grid-cols-3 gap-2 lg:gap-4">
+    <main className="flex h-screen w-full flex-col justify-between items-center ">
+      <div className="w-full flex py-2 px-4 landscape:px-16">GALLERY</div>
+      <div className="w-full p-4 landscape:px-16 grid grid-cols-3 landscape:grid-cols-5 gap-4">
         {donors.map((donor, index) => (
           <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} />
         ))}
