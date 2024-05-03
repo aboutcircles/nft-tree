@@ -5,15 +5,42 @@ const PORT = 8000;
 
 import { spawn } from "child_process";
 
-const db = new sqlite3.Database(
-  "./transfers.db",
-  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-  (err: Error | null) => {
-    if (err) {
-      console.error("Error opening database", err);
-    }
+import { db, initializeDatabase } from "./database.js";
+
+(async () => {
+  try {
+    await initializeDatabase();
+    console.log("Database initialized successfully.");
+    // Start your server here or perform other database operations
+
+    // Start the background task as a separate process
+    const background = spawn("node", ["dist/processTransfers/index.js"]);
+
+    background.stdout.on("data", (data: Buffer) => {
+      console.log(`Minting task says: ${data.toString()}`);
+    });
+
+    background.stderr.on("data", (data: Buffer) => {
+      console.error(`Minting task had an error: ${data}`);
+    });
+
+    background.on("close", (code: number) => {
+      console.log(`Minting task exited with code: ${code}`);
+    });
+  } catch (error) {
+    console.error("Failed to initialize database:", error);
   }
-);
+})();
+
+// const db = new sqlite3.Database(
+//   "./transfers.db",
+//   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
+//   (err: Error | null) => {
+//     if (err) {
+//       console.error("Error opening database", err);
+//     }
+//   }
+// );
 
 const dbTest = new sqlite3.Database(
   "./test.db",
@@ -24,17 +51,6 @@ const dbTest = new sqlite3.Database(
     }
   }
 );
-
-// Start the background task as a separate process
-const background = spawn("node", ["dist/processTransfers/index.js"]);
-
-background.stdout.on("data", (data: Buffer) => {
-  console.log(`Minting task says: ${data.toString()}`);
-});
-
-background.stderr.on("data", (data: Buffer) => {
-  console.error(`Minting task had an error: ${data}`);
-});
 
 app.get("/tree-data", (req: Request, res: Response) => {
   console.log("🟢 GET /tree-data");

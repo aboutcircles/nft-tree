@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-import db from "../database.js";
+import { db } from "../database.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
 import convertToHumanCrc from "../utils/convertToHumanCrc.js";
 import { getMockTransferSteps } from "./mockData.js";

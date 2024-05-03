@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { processTransfers } from "./processTransfers.js";
-import db from "../database.js";
+import { db } from "../database.js";
 
 const POLLING_INTERVAL = 10000;
 
