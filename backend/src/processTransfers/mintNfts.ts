@@ -1,7 +1,9 @@
 import { ethers } from "ethers";
 
-import db from "../../database.js";
+import db from "../database.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
+import convertToHumanCrc from "../utils/convertToHumanCrc.js";
+import { getMockTransferSteps } from "./mockData.js";
 
 const erc721ABI = [
   {
@@ -57,15 +59,7 @@ interface Transfer {
   amount: string;
   nftAmount: number;
   nftMinted: number;
-}
-
-interface TransferEvent {
-  event: string;
-  args: {
-    from: string;
-    to: string;
-    tokenId: string;
-  };
+  timestamp: string;
 }
 
 export async function mintNfts(transfer: Transfer) {
@@ -76,18 +70,9 @@ export async function mintNfts(transfer: Transfer) {
   const transferId = transfer.transactionHash.slice(-5);
 
   try {
-    // // Update the database to mark the transfer as processed
-    // db.run("UPDATE transfers SET processed = 1 WHERE transactionHash = ?", [
-    //   transfer.transactionHash,
-    // ]);
-
-    const steps = await getTransferSteps(
-      transfer.transactionHash,
-      transfer.amount
-    );
     const checksumAddress = ethers.getAddress(transfer.fromAddress);
-    const senderData = await getUserData(checksumAddress);
 
+    const nftIds = [];
     for (let i = 0; i < toMint; i++) {
       try {
         const currentNonce = await provider.getTransactionCount(
@@ -101,13 +86,12 @@ export async function mintNfts(transfer: Transfer) {
         });
 
         console.log(
-          `   ${transferId} ${
-            i + 1
-          } of ${toMint} minting started, waiting for receipt`
+          `   ${transferId} ${i + 1} of ${toMint} minting started, tx hash: ${
+            tx.hash
+          }`
         );
-        console.log(`   ${transferId} Minting tx hash: ${tx.hash}`);
 
-        const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for 5 confirmations or 30 seconds
+        const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for  confirmations or 30 seconds
         if (!txReceipt) {
           console.log(
             `   ${transferId} Transaction ${tx.hash} is not confirmed...`
@@ -119,27 +103,17 @@ export async function mintNfts(transfer: Transfer) {
           );
 
           const parsedLog = contract.interface.parseLog(txReceipt.logs[0]);
-          const tokenId = parsedLog?.args.tokenId.toString();
+          const nftId = parsedLog?.args.tokenId.toString();
+
+          const block = await provider.getBlock(txReceipt.blockNumber);
+          const timestamp = block?.timestamp;
 
           console.log(
-            `   ${transferId} Token minted successfully with ID: ${tokenId}`
+            `   ${transferId} Token minted successfully with ID: ${nftId}`
           );
           minted++;
 
-          const sql = `
-          INSERT INTO treeData (nftId, address, username, imageUrl, steps)
-          VALUES (?, ?, ?, ?, ?)`;
-          db.run(sql, [
-            tokenId,
-            checksumAddress,
-            senderData.username,
-            senderData.avatarUrl,
-            JSON.stringify(steps),
-          ]);
-
-          // console.log(
-          //   `   ${transferId} Successfully inserted token ID ${tokenId} into the database.`
-          // );
+          nftIds.push({ nftId, timestamp });
         }
       } catch (error) {
         console.error(
@@ -159,6 +133,26 @@ export async function mintNfts(transfer: Transfer) {
         transfer.transactionHash,
       ]
     );
+    // const steps = await getTransferSteps(
+    //   transfer.transactionHash,
+    //   transfer.amount
+    // );
+    const steps = await getMockTransferSteps(checksumAddress);
+
+    const senderData = await getUserData(checksumAddress);
+    const crcAmount = convertToHumanCrc(transfer.amount, transfer.timestamp);
+    const sql = `
+          INSERT INTO treeData (nftIds, crcAmount, address, username, imageUrl, steps)
+          VALUES (?, ?, ?, ?, ?, ?)`;
+    db.run(sql, [
+      JSON.stringify(nftIds),
+      crcAmount,
+      checksumAddress,
+      senderData.username,
+      senderData.avatarUrl,
+      JSON.stringify(steps),
+    ]);
+    console.log(`${transferId} - FINISH`);
   } catch (error) {
     console.error(
       `   ${transferId} ERROR MINTING TOKENS TO ${transfer.fromAddress}`
