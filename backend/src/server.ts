@@ -26,7 +26,7 @@ const dbTest = new sqlite3.Database(
 );
 
 // Start the background task as a separate process
-const background = spawn("node", ["dist/processes/index.js"]);
+const background = spawn("node", ["dist/processTransfers/index.js"]);
 
 background.stdout.on("data", (data: Buffer) => {
   console.log(`Minting task says: ${data.toString()}`);
