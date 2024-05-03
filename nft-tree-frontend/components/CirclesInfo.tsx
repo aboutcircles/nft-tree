@@ -1,4 +1,4 @@
-import Circles from "./circles";
+import CirclesIcon from "./circlesIcon";
 
 interface CirclesInfoProps {
   supply: number;
@@ -10,7 +10,7 @@ export default function CirclesInfo({ supply }: CirclesInfoProps) {
       <p className="text-sm landscape:text-2xl">NFTS MINTED</p>
       <p className="text-lg landscape:text-4xl">{supply}/1000</p>
       <div className="w-28 h-28 landscape:w-44 landscape:h-44 border-2 mt-2">
-        <Circles />
+        <CirclesIcon />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { fetchServerData } from "@/actions/fetchDatas";
+import GalleryItem from "@/components/galleryItem";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +8,12 @@ export default async function Home() {
   const { consolidateTransfer, donors, supply } = await fetchServerData();
   return (
     <main className="flex h-screen w-full flex-col justify-between items-center">
-      <div></div>
+      GALLERY
+      <div className="w-full p-4 grid grid-cols-3 gap-2 lg:gap-4">
+        {donors.map((donor, index) => (
+          <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} />
+        ))}
+      </div>
       <div className="w-full">
         <div className="w-full flex border-t-2 p-4 landscape:hidden">
           <div className="min-w-24 min-h-24 border-2 p-2">
