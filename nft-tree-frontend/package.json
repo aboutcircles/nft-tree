@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.3",
     "@p5-wrapper/next": "^1.0.3",
     "@p5-wrapper/react": "^4.4.0",
     "@splinetool/loader": "^1.1.5",

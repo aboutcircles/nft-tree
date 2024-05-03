@@ -12,6 +12,11 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Strings for uint256;
     uint256 private _tokenIdCounter;
+     uint256 private constant _maxSupply = 1000;
+    uint256 private _maxMintPerAddress = 3;
+    mapping(address => uint256) private _mintCounts;
+
+
 
     //enable start and end time
     // uint256 public startTime;
@@ -80,13 +85,30 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
             );
     }
 
+    // function safeMint(address to) public onlyOwner {
+    //     uint256 tokenId = _tokenIdCounter;
+    //     _tokenIdCounter += 1;
+    //     _safeMint(to, tokenId);
+    //     _setTokenURI(tokenId, getTokenURI(tokenId));
+    //     // require(block.timestamp >= startTime && block.timestamp <= endTime, "Contract is not available at the moment");
+    // }
+
     function safeMint(address to) public onlyOwner {
+        require(totalSupply() < _maxSupply, "Maximum supply reached");
+        require(_mintCounts[to] < _maxMintPerAddress, "Address has reached the maximum mint limit");
+        
         uint256 tokenId = _tokenIdCounter;
         _tokenIdCounter += 1;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, getTokenURI(tokenId));
-        // require(block.timestamp >= startTime && block.timestamp <= endTime, "Contract is not available at the moment");
+        
+        _mintCounts[to]++;
     }
+    
+    function setMaxMintPerAddress(uint256 maxMint) external onlyOwner {
+        _maxMintPerAddress = maxMint;
+    }
+
 
     function transferFrom(
         address from,
