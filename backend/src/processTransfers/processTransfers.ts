@@ -1,5 +1,5 @@
 import axios from "axios";
-import db from "../database.js";
+import { db } from "../database.js";
 import { mintNfts } from "./mintNfts.js";
 import convertToHumanCrc from "../utils/convertToHumanCrc.js";
 import { fetchTransfers } from "./fetchTransfers.js";
@@ -56,7 +56,7 @@ export async function processTransfers(): Promise<void> {
   try {
     const response = await fetchTransfers();
     if (response.data && response.data.result) {
-      let i = 0;
+      let i = 1;
       for (const transfer of response.data.result) {
         console.log(`iteration ${i++} of ${response.data.result.length}`);
         const {
