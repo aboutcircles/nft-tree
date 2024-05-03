@@ -10,6 +10,12 @@ const convertToHumanCrc = (crcAmountInWei: string, timestamp: string) => {
   const crcAmount = Number(ethers.formatEther(crcAmountInWei.toString()));
   const tcAmount = crcToTc(Number(timestamp) * 1000, crcAmount);
 
+  // console.log(
+  //   "convertToHumanCrc",
+  //   { crcAmount, tcAmount },
+  //   roundToNearest(tcAmount)
+  // );
+
   if (Number(process.env.NFT_COST_CRC) < 1) {
     return roundToNearest(tcAmount, 2); // only for test
   }

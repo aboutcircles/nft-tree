@@ -1,8 +1,9 @@
 import { ethers } from "ethers";
 
-import db from "../../database.js";
+import db from "../database.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
-import convertToHumanCrc from "../../utils/convertToHumanCrc.js";
+import convertToHumanCrc from "../utils/convertToHumanCrc.js";
+import { getMockTransferSteps } from "./mockData.js";
 
 const erc721ABI = [
   {
@@ -90,7 +91,7 @@ export async function mintNfts(transfer: Transfer) {
           }`
         );
 
-        const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for 5 confirmations or 30 seconds
+        const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for  confirmations or 30 seconds
         if (!txReceipt) {
           console.log(
             `   ${transferId} Transaction ${tx.hash} is not confirmed...`
@@ -102,14 +103,17 @@ export async function mintNfts(transfer: Transfer) {
           );
 
           const parsedLog = contract.interface.parseLog(txReceipt.logs[0]);
-          const tokenId = parsedLog?.args.tokenId.toString();
+          const nftId = parsedLog?.args.tokenId.toString();
+
+          const block = await provider.getBlock(txReceipt.blockNumber);
+          const timestamp = block?.timestamp;
 
           console.log(
-            `   ${transferId} Token minted successfully with ID: ${tokenId}`
+            `   ${transferId} Token minted successfully with ID: ${nftId}`
           );
           minted++;
 
-          nftIds.push(tokenId);
+          nftIds.push({ nftId, timestamp });
         }
       } catch (error) {
         console.error(
@@ -129,10 +133,11 @@ export async function mintNfts(transfer: Transfer) {
         transfer.transactionHash,
       ]
     );
-    const steps = await getTransferSteps(
-      transfer.transactionHash,
-      transfer.amount
-    );
+    // const steps = await getTransferSteps(
+    //   transfer.transactionHash,
+    //   transfer.amount
+    // );
+    const steps = await getMockTransferSteps(checksumAddress);
 
     const senderData = await getUserData(checksumAddress);
     const crcAmount = convertToHumanCrc(transfer.amount, transfer.timestamp);
