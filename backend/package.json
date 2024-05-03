@@ -11,7 +11,8 @@
     "dev-server": "node --loader ts-node/esm src/server.ts",
     "db": "node --loader ts-node/esm src/testData/logTablesData.ts",
     "fill-test-db": "node --loader ts-node/esm src/testData/fillTestData.ts",
-    "dev": "npm run dev-processes & npm run dev-server"
+    "dev": "npm run dev-processes & npm run dev-server",
+    "mock": "node --loader ts-node/esm src/testData/mockTransfers.ts"
   },
   "keywords": [],
   "author": "",
