@@ -133,16 +133,17 @@ export async function mintNfts(transfer: Transfer) {
         transfer.transactionHash,
       ]
     );
+
+    if (nftIds.length === 0) {
+      `   ${transferId} NO TOKENS WERE MINTED TO ${transfer.fromAddress}`;
+      return;
+    }
+
     // const steps = await getTransferSteps(
     //   transfer.transactionHash,
     //   transfer.amount
     // );
     const steps = await getMockTransferSteps(checksumAddress);
-
-    // if (nftIds.length === 0) {
-    //   console.log("nftIds is empty");
-    //   return;
-    // }
 
     console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
 
@@ -155,8 +156,8 @@ export async function mintNfts(transfer: Transfer) {
       JSON.stringify(nftIds),
       crcAmount,
       checksumAddress,
-      senderData.username,
-      senderData.avatarUrl,
+      senderData?.username || "",
+      senderData?.avatarUrl || "",
       JSON.stringify(steps),
     ]);
     console.log(`${transferId} - FINISH`);
