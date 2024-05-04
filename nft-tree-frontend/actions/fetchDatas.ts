@@ -47,7 +47,6 @@ export async function fetchServerData() {
   }
 
   const dataArray: TreeData[] = await res.json();
-  console.log(dataArray);
 
   const donors: Donor[] = dataArray.map((item) => {
     return {

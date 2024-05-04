@@ -17,15 +17,15 @@ export default function GalleryItem({ address, imageUrl, username, nftId }: Dono
           <p>{nftId}/1000</p>
         </div>
       </div>
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col p-2">
         <div className="w-full flex justify-between">
           <div className="flex flex-col">
-            <p className="text-[12px] text-white/50">MINTED BY</p>
-            <p className="text-[10px]">{truncateAddress(address)}</p>
+            <p className="text-[10px] lg:text-[12px] text-white/50">MINTED BY</p>
+            <p className="text-[8px] lg:text-[10px]">{truncateAddress(address)}</p>
           </div>
-          {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} className="border-white border" /> : <Image src={"/profileDefault.jpg"} alt={"profileDefault"} width={25} height={25} className="border-white border" />}
+          {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} className="border-white border w-6 h-6 lg:w-8 lg:h-8" /> : <Image src={"/profileDefault.jpg"} alt={"profileDefault"} width={25} height={25} className="border-white border w-6 h-6 lg:w-8 lg:h-8" />}
         </div>
-        <p className="text-[12px] text-white/50">MINTED ON</p>
+        <p className="text-[10px] lg:text-[12px] text-white/50">MINTED ON</p>
       </div>
       {/* {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} /> : <Image src={"/profileDefault.jpg"} alt={"profileDefault"} width={25} height={25} className="border-white border" />}
       <p className="text-[10px] ml-2">{truncateAddress(address)}</p>
