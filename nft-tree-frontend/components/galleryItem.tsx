@@ -32,4 +32,8 @@ export default function GalleryItem({ address, imageUrl, username, nftId }: Dono
       <p className="text-nowrap text-[10px] ml-4">100 CRC</p> */}
     </Link>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/dev
