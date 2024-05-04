@@ -3,17 +3,7 @@ import { db } from "../database.js";
 import { mintNfts } from "./mintNfts.js";
 import convertToHumanCrc from "../utils/convertToHumanCrc.js";
 import { fetchTransfers } from "./fetchTransfers.js";
-
-const getNftAmount = (crcAmountInWei: string, timestamp: string) => {
-  const tcAmount = convertToHumanCrc(crcAmountInWei, timestamp);
-  const nftAmount = Math.trunc(tcAmount / Number(process.env.NFT_COST_CRC));
-
-  if (nftAmount < 3) {
-    return nftAmount;
-  } else {
-    return 3;
-  }
-};
+import getNftAmount from "../utils/getNftAmount.js";
 
 const checkIfTransferExists = (transactionHash: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {
@@ -90,9 +80,11 @@ export async function processTransfers(): Promise<void> {
           console.log("✨✨✨🚀");
           console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
 
+          const crcAmount = convertToHumanCrc(amount, timestamp);
+
           const insertQuery = `
-          INSERT INTO transfers (transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber, processed, nftAmount, nftMinted)
-          SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+          INSERT INTO transfers (transactionHash, fromAddress, toAddress, timestamp, amount, crcAmount, blockNumber, processed, nftAmount, nftMinted)
+          SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
           WHERE NOT EXISTS (
             SELECT 1 FROM transfers WHERE transactionHash = ?
           )`;
@@ -104,6 +96,7 @@ export async function processTransfers(): Promise<void> {
               toAddress,
               timestamp,
               amount,
+              crcAmount,
               blockNumber,
               1,
               nftAmount,
