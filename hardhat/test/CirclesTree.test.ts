@@ -13,6 +13,10 @@ describe("Circles Tree NFT collection", function () {
     // Contracts are deployed using the first signer/account by default
     const [deployer, owner, account1, account2] = await hre.ethers.getSigners();
 
+    // Fetching the balance of the deployer account
+    const balance = await hre.ethers.provider.getBalance(deployer.address);
+    // console.log("deployer balance", hre.ethers.formatEther(balance) + " ETH");
+
     const NFT = await hre.ethers.getContractFactory("CirclesTree");
     const nft = await NFT.deploy(owner);
 
@@ -50,6 +54,17 @@ describe("Circles Tree NFT collection", function () {
       const { nft, account1, account2 } = await loadFixture(deploy);
 
       await expect(nft.connect(account1).safeMint(account2)).to.be.reverted;
+    });
+
+    it("No more than 3 nfts per address", async function () {
+      const { nft, owner, account1, account2 } = await loadFixture(deploy);
+
+      await nft.connect(owner).safeMint(account1);
+      await nft.connect(owner).safeMint(account1);
+
+      await expect(nft.connect(owner).safeMint(account1)).to.be.revertedWith(
+        "Address has reached the maximum mint limit"
+      );
     });
   });
 

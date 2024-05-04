@@ -139,6 +139,13 @@ export async function mintNfts(transfer: Transfer) {
     // );
     const steps = await getMockTransferSteps(checksumAddress);
 
+    // if (nftIds.length === 0) {
+    //   console.log("nftIds is empty");
+    //   return;
+    // }
+
+    console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
+
     const senderData = await getUserData(checksumAddress);
     const crcAmount = convertToHumanCrc(transfer.amount, transfer.timestamp);
     const sql = `
