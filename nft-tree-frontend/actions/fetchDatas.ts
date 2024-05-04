@@ -24,6 +24,7 @@ export type Donor = {
   address: Address;
   imageUrl: string;
   username: string;
+  nftId: number;
 };
 
 export async function fetchFilesData() {
@@ -53,6 +54,7 @@ export async function fetchServerData() {
       address: item.address,
       imageUrl: item.imageUrl,
       username: item.username,
+      nftId: Number(item.nftId),
     };
   });
 
