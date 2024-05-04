@@ -24,6 +24,7 @@ export type Donor = {
   address: Address;
   imageUrl: string;
   username: string;
+  nftId: number;
 };
 
 export async function fetchFilesData() {
@@ -46,13 +47,13 @@ export async function fetchServerData() {
   }
 
   const dataArray: TreeData[] = await res.json();
-  console.log(dataArray);
 
   const donors: Donor[] = dataArray.map((item) => {
     return {
       address: item.address,
       imageUrl: item.imageUrl,
       username: item.username,
+      nftId: Number(item.nftId),
     };
   });
 
