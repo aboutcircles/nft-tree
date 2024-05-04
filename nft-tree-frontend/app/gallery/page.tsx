@@ -1,11 +1,16 @@
+<<<<<<< HEAD
 "use client"
 import { useState, useEffect } from "react";
 import { fetchServerData } from "@/actions/fetchDatas";
 import GalleryItem from "@/components/galleryItem";
+=======
+import { fetchServerData } from "@/actions/fetchDatas";
+>>>>>>> 3d415f1 (feat: add gallery button on main page)
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
 
+<<<<<<< HEAD
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [donors, setDonors] = useState([]);
@@ -97,11 +102,21 @@ export default function Home() {
       </div>
       <div className="p-4 border-t-2 border-white">
         <div className="flex items-center">
+=======
+export default async function Home() {
+  const { consolidateTransfer, donors, supply } = await fetchServerData();
+  return (
+    <main className="flex h-screen flex-col justify-between items-center">
+      <div></div>
+      <div>
+        <div className="w-full flex border-t-2 p-4 landscape:hidden">
+>>>>>>> 3d415f1 (feat: add gallery button on main page)
           <div className="min-w-24 min-h-24 border-2 p-2">
             <div className="relative w-full h-full">
               <Image src={"/QRcode.png"} alt={""} fill={true} />
             </div>
           </div>
+<<<<<<< HEAD
           <div className="ml-4">
             <p className="text-xs font-bold">
               DONATE, GET AN NFT, AND GROW THE NETWORK
@@ -117,6 +132,15 @@ export default function Home() {
           </div>
         </div>
         <div className="mt-4">
+=======
+          <div className="flex flex-col text-wrap ml-4">
+            <p className="text-xs font-bold">DONATE, GET AN NFT, AND GROW THE NETWORK</p>
+            <p className="text-[8px]">Deposit 100 CRC into this address to mint an exclusive, DAPPCON 2024 CIRCLES NFT.</p>
+            <p className="text-[8px] mt-2">By growing our network, you are helping to solidify the Circles Network.</p>
+          </div>
+        </div>
+        <div className="w-full flex border-t-2 p-2">
+>>>>>>> 3d415f1 (feat: add gallery button on main page)
           <Link className="flex items-center text-sm" href={"/"}>
             <ArrowLeftIcon width={18} height={18} className="mr-1" />
             BACK TO THE TREE
