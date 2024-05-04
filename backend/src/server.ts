@@ -32,16 +32,6 @@ import { db, initializeDatabase } from "./database.js";
   }
 })();
 
-// const db = new sqlite3.Database(
-//   "./transfers.db",
-//   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-//   (err: Error | null) => {
-//     if (err) {
-//       console.error("Error opening database", err);
-//     }
-//   }
-// );
-
 const dbTest = new sqlite3.Database(
   "./test.db",
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
@@ -84,6 +74,18 @@ app.get("/tree-test", (req: Request, res: Response) => {
       }
     }
   );
+});
+
+app.get("/db-transfers", (req: Request, res: Response) => {
+  console.log("🟢 GET /db-transfers");
+  db.all("SELECT * FROM transfers", (err: Error | null, rows: any[]) => {
+    if (err) {
+      res.status(500).send("Failed to retrieve data from database.");
+      console.error(err.message);
+    } else {
+      res.json(rows);
+    }
+  });
 });
 
 app.listen(PORT, () => {
