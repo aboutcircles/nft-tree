@@ -3,21 +3,11 @@ import { db } from "../database.js";
 import { mintNfts } from "./mintNfts.js";
 import convertToHumanCrc from "../utils/convertToHumanCrc.js";
 import { fetchTransfers } from "./fetchTransfers.js";
-
-const getNftAmount = (crcAmountInWei: string, timestamp: string) => {
-  const tcAmount = convertToHumanCrc(crcAmountInWei, timestamp);
-  const nftAmount = Math.trunc(tcAmount / Number(process.env.NFT_COST_CRC));
-
-  if (nftAmount < 3) {
-    return nftAmount;
-  } else {
-    return 3;
-  }
-};
+import getNftAmount from "../utils/getNftAmount.js";
 
 const checkIfTransferExists = (transactionHash: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT 1 FROM transfers WHERE transactionHash = ? LIMIT 1`;
+    const query = `SELECT 1 FROM transfers WHERE transactionHash = ? AND processed = 1 LIMIT 1`;
     db.get(query, [transactionHash], (err, row) => {
       if (err) {
         reject(err);
@@ -30,6 +20,7 @@ const checkIfTransferExists = (transactionHash: string): Promise<boolean> => {
 
 interface TransferRow {
   nftAmount: number | null;
+  nftMinted: number | null;
 }
 
 const getTotalNftAmountForAddress = async (
@@ -44,7 +35,7 @@ const getTotalNftAmountForAddress = async (
       } else {
         let totalNftAmount = 0;
         rows.forEach((row) => {
-          totalNftAmount += row.nftAmount || 0;
+          totalNftAmount += row.nftMinted || 0;
         });
         resolve(totalNftAmount);
       }
@@ -55,6 +46,7 @@ const getTotalNftAmountForAddress = async (
 export async function processTransfers(): Promise<void> {
   try {
     const response = await fetchTransfers();
+    // console.log("processTransfers", response.data.result.length);
     if (response.data && response.data.result) {
       let i = 1;
       for (const transfer of response.data.result) {
@@ -88,9 +80,11 @@ export async function processTransfers(): Promise<void> {
           console.log("✨✨✨🚀");
           console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
 
+          const crcAmount = convertToHumanCrc(amount, timestamp);
+
           const insertQuery = `
-          INSERT INTO transfers (transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber, processed, nftAmount, nftMinted)
-          SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+          INSERT INTO transfers (transactionHash, fromAddress, toAddress, timestamp, amount, crcAmount, blockNumber, processed, nftAmount, nftMinted)
+          SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
           WHERE NOT EXISTS (
             SELECT 1 FROM transfers WHERE transactionHash = ?
           )`;
@@ -102,6 +96,7 @@ export async function processTransfers(): Promise<void> {
               toAddress,
               timestamp,
               amount,
+              crcAmount,
               blockNumber,
               1,
               nftAmount,
@@ -132,11 +127,41 @@ export async function processTransfers(): Promise<void> {
             console.log(`${transferId} ERROR PROCESSING TRANSFER`);
             console.log(error);
           }
+        } else {
+          const insertQuery = `
+          INSERT INTO transfers (transactionHash, fromAddress, toAddress, timestamp, amount, blockNumber, processed, nftAmount, nftMinted)
+          SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+          WHERE NOT EXISTS (
+            SELECT 1 FROM transfers WHERE transactionHash = ?
+          )`;
+          db.run(
+            insertQuery,
+            [
+              transactionHash,
+              fromAddress,
+              toAddress,
+              timestamp,
+              amount,
+              blockNumber,
+              1,
+              nftAmount,
+              0,
+              transactionHash,
+            ],
+            (err) => {
+              if (err) {
+                console.error(
+                  "Error inserting new transfers data into the database",
+                  err
+                );
+              }
+            }
+          );
         }
       }
-      console.log(
-        `finish iteration for ${response.data.result.length} transfers`
-      );
+      // console.log(
+      //   `finish iteration for ${response.data.result.length} transfers`
+      // );
     }
   } catch (error) {
     console.error("Error fetching data", error);

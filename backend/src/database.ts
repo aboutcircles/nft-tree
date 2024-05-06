@@ -22,6 +22,7 @@ const initializeDatabase = () => {
           toAddress TEXT,
           timestamp TEXT,
           amount TEXT,
+          crcAmount TEXT,
           blockNumber TEXT,
           nftAmount INTEGER DEFAULT 0,
           nftMinted INTEGER DEFAULT 0,
