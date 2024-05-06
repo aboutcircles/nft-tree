@@ -40,7 +40,7 @@ export async function fetchFilesData() {
 }
 
 export async function fetchServerData() {
-  const res = await fetch("https://tree-server-test.onrender.com/tree-test");
+  const res = await fetch("https://plankton-app-gvulz.ondigitalocean.app/tree-data");
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
