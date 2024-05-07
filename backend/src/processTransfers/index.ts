@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { processTransfers } from "./processTransfers.js";
-import { db } from "../database.js";
+import { db } from "../db/models/index.js";
 
 const POLLING_INTERVAL = 10000;
 
@@ -17,11 +17,14 @@ const runTasks = async () => {
 runTasks();
 
 process.on("SIGINT", () => {
-  db.close((err: Error | null) => {
-    if (err) {
+  db.sequelize
+    .close()
+    .then(() => {
+      console.log("Database connection closed.");
+      process.exit(0);
+    })
+    .catch((err) => {
       console.error(err.message);
-    }
-    console.log("Database connection closed.");
-    process.exit(0);
-  });
+      process.exit(1);
+    });
 });
