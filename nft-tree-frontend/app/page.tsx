@@ -1,5 +1,5 @@
 import { fetchServerData } from "@/actions/fetchDatas";
-import CirclesInfo from "@/components/circlesInfo";
+import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
@@ -29,9 +29,17 @@ export default async function Home() {
                 </div>
               </div>
               <div className="flex flex-col text-wrap ml-4">
-                <p className="text-xs font-bold">DONATE, GET AN NFT, AND GROW THE NETWORK</p>
-                <p className="text-[8px]">Deposit 100 CRC into this address to mint an exclusive, DAPPCON 2024 CIRCLES NFT.</p>
-                <p className="text-[8px] mt-2">By growing our network, you are helping to solidify the Circles Network.</p>
+                <p className="text-xs font-bold">
+                  DONATE, GET AN NFT, AND GROW THE NETWORK
+                </p>
+                <p className="text-[8px]">
+                  Deposit 100 CRC into this address to mint an exclusive,
+                  DAPPCON 2024 CIRCLES NFT.
+                </p>
+                <p className="text-[8px] mt-2">
+                  By growing our network, you are helping to solidify the
+                  Circles Network.
+                </p>
               </div>
             </div>
           </div>
