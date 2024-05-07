@@ -15,13 +15,13 @@ export default async function Home() {
           <div className="z-10 absolute right-4 bottom-40 landscape:top-4 landscape:left-4">
             <CirclesInfo supply={supply} />
           </div>
-          <div className="w-fit flex flex-col p-4">
+          <div className="w-fit flex flex-col p-4 landscape:sm:hidden">
             <Donations donors={donors} />
           </div>
           <div className="h-full w-full flex flex-col justify-end p-4">
             <Tree nodes={consolidateTransfer} />
           </div>
-          <div className="flex w-full items-end p-2 border-t-2 landscape:border-0">
+          <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
             <div className="flex">
               <div className="border-2 p-2">
                 <div className="relative w-full h-full min-w-24 min-h-24 max-w-24 max-h-24">

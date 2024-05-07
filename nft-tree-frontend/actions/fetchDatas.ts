@@ -68,7 +68,11 @@ export async function fetchServerData() {
     return acc;
   }, [] as Transfer[]);
 
+  console.log(dataArray);
+
   const consolidateTransfer = consolidateTransfers(transfers);
+  
+  console.log(consolidateTransfer);
 
   return { consolidateTransfer, donors, supply: dataArray.length };
 }

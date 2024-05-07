@@ -22,13 +22,14 @@ export function consolidateTransfers(transfers: Transfer[]): Node[] {
 
   transfers.forEach(({ from, to }) => {
     if (!nodesMap.has(from)) {
-      nodesMap.set(from, { id: from, children: new Set(), level: -1});
+      nodesMap.set(from, { id: from, parents: new Set(), children: new Set(), level: -1});
     }
     if (!nodesMap.has(to)) {
-      nodesMap.set(to, { id: to, children: new Set(), level: -1});
+      nodesMap.set(to, { id: to, parents: new Set(), children: new Set(), level: -1});
     }
 
     nodesMap.get(to)?.children.add(from);
+    nodesMap.get(from)?.parents.add(to);
   });
 
   const rootAddress = "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
