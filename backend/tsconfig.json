@@ -12,10 +12,10 @@
     "moduleResolution": "Node16",
     "outDir": "dist",
     "paths": {
-      "*": ["./src/*"]
+      "*": ["./node_modules/*", "./src/types/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"],
+  "include": ["./src/**/*"],
+  "exclude": ["./node_modules"],
   "ts-node": { "esm": true }
 }
