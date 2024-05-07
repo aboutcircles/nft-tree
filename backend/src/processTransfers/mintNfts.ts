@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { db } from "../db/models/index.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
 import { getMockTransferSteps } from "./mockData.js";
+import { Transfer } from "types/Transfer.js";
 const erc721ABI = [
   {
     inputs: [
@@ -51,18 +52,7 @@ const contract = new ethers.Contract(
   wallet
 );
 
-interface Transfer {
-  transactionHash: string;
-  fromAddress: string;
-  amount: string;
-  crcAmount: number;
-  nftAmount: number;
-  nftMinted: number;
-  timestamp: string;
-}
-
-export async function mintNfts(transfer: Transfer) {
-  const toMint = transfer.nftAmount;
+export async function mintNfts(transfer: Transfer, toMint: number) {
   if (toMint === 0) return;
   let minted = 0;
 
@@ -125,11 +115,17 @@ export async function mintNfts(transfer: Transfer) {
     }
 
     try {
-      await db.models.Transfer.upsert({
-        transactionHash: transfer.transactionHash,
-        processed: minted === toMint ? true : false,
-        nftMinted: transfer.nftMinted + minted,
-      });
+      await db.models.Transfer.update(
+        {
+          processed: minted === toMint ? true : false,
+          nftMinted: transfer.nftMinted + minted,
+        },
+        {
+          where: {
+            transactionHash: transfer.transactionHash,
+          },
+        }
+      );
     } catch (error) {
       console.error(
         `   ${transferId} ERROR UPDATING TRANSFER ${transfer.transactionHash}`
@@ -152,14 +148,21 @@ export async function mintNfts(transfer: Transfer) {
 
     const senderData = await getUserData(checksumAddress);
 
-    await db.models.TreeData.upsert({
-      nftIds: JSON.stringify(nftIds),
-      crcAmount: transfer.crcAmount,
-      address: checksumAddress,
-      username: senderData?.username || "",
-      imageUrl: senderData?.avatarUrl || "",
-      steps: JSON.stringify(steps),
-    });
+    try {
+      await db.models.TreeData.create({
+        nftIds: JSON.stringify(nftIds),
+        crcAmount: transfer.crcAmount,
+        address: checksumAddress,
+        username: senderData?.username || "",
+        imageUrl: senderData?.avatarUrl || "",
+        steps: JSON.stringify(steps),
+      });
+    } catch (error) {
+      console.error(
+        `   ${transferId} ERROR STORING NFT DATA FOR ${checksumAddress}`
+      );
+      console.error(error);
+    }
 
     console.log(`${transferId} - FINISH`);
   } catch (error) {

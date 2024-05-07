@@ -4,26 +4,20 @@ import { mintNfts } from "./mintNfts.js";
 import convertToHumanCrc from "../utils/convertToHumanCrc.js";
 import { fetchTransfers } from "./fetchTransfers.js";
 import getNftAmount from "../utils/getNftAmount.js";
+import { Transfer } from "../types/Transfer.js";
 
-const checkIfTransferExists = async (
+const findTransfer = async (
   transactionHash: string
-): Promise<boolean> => {
-  const transfer = await db.models.Transfer.findOne({
-    where: { transactionHash: transactionHash, processed: true },
-  });
-  return !!transfer;
+): Promise<Transfer | null> => {
+  const transfer = await db.models.Transfer.findByPk(transactionHash);
+  return transfer;
 };
-
-interface TransferRow {
-  nftAmount: number | null;
-  nftMinted: number | null;
-}
 
 const getTotalNftAmountForAddress = async (
   fromAddress: string
 ): Promise<number> => {
   try {
-    const transfers: TransferRow[] = await db.models.Transfer.findAll({
+    const transfers: Transfer[] = await db.models.Transfer.findAll({
       where: { fromAddress: fromAddress },
       attributes: ["nftMinted"],
     });
@@ -45,7 +39,7 @@ export async function processTransfers(): Promise<void> {
     // console.log("processTransfers", response.data.result.length);
     if (response.data && response.data.result) {
       let i = 1;
-      for (const transfer of response.data.result) {
+      for (const donation of response.data.result) {
         console.log(`iteration ${i++} of ${response.data.result.length}`);
         const {
           transactionHash,
@@ -54,10 +48,10 @@ export async function processTransfers(): Promise<void> {
           timestamp,
           amount,
           blockNumber,
-        } = transfer;
+        } = donation;
 
-        const transferExists = await checkIfTransferExists(transactionHash);
-        if (transferExists) continue; // already processed
+        let dbTransfer = await findTransfer(transactionHash);
+        if (dbTransfer && dbTransfer.processed) continue; // already processed
 
         const transferId = transactionHash.slice(-5);
 
@@ -78,8 +72,20 @@ export async function processTransfers(): Promise<void> {
           console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
 
           try {
-            const [transfer] = await db.models.Transfer.upsert(
-              {
+            if (dbTransfer) {
+              await db.models.Transfer.update(
+                {
+                  processed: true,
+                  nftAmount: dbTransfer.nftAmount + nftAmountToMint,
+                },
+                {
+                  where: {
+                    transactionHash: transactionHash,
+                  },
+                }
+              );
+            } else {
+              dbTransfer = await db.models.Transfer.create({
                 transactionHash,
                 fromAddress,
                 toAddress,
@@ -89,22 +95,11 @@ export async function processTransfers(): Promise<void> {
                 blockNumber,
                 processed: true,
                 nftAmount: nftAmountToMint,
-              },
-              {
-                returning: true, // This ensures that the full object is returned
-              }
-            );
+              });
+            }
 
             try {
-              await mintNfts({
-                transactionHash,
-                fromAddress,
-                amount,
-                crcAmount,
-                nftAmount: nftAmountToMint,
-                nftMinted: transfer.nftMinted,
-                timestamp,
-              });
+              await mintNfts(dbTransfer, nftAmountToMint);
             } catch (error) {
               console.log(`${transferId} ERROR PROCESSING TRANSFER`);
               console.log(error);

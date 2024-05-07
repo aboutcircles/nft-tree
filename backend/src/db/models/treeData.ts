@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
 export default (sequelize: Sequelize) => {
-  class Transfer extends Model {
+  class TreeData extends Model {
     declare nftIds: string;
     declare crcAmount: string;
     declare address: string;
@@ -10,7 +10,7 @@ export default (sequelize: Sequelize) => {
     declare steps: string;
   }
 
-  Transfer.init(
+  TreeData.init(
     {
       nftIds: DataTypes.TEXT,
       crcAmount: DataTypes.STRING,
@@ -27,5 +27,5 @@ export default (sequelize: Sequelize) => {
     }
   );
 
-  return Transfer;
+  return TreeData;
 };
