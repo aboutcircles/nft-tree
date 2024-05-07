@@ -1,5 +1,5 @@
 import { fetchServerData } from "@/actions/fetchDatas";
-import CirclesInfo from "@/components/circlesInfo";
+import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
