@@ -9,7 +9,7 @@ const PORT = 8000;
 
 (async () => {
   try {
-    // await db.sequelize.sync();
+    await db.sequelize.sync();
     console.log("Database initialized successfully.");
     // Start your server here or perform other database operations
 

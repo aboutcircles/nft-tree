@@ -9,7 +9,7 @@ const checkIfTransferExists = async (
   transactionHash: string
 ): Promise<boolean> => {
   const transfer = await db.models.Transfer.findOne({
-    where: { transactionHash: transactionHash, processed: 1 },
+    where: { transactionHash: transactionHash, processed: true },
   });
   return !!transfer;
 };
