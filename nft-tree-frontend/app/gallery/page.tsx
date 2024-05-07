@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col h-screen w-full bg-black text-white">
-      <div className="p-2 flex flex-col items-center justify-center">DAPPCON'2024 MINTER GALLERY</div>
+      <div className="p-2 flex flex-col items-center justify-center">DAPPCON 2024 MINTER GALLERY</div>
       {isSmallScreen && (
         <div className="p-4 flex flex-col items-center justify-center border-b-2 border-white">
           <div className="flex items-center">
