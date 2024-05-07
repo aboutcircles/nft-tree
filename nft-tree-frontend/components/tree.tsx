@@ -15,6 +15,7 @@ export const treasuryAddress = "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
 export type Node = {
   id: Address;
   level: number;
+  parents: Set<Address>;
   children: Set<Address>;
 };
 
@@ -45,18 +46,20 @@ export default function Tree({ nodes }: TreeProps) {
   }, []);
 
   const sketch: Sketch = (p5) => {
+    let pathfindersMap = new Map();
     let rootPathfinder: Pathfinder;
     let allPathfinder: Pathfinder[] = [];
 
     class Pathfinder {
-      address: Address;
+      node: Node;
       location: p5.Vector;
       velocity: p5.Vector;
       diameter: number;
       level: number;
+      updated: boolean;
 
-      constructor(address: Address, parent?: Pathfinder) {
-        this.address = address;
+      constructor(node: Node, parent?: Pathfinder) {
+        this.node = node;
         if (parent) {
           this.location = parent.location.copy();
           this.velocity = parent.velocity.copy();
@@ -69,6 +72,7 @@ export default function Tree({ nodes }: TreeProps) {
           this.level = 1;
         }
         this.diameter = Math.max(0.8, 1 - 0.1 * this.level);
+        this.updated = false;
       }
 
       update() {
@@ -76,6 +80,7 @@ export default function Tree({ nodes }: TreeProps) {
         bump.mult(0.1 * (1 / this.level));
         this.velocity.add(bump);
         this.location.add(this.velocity);
+        this.updated = true;
       }
 
       // adjust() {
@@ -91,7 +96,7 @@ export default function Tree({ nodes }: TreeProps) {
         let c = p5.lerpColor(bottomColor, topColor, inter);
         p5.strokeWeight(this.diameter);
         p5.stroke(c);
-        p5.line(this.location.x - this.velocity.x, this.location.y - this.velocity.y, this.location.x, this.location.y);
+        p5.point(this.location.x, this.location.y);
       }
     }
 
@@ -100,9 +105,15 @@ export default function Tree({ nodes }: TreeProps) {
         node.children.forEach((childAddress) => {
           let childNode = nodes.find((n) => n.id === childAddress);
           if (childNode) {
-            let newBranch = new Pathfinder(childAddress, pathfinder);
+            let newBranch;
+            if (pathfindersMap.has(childAddress)) {
+              newBranch = pathfindersMap.get(childAddress);
+            } else {
+              newBranch = new Pathfinder(childNode, pathfinder);
+              pathfindersMap.set(childAddress, newBranch);
+              allPathfinder.push(newBranch);
+            }
             newBranch.update();
-            allPathfinder.push(newBranch);
             setupTree(childNode, newBranch);
           }
         });
@@ -115,7 +126,8 @@ export default function Tree({ nodes }: TreeProps) {
       p5.randomSeed(95);
       const rootNode = nodes.find((n) => n.id === treasuryAddress);
       if (rootNode) {
-        rootPathfinder = new Pathfinder(treasuryAddress);
+        rootPathfinder = new Pathfinder(rootNode);
+        pathfindersMap.set(treasuryAddress, rootPathfinder);
         setupTree(rootNode, rootPathfinder);
       }
     };
@@ -124,6 +136,15 @@ export default function Tree({ nodes }: TreeProps) {
       p5.background(0);
       allPathfinder.forEach((path) => {
         path.draw();
+      });
+      allPathfinder.forEach((pathfinder) => {
+        pathfinder.node.parents.forEach((parent) => {
+          let parentPathfinder = pathfindersMap.get(parent);
+          if (parentPathfinder) {
+            p5.stroke(231, 179, 210);;
+            p5.line(parentPathfinder.location.x, parentPathfinder.location.y, pathfinder.location.x, pathfinder.location.y);
+          }
+        });
       });
     };
   };
