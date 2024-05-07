@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={space_mono.className}>
-        <div className="bg-black w-full h-full">{children} </div>
+        <div className="bg-black w-full h-full text-white">{children} </div>
       </body>
     </html>
   );
