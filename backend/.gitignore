@@ -8,3 +8,6 @@ transfers.db
 
 dist
 data
+
+ca-certificate.*
+ca-cert.*
