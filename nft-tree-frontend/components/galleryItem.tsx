@@ -25,7 +25,7 @@ export default function GalleryItem({ address, imageUrl, username, nftId, timest
           {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} className="border-white border w-6 h-6 lg:w-8 lg:h-8" /> : <div className="border-white flex items-center justify-center text-lg border w-6 h-6 lg:w-8 lg:h-8">?</div>}
         </div>
         <p className="text-[10px] lg:text-[12px] text-white/50">MINTED ON</p>
-        <p className="text-[8px] lg:text-[10px]">{timestamp}</p>
+        <p className="text-[8px] lg:text-[10px]">{new Date(Number(timestamp) * 1000).toDateString()}</p>
       </div>
     </Link>
   );
