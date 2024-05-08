@@ -63,9 +63,9 @@ export default function Tree({ nodes }: TreeProps) {
         if (parent) {
           this.location = parent.location.copy();
           this.velocity = parent.velocity.copy();
-          this.velocity.rotate(p5.random(-p5.QUARTER_PI / 3, p5.QUARTER_PI / 3));
+          this.velocity.rotate(p5.random(-p5.QUARTER_PI / 2, p5.QUARTER_PI / 2));
           this.level = parent.level + 1;
-          this.velocity.setMag(p5.random(150 * Math.pow(0.8, this.level), 170 * Math.pow(0.8, this.level)));
+          this.velocity.setMag(p5.random(100 * Math.pow(0.8, this.level), 120 * Math.pow(0.8, this.level)));
         } else {
           this.location = p5.createVector(p5.width / 2, p5.height);
           this.velocity = p5.createVector(0, -p5.random(1, 5));
@@ -141,7 +141,7 @@ export default function Tree({ nodes }: TreeProps) {
         pathfinder.node.parents.forEach((parent) => {
           let parentPathfinder = pathfindersMap.get(parent);
           if (parentPathfinder) {
-            p5.stroke(231, 179, 210);;
+            p5.stroke(231, 179, 210);
             p5.line(parentPathfinder.location.x, parentPathfinder.location.y, pathfinder.location.x, pathfinder.location.y);
           }
         });

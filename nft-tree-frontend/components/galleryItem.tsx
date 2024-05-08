@@ -2,9 +2,8 @@ import { Donor } from "@/actions/fetchDatas";
 import { truncateAddress } from "@/utils/truncateAddress";
 import Image from "next/image";
 import Link from "next/link";
-import CirclesIcon from "./circlesIcon";
 
-export default function GalleryItem({ address, imageUrl, username, nftId }: Donor) {
+export default function GalleryItem({ address, imageUrl, username, nftId, updatedAt }: Donor) {
   return (
     <Link className="min-w-42 flex flex-col justify-between items-center border border-slate-300 text-xs hover:cursor-pointer" href={"https://circles.garden/profile/" + address} target="_blank">
       <div className="w-full border-b p-1">
@@ -21,15 +20,13 @@ export default function GalleryItem({ address, imageUrl, username, nftId }: Dono
         <div className="w-full flex justify-between">
           <div className="flex flex-col">
             <p className="text-[10px] lg:text-[12px] text-white/50">MINTED BY</p>
-            <p className="text-[8px] lg:text-[10px]">{truncateAddress(address)}</p>
+            <p className="text-[8px] lg:text-[10px]">{username ? username: truncateAddress(address)}</p>
           </div>
           {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} className="border-white border w-6 h-6 lg:w-8 lg:h-8" /> : <Image src={"/profileDefault.jpg"} alt={"profileDefault"} width={25} height={25} className="border-white border w-6 h-6 lg:w-8 lg:h-8" />}
         </div>
         <p className="text-[10px] lg:text-[12px] text-white/50">MINTED ON</p>
+        <p className="text-[8px] lg:text-[10px]">{updatedAt}</p>
       </div>
-      {/* {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} /> : <Image src={"/profileDefault.jpg"} alt={"profileDefault"} width={25} height={25} className="border-white border" />}
-      <p className="text-[10px] ml-2">{truncateAddress(address)}</p>
-      <p className="text-nowrap text-[10px] ml-4">100 CRC</p> */}
     </Link>
   );
 }

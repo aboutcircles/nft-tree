@@ -13,7 +13,7 @@ export default function Donations({ donors }: DonationsProps) {
       <div className="w-full flex gap-x-1 landscape:flex-col text-xs mt-2">
         {donors.slice(0, 10).map((donor, index) => (
           <div key={index} className={`${index >= 2 ? "w-full hidden landscape:block" : ""}`}>
-            <Donation key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} />
+            <Donation key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} updatedAt={donor.updatedAt} />
           </div>
         ))}
       </div>

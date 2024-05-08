@@ -62,9 +62,9 @@ export default function Home() {
       <div className="w-full overflow-y-scroll p-4 landscape:px-16 grid grid-cols-3 landscape:grid-cols-5 gap-4">
         {searchQuery === ""
           ? // If searchQuery is empty, render all donors
-            donors.map((donor, index) => <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} />)
+            donors.map((donor, index) => <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} updatedAt={donor.updatedAt} />)
           : // If searchQuery is not empty, render filtered donors
-            filteredDonors.map((donor, index) => <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} />)}
+            filteredDonors.map((donor, index) => <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} updatedAt={donor.updatedAt} />)}
       </div>
       <div className="flex w-full items-end p-2 border-t-2 landscape:hidden">
         <div className="flex">

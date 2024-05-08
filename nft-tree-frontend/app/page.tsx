@@ -15,7 +15,7 @@ export default async function Home() {
           <div className="z-10 absolute right-4 bottom-40 landscape:top-4 landscape:left-4">
             <CirclesInfo supply={supply} />
           </div>
-          <div className="w-fit flex flex-col p-4 landscape:sm:hidden">
+          <div className="w-fit flex flex-col p-4 landscape:hidden landscape:lg:flex">
             <Donations donors={donors} />
           </div>
           <div className="h-full w-full flex flex-col justify-end p-4">

@@ -7,7 +7,7 @@ export default function Donation({ address, imageUrl, username }: Donor) {
   return (
     <Link className="w-full flex justify-between items-center border-t border-l border-r border-b lg:border-b-0 lg:last:border-b border-slate-300 p-2 lg:p-2 hover:cursor-pointer" href={"https://circles.garden/profile/" + address} target="_blank">
       {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} objectFit='cover' className="border-white border w-6 h-6 lg:w-8 lg:h-8"/> : <Image src={"/profileDefault.jpg"} alt={"profileDefault"} width={25} height={25} objectFit='cover' className="border-white border w-6 h-6 lg:w-8 lg:h-8" />}
-      <p className="text-[10px] ml-2">{truncateAddress(address)}</p>
+      <p className="text-[10px] ml-2">{username ? username: truncateAddress(address)}</p>
       <p className="text-nowrap text-[10px] ml-4">100 CRC</p>
     </Link>
   );
