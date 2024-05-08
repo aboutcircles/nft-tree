@@ -1,15 +1,15 @@
 import express, { Request, Response } from "express";
 import sqlite3 from "sqlite3";
+import { spawn } from "child_process";
+import { db } from "./db/models/index.js";
+import { Op } from "sequelize";
+
 const app = express();
 const PORT = 8000;
 
-import { spawn } from "child_process";
-
-import { db, initializeDatabase } from "./database.js";
-
 (async () => {
   try {
-    await initializeDatabase();
+    await db.sequelize.sync();
     console.log("Database initialized successfully.");
     // Start your server here or perform other database operations
 
@@ -45,18 +45,20 @@ const dbTest = new sqlite3.Database(
 app.get("/tree-data", (req: Request, res: Response) => {
   console.log("🟢 GET /tree-data");
   const lastFetchedId = req.query.id || 0;
-  db.all(
-    "SELECT * FROM treeData WHERE id > ?",
-    [lastFetchedId],
-    (err: Error | null, rows: any[]) => {
-      if (err) {
-        res.status(500).send("Failed to retrieve data from database.");
-        console.error(err.message);
-      } else {
-        res.json(rows);
-      }
-    }
-  );
+  db.models.TreeData.findAll({
+    where: {
+      id: {
+        [Op.gt]: lastFetchedId,
+      },
+    },
+  })
+    .then((rows: any) => {
+      res.json(rows);
+    })
+    .catch((err: { message: any }) => {
+      res.status(500).send("Failed to retrieve data from database.");
+      console.error(err.message);
+    });
 });
 
 app.get("/tree-test", (req: Request, res: Response) => {
@@ -78,14 +80,14 @@ app.get("/tree-test", (req: Request, res: Response) => {
 
 app.get("/db-transfers", (req: Request, res: Response) => {
   console.log("🟢 GET /db-transfers");
-  db.all("SELECT * FROM transfers", (err: Error | null, rows: any[]) => {
-    if (err) {
+  db.models.Transfer.findAll()
+    .then((rows: any) => {
+      res.json(rows);
+    })
+    .catch((err: { message: any }) => {
       res.status(500).send("Failed to retrieve data from database.");
       console.error(err.message);
-    } else {
-      res.json(rows);
-    }
-  });
+    });
 });
 
 app.listen(PORT, () => {
@@ -93,11 +95,14 @@ app.listen(PORT, () => {
 });
 
 process.on("SIGINT", () => {
-  db.close((err: Error | null) => {
-    if (err) {
+  db.sequelize
+    .close()
+    .then(() => {
+      console.log("Database connection closed.");
+      process.exit(0);
+    })
+    .catch((err) => {
       console.error(err.message);
-    }
-    console.log("Database connection closed.");
-    process.exit(0);
-  });
+      process.exit(1);
+    });
 });

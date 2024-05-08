@@ -1,10 +1,8 @@
 import { ethers } from "ethers";
-
-import { db } from "../database.js";
+import { db } from "../db/models/index.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
-import convertToHumanCrc from "../utils/convertToHumanCrc.js";
 import { getMockTransferSteps } from "./mockData.js";
-
+import { Transfer } from "types/Transfer.js";
 const erc721ABI = [
   {
     inputs: [
@@ -45,6 +43,7 @@ const erc721ABI = [
     type: "event",
   },
 ];
+
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || "", provider);
 const contract = new ethers.Contract(
@@ -53,17 +52,7 @@ const contract = new ethers.Contract(
   wallet
 );
 
-interface Transfer {
-  transactionHash: string;
-  fromAddress: string;
-  amount: string;
-  nftAmount: number;
-  nftMinted: number;
-  timestamp: string;
-}
-
-export async function mintNfts(transfer: Transfer) {
-  const toMint = transfer.nftAmount - transfer.nftMinted;
+export async function mintNfts(transfer: Transfer, toMint: number) {
   if (toMint === 0) return;
   let minted = 0;
 
@@ -125,14 +114,24 @@ export async function mintNfts(transfer: Transfer) {
       }
     }
 
-    db.run(
-      "UPDATE transfers SET processed = ?, nftMinted = ? WHERE transactionHash = ?",
-      [
-        minted === toMint ? 1 : 0,
-        transfer.nftMinted + minted,
-        transfer.transactionHash,
-      ]
-    );
+    try {
+      await db.models.Transfer.update(
+        {
+          processed: minted === toMint ? true : false,
+          nftMinted: transfer.nftMinted + minted,
+        },
+        {
+          where: {
+            transactionHash: transfer.transactionHash,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(
+        `   ${transferId} ERROR UPDATING TRANSFER ${transfer.transactionHash}`
+      );
+      console.error(error);
+    }
 
     if (nftIds.length === 0) {
       `   ${transferId} NO TOKENS WERE MINTED TO ${transfer.fromAddress}`;
@@ -148,18 +147,23 @@ export async function mintNfts(transfer: Transfer) {
     console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
 
     const senderData = await getUserData(checksumAddress);
-    const crcAmount = convertToHumanCrc(transfer.amount, transfer.timestamp);
-    const sql = `
-          INSERT INTO treeData (nftIds, crcAmount, address, username, imageUrl, steps)
-          VALUES (?, ?, ?, ?, ?, ?)`;
-    db.run(sql, [
-      JSON.stringify(nftIds),
-      crcAmount,
-      checksumAddress,
-      senderData?.username || "",
-      senderData?.avatarUrl || "",
-      JSON.stringify(steps),
-    ]);
+
+    try {
+      await db.models.TreeData.create({
+        nftIds: JSON.stringify(nftIds),
+        crcAmount: transfer.crcAmount,
+        address: checksumAddress,
+        username: senderData?.username || "",
+        imageUrl: senderData?.avatarUrl || "",
+        steps: JSON.stringify(steps),
+      });
+    } catch (error) {
+      console.error(
+        `   ${transferId} ERROR STORING NFT DATA FOR ${checksumAddress}`
+      );
+      console.error(error);
+    }
+
     console.log(`${transferId} - FINISH`);
   } catch (error) {
     console.error(

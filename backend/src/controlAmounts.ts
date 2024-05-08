@@ -13,10 +13,7 @@ const controlAmounts = () => {
       String(transfer.timestamp)
     );
     console.log("crcAmount", crcAmount);
-    const nftAmount = getNftAmount(
-      String(transfer.amount),
-      String(transfer.timestamp)
-    );
+    const nftAmount = getNftAmount(crcAmount);
     console.log("nftAmount", nftAmount);
   }
 };
