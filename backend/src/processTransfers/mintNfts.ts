@@ -149,6 +149,7 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
     const senderData = await getUserData(checksumAddress);
 
     try {
+      console.log("create tree data");
       await db.models.TreeData.create({
         nftIds: JSON.stringify(nftIds),
         crcAmount: transfer.crcAmount,

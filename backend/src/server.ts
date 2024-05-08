@@ -7,30 +7,30 @@ import { Op } from "sequelize";
 const app = express();
 const PORT = 8000;
 
-(async () => {
-  try {
-    await db.sequelize.sync();
-    console.log("Database initialized successfully.");
-    // Start your server here or perform other database operations
+// (async () => {
+//   try {
+//     await db.sequelize.sync();
+//     console.log("Database initialized successfully.");
+//     // Start your server here or perform other database operations
 
-    // Start the background task as a separate process
-    const background = spawn("node", ["dist/processTransfers/index.js"]);
+//     // Start the background task as a separate process
+//     const background = spawn("node", ["dist/processTransfers/index.js"]);
 
-    background.stdout.on("data", (data: Buffer) => {
-      console.log(`Minting task says: ${data.toString()}`);
-    });
+//     background.stdout.on("data", (data: Buffer) => {
+//       console.log(`Minting task says: ${data.toString()}`);
+//     });
 
-    background.stderr.on("data", (data: Buffer) => {
-      console.error(`Minting task had an error: ${data}`);
-    });
+//     background.stderr.on("data", (data: Buffer) => {
+//       console.error(`Minting task had an error: ${data}`);
+//     });
 
-    background.on("close", (code: number) => {
-      console.log(`Minting task exited with code: ${code}`);
-    });
-  } catch (error) {
-    console.error("Failed to initialize database:", error);
-  }
-})();
+//     background.on("close", (code: number) => {
+//       console.log(`Minting task exited with code: ${code}`);
+//     });
+//   } catch (error) {
+//     console.error("Failed to initialize database:", error);
+//   }
+// })();
 
 const dbTest = new sqlite3.Database(
   "./test.db",
