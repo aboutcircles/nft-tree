@@ -7,12 +7,12 @@ import { Address } from "viem";
 
 type TreeData = {
   id: number;
-  nftId: string;
+  nftIds: string;
+  crcAmount: string;
   address: Address;
   username: string;
   imageUrl: string;
   steps: string;
-  timestamp: string;
 };
 
 type Transfer = {
@@ -21,6 +21,13 @@ type Transfer = {
 };
 
 export type Donor = {
+  address: Address;
+  imageUrl: string;
+  username: string;
+  crcAmount: string;
+};
+
+export type NFT = {
   address: Address;
   imageUrl: string;
   username: string;
@@ -54,9 +61,19 @@ export async function fetchServerData() {
       address: item.address,
       imageUrl: item.imageUrl,
       username: item.username,
-      nftId: Number(item.nftId),
-      timestamp: item.timestamp
+      crcAmount: item.crcAmount,
     };
+  });
+
+  const nfts: NFT[] = dataArray.flatMap((item) => {
+    const nftArray = JSON.parse(item.nftIds);
+    return nftArray.map((nft: { nftId: string; timestamp: number }) => ({
+      address: item.address,
+      imageUrl: item.imageUrl,
+      username: item.username,
+      nftId: parseInt(nft.nftId),
+      timestamp: nft.timestamp.toString(),
+    }));
   });
 
   const transfers: Transfer[] = dataArray.reduce((acc, item) => {
@@ -72,5 +89,5 @@ export async function fetchServerData() {
 
   const consolidateTransfer = consolidateTransfers(transfers);
 
-  return { consolidateTransfer, donors, supply: dataArray.length };
+  return { consolidateTransfer, donors, nfts, supply: dataArray.length };
 }

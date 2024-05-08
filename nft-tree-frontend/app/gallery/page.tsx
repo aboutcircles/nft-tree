@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Donor, fetchServerData } from "@/actions/fetchDatas";
+import { NFT, fetchServerData } from "@/actions/fetchDatas";
 import GalleryItem from "@/components/galleryItem";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
@@ -8,15 +8,15 @@ import Link from "next/link";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [donors, setDonors] = useState<Donor[]>([]);
-  const [filteredDonors, setFilteredDonors] = useState<Donor[]>([]);
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  const [filteredNfts, setFilteredNfts] = useState<NFT[]>([]);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const { donors } = await fetchServerData();
-      setDonors(donors);
-      setFilteredDonors(donors); // Initially, display all donors
+      const { nfts } = await fetchServerData();
+      setNfts(nfts);
+      setFilteredNfts(nfts); // Initially, display all nfts
     };
     fetchData();
 
@@ -32,19 +32,19 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Filter donors when searchQuery changes
-    const filtered = donors.filter((donor) => {
+    // Filter nfts when searchQuery changes
+    const filtered = nfts.filter((nft) => {
       if (!isNaN(Number(searchQuery))) {
         // If searchQuery is a number, filter based on nftId
         console.log(searchQuery);
-        return donor.nftId === parseInt(searchQuery);
+        return nft.nftId === parseInt(searchQuery);
       } else {
         // If searchQuery is not a number, filter based on address or username
-        return donor.address.includes(searchQuery) || donor.username.includes(searchQuery);
+        return nft.address.includes(searchQuery) || nft.username.includes(searchQuery);
       }
     });
-    setFilteredDonors(filtered);
-  }, [searchQuery, donors]);
+    setFilteredNfts(filtered);
+  }, [searchQuery, nfts]);
 
   return (
     <main className="flex flex-col h-screen w-full bg-black text-white">
@@ -61,10 +61,10 @@ export default function Home() {
       )}
       <div className="w-full overflow-y-scroll p-4 landscape:px-16 grid grid-cols-3 landscape:grid-cols-5 gap-4">
         {searchQuery === ""
-          ? // If searchQuery is empty, render all donors
-            donors.map((donor, index) => <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} timestamp={donor.timestamp} />)
-          : // If searchQuery is not empty, render filtered donors
-            filteredDonors.map((donor, index) => <GalleryItem key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} nftId={donor.nftId} timestamp={donor.timestamp} />)}
+          ? // If searchQuery is empty, render all nfts
+            nfts.map((nft, index) => <GalleryItem key={index} address={nft.address} imageUrl={nft.imageUrl} username={nft.username} nftId={nft.nftId} timestamp={nft.timestamp} />)
+          : // If searchQuery is not empty, render filtered nfts
+            filteredNfts.map((nft, index) => <GalleryItem key={index} address={nft.address} imageUrl={nft.imageUrl} username={nft.username} nftId={nft.nftId} timestamp={nft.timestamp} />)}
       </div>
       <div className="flex w-full items-end p-2 border-t-2 landscape:hidden">
         <div className="flex">
