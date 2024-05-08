@@ -12,7 +12,7 @@ type TreeData = {
   username: string;
   imageUrl: string;
   steps: string;
-  updatedAt: string;
+  timestamp: string;
 };
 
 type Transfer = {
@@ -25,7 +25,7 @@ export type Donor = {
   imageUrl: string;
   username: string;
   nftId: number;
-  updatedAt: string;
+  timestamp: string;
 };
 
 export async function fetchFilesData() {
@@ -55,7 +55,7 @@ export async function fetchServerData() {
       imageUrl: item.imageUrl,
       username: item.username,
       nftId: Number(item.nftId),
-      updatedAt: item.updatedAt
+      timestamp: item.timestamp
     };
   });
 

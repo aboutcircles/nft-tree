@@ -3,7 +3,7 @@ import { truncateAddress } from "@/utils/truncateAddress";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function GalleryItem({ address, imageUrl, username, nftId, updatedAt }: Donor) {
+export default function GalleryItem({ address, imageUrl, username, nftId, timestamp }: Donor) {
   return (
     <Link className="min-w-42 flex flex-col justify-between items-center border border-slate-300 text-xs hover:cursor-pointer" href={"https://circles.garden/profile/" + address} target="_blank">
       <div className="w-full border-b p-1">
@@ -25,7 +25,7 @@ export default function GalleryItem({ address, imageUrl, username, nftId, update
           {imageUrl ? <Image src={imageUrl} alt={""} width={25} height={25} className="border-white border w-6 h-6 lg:w-8 lg:h-8" /> : <Image src={"/profileDefault.jpg"} alt={"profileDefault"} width={25} height={25} className="border-white border w-6 h-6 lg:w-8 lg:h-8" />}
         </div>
         <p className="text-[10px] lg:text-[12px] text-white/50">MINTED ON</p>
-        <p className="text-[8px] lg:text-[10px]">{updatedAt}</p>
+        <p className="text-[8px] lg:text-[10px]">{timestamp}</p>
       </div>
     </Link>
   );
