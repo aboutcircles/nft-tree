@@ -20,7 +20,7 @@ const fetchRealData = async () => {
       },
     }
   );
-  return response.data;
+  return response;
 };
 
 export async function fetchTransfers(): Promise<{ data: { result: any[] } }> {
