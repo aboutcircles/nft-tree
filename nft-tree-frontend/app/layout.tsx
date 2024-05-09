@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Mono } from "next/font/google";
 import "./globals.css";
+import { TreeDataProvider } from "@/providers/TreeDataProvider";
 
 const space_mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={space_mono.className}>
-        <div className="bg-black w-full h-full text-white">{children} </div>
+        <TreeDataProvider>
+          <div className="bg-black w-full h-full text-white">{children} </div>
+        </TreeDataProvider>
       </body>
     </html>
   );
