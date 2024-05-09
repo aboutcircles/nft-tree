@@ -48,7 +48,9 @@ export async function fetchFilesData() {
 }
 
 export async function fetchServerData() {
-  const res = await fetch("https://plankton-app-gvulz.ondigitalocean.app/tree-data");
+  const res = await fetch(
+    "https://plankton-app-gvulz.ondigitalocean.app/tree-data"
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -89,5 +91,5 @@ export async function fetchServerData() {
 
   const consolidateTransfer = consolidateTransfers(transfers);
 
-  return { consolidateTransfer, donors, nfts, supply: dataArray.length };
+  return { consolidateTransfer, donors, nfts, supply: nfts.length };
 }
