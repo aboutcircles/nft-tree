@@ -10,26 +10,23 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+    
     using Strings for uint256;
     uint256 private _tokenIdCounter;
      uint256 private constant _maxSupply = 1000;
     uint256 private _maxMintPerAddress = 3;
     mapping(address => uint256) private _mintCounts;
-
-
-
     //enable start and end time
-    // uint256 public startTime;
-    // uint256 public endTime;
+    uint256 public startTime;
+    uint256 public endTime;
 
-    constructor(
-        address initialOwner
-    ) ERC721("CirclesTree", "CTR") Ownable(initialOwner) {
+     constructor(
+        address initialOwner, uint256 _startTime, uint256 _endTime
+        ) ERC721("CirclesTree", "CTR") Ownable(initialOwner) {
         _tokenIdCounter = 1;
-    } // Start token ID from 1
-
-    //     startTime = _startTime;
-    //     endTime = _endTime;
+        startTime = _startTime;
+        endTime = _endTime;
+    }
 
     function generateSVG(uint256 tokenId) public pure returns (string memory) {
         bytes memory svg = abi.encodePacked(
@@ -85,15 +82,21 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
             );
     }
 
+
     // function safeMint(address to) public onlyOwner {
+    //     require(totalSupply() < _maxSupply, "Maximum supply reached");
+    //     require(_mintCounts[to] < _maxMintPerAddress, "Address has reached the maximum mint limit");
+        
     //     uint256 tokenId = _tokenIdCounter;
     //     _tokenIdCounter += 1;
     //     _safeMint(to, tokenId);
     //     _setTokenURI(tokenId, getTokenURI(tokenId));
-    //     // require(block.timestamp >= startTime && block.timestamp <= endTime, "Contract is not available at the moment");
+        
+    //     _mintCounts[to]++;
     // }
 
     function safeMint(address to) public onlyOwner {
+        require(block.timestamp >= startTime && block.timestamp <= endTime, "Minting is not allowed at this time");
         require(totalSupply() < _maxSupply, "Maximum supply reached");
         require(_mintCounts[to] < _maxMintPerAddress, "Address has reached the maximum mint limit");
         
@@ -117,14 +120,6 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     ) public virtual override(ERC721, IERC721) {
         revert("Transfers are disabled.");
     }
-
-    // function safeTransferFrom(
-    //     address from,
-    //     address to,
-    //     uint256 tokenId
-    // ) public virtual override {
-    //     revert("Transfers are disabled.");
-    // }
 
     function safeTransferFrom(
         address from,
@@ -175,3 +170,4 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         return super.supportsInterface(interfaceId);
     }
 }
+
