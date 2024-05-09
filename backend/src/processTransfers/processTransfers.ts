@@ -35,7 +35,7 @@ const getTotalNftAmountForAddress = async (
 export async function processTransfers(): Promise<void> {
   try {
     const response = await fetchTransfers();
-    // console.log("processTransfers", response.data.result.length);
+    console.log("processTransfers", response.data.result.length);
     if (response.data && response.data.result) {
       let i = 1;
       for (const donation of response.data.result) {
