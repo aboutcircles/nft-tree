@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useState, useEffect } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { publicClient } from "@/viem";
 import { Address } from "viem";
 import circlesTreeABI from "@/utils/abis/CirclesTree";
@@ -29,10 +29,15 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
   children,
 }) => {
   const [lastId, setLastId] = useState<number>(0);
+  // const [lastEvent, setLastEvent] = useState<number>(0);
   const URL = "https://plankton-app-gvulz.ondigitalocean.app/tree-data";
-  const fetcher = ([url, id]: [string, number]) =>
-    fetch(`${url}?id=${id}`).then((res) => res.json());
-  const { data, error } = useSWR([URL, lastId], fetcher);
+  // fetch(`${url}?id=${id}`).then((res) => res.json());
+  const fetcher = async ([url, id]: [string, number]) => {
+    console.log("fetcher");
+    return fetch(`${url}`).then((res) => res.json());
+  };
+
+  const { data, error, isLoading } = useSWR([URL, lastId], fetcher);
 
   const [donors, setDonors] = useState<Donor[]>();
   const [nfts, setNfts] = useState<NFT[]>();
@@ -47,7 +52,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
         username: item.username,
         crcAmount: item.crcAmount,
       }));
-      setDonors(_donors);
+      setDonors(_donors.reverse());
 
       const _nfts: NFT[] = data.flatMap((item: TreeData) => {
         const nftArray = JSON.parse(item.nftIds);
@@ -59,7 +64,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
           timestamp: nft.timestamp.toString(),
         }));
       });
-      setNfts(_nfts);
+      setNfts(_nfts.reverse());
       const _transfers: Transfer[] = data.reduce(
         (acc: Transfer[], item: TreeData) => {
           const steps = JSON.parse(item.steps) as Transfer[];
@@ -77,11 +82,12 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
 
       const _consolidateTransfer = consolidateTransfers(_transfers);
       setConsolidateTransfer(_consolidateTransfer);
-    }
-  }, [data]);
 
-  if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+      if (data && data.length > 0 && data[data.length - 1].id > lastId) {
+        setLastId(data[data.length - 1].id);
+      }
+    }
+  }, [data, lastId]);
 
   useEffect(() => {
     const unwatch = publicClient.watchContractEvent({
@@ -91,12 +97,12 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
       pollingInterval: 2000,
       onLogs: async (logs) => {
         console.log("logs", logs);
-        await fetchServerData();
+        await mutate([URL, lastId]);
       },
     });
 
     return () => unwatch();
-  }, []);
+  }, [lastId]);
 
   const treeData = {
     donors,

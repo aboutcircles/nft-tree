@@ -1,6 +1,6 @@
 import Donation from "./donation";
 import { Donor } from "@/actions/fetchDatas";
-import Link from "next/link";
+// import Link from "next/link";
 
 interface DonationsProps {
   donors: Donor[];
@@ -12,8 +12,17 @@ export default function Donations({ donors }: DonationsProps) {
       Recent Donations
       <div className="w-full flex gap-x-1 landscape:flex-col text-xs mt-2">
         {donors.slice(0, 10).map((donor, index) => (
-          <div key={index} className={`${index >= 2 ? "w-full hidden landscape:block" : ""}`}>
-            <Donation key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} crcAmount={donor.crcAmount} />
+          <div
+            key={index}
+            className={`${index >= 2 ? "w-full hidden landscape:block" : ""}`}
+          >
+            <Donation
+              key={index}
+              address={donor.address}
+              imageUrl={donor.imageUrl}
+              username={donor.username}
+              crcAmount={donor.crcAmount}
+            />
           </div>
         ))}
       </div>

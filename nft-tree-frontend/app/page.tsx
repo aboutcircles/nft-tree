@@ -1,5 +1,4 @@
 "use client";
-import { fetchServerData } from "@/actions/fetchDatas";
 import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
@@ -10,7 +9,6 @@ import Link from "next/link";
 
 export default function Home() {
   const { consolidateTransfer, donors, supply } = useTreeData();
-  // const { consolidateTransfer, donors, supply } = await fetchServerData();
   return (
     <main className="flex h-screen flex-col items-center">
       <div className="w-full h-full flex flex-col items-center">
@@ -48,7 +46,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-end border-t-2 p-2">
+      <div className="bg-black w-full flex justify-end border-t-2 p-2">
         <Link className="flex items-center text-sm" href={"/gallery"}>
           SEE THE GALLERY
           <ArrowRightIcon width={18} height={18} className="ml-1" />
