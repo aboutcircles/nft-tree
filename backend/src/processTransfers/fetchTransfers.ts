@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchMockData } from "./mockData.js";
+// import { fetchMockData } from "./mockData.js";
 
 const fetchRealData = async () => {
   const response = await axios.post(
@@ -24,8 +24,8 @@ const fetchRealData = async () => {
 };
 
 export async function fetchTransfers(): Promise<{ data: { result: any[] } }> {
-  // const response = await fetchRealData();
-  const response = await fetchMockData();
+  const response = await fetchRealData();
+  // const response = await fetchMockData();
 
   return response;
 }

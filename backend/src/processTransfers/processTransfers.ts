@@ -1,4 +1,3 @@
-import axios from "axios";
 import { db } from "../db/models/index.js";
 import { mintNfts } from "./mintNfts.js";
 import convertToHumanCrc from "../utils/convertToHumanCrc.js";
