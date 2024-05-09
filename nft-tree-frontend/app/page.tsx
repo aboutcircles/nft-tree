@@ -1,13 +1,14 @@
-import { fetchServerData } from "@/actions/fetchDatas";
+"use client";
 import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
+import { useTreeData } from "@/hooks/useTreeData";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function Home() {
-  const { consolidateTransfer, donors, supply } = await fetchServerData();
+export default function Home() {
+  const { consolidateTransfer, donors, supply } = useTreeData();
   return (
     <main className="flex h-screen flex-col items-center">
       <div className="w-full h-full flex flex-col items-center">
@@ -16,10 +17,10 @@ export default async function Home() {
             <CirclesInfo supply={supply} />
           </div>
           <div className="w-fit flex flex-col p-4 landscape:hidden landscape:lg:flex">
-            <Donations donors={donors} />
+            <Donations donors={donors || []} />
           </div>
           <div className="h-full w-full flex flex-col justify-end p-4">
-            <Tree nodes={consolidateTransfer} />
+            <Tree nodes={consolidateTransfer || []} />
           </div>
           <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
             <div className="flex">
@@ -45,7 +46,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-end border-t-2 p-2">
+      <div className="bg-black w-full flex justify-end border-t-2 p-2">
         <Link className="flex items-center text-sm" href={"/gallery"}>
           SEE THE GALLERY
           <ArrowRightIcon width={18} height={18} className="ml-1" />
