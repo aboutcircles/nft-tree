@@ -3,8 +3,10 @@ import sqlite3 from "sqlite3";
 import { spawn } from "child_process";
 import { db } from "./db/models/index.js";
 import { Op } from "sequelize";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 const PORT = 8000;
 
 (async () => {
