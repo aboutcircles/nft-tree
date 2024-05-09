@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { db } from "../db/models/index.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
-import { getMockTransferSteps } from "./mockData.js";
+// import { getMockTransferSteps } from "./mockData.js";
 import { Transfer } from "types/Transfer.js";
 const erc721ABI = [
   {
@@ -138,11 +138,11 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
       return;
     }
 
-    // const steps = await getTransferSteps(
-    //   transfer.transactionHash,
-    //   transfer.amount
-    // );
-    const steps = await getMockTransferSteps(checksumAddress);
+    const steps = await getTransferSteps(
+      transfer.transactionHash,
+      transfer.amount
+    );
+    // const steps = await getMockTransferSteps(checksumAddress);
 
     console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
 
