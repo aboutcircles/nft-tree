@@ -68,7 +68,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="w-full overflow-y-scroll p-4 landscape:px-16 grid grid-cols-3 landscape:grid-cols-5 gap-4">
+      <div className="w-full overflow-y-scroll p-4 landscape:px-16 grid grid-cols-2 landscape:grid-cols-5 gap-4">
         {searchQuery === ""
           ? // If searchQuery is empty, render all nfts
             nfts?.map((nft, index) => (
