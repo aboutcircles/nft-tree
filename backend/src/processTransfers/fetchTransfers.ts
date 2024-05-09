@@ -25,7 +25,6 @@ const fetchRealData = async () => {
 
 export async function fetchTransfers(): Promise<{ data: { result: any[] } }> {
   const response = await fetchRealData();
-  console.log("fetch data", response);
   // const response = await fetchMockData();
 
   return response;

@@ -13,7 +13,8 @@ const sequelize = new Sequelize(database, username, password, {
   host,
   port,
   dialect,
-  logging: console.log,
+  // logging: console.log,
+  logging: false,
   dialectOptions,
 });
 

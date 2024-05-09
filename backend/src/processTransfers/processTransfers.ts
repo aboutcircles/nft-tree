@@ -35,7 +35,6 @@ const getTotalNftAmountForAddress = async (
 export async function processTransfers(): Promise<void> {
   try {
     const response = await fetchTransfers();
-    console.log("processTransfers", response.data.result.length);
     if (response.data && response.data.result) {
       let i = 1;
       for (const donation of response.data.result) {
@@ -55,13 +54,13 @@ export async function processTransfers(): Promise<void> {
         const transferId = transactionHash.slice(-5);
 
         const crcAmount = convertToHumanCrc(amount, timestamp);
-        console.log(`${transferId} - crcAmount: ${crcAmount}`);
+        console.log(`   ${transferId} - crcAmount: ${crcAmount}`);
         const nftAmountFromTransfer = getNftAmount(crcAmount);
         console.log(
-          `${transferId} - nftAmountFromTransfer: ${nftAmountFromTransfer}`
+          `   ${transferId} - nftAmountFromTransfer: ${nftAmountFromTransfer}`
         );
         const nftAlreadyMinted = await getTotalNftAmountForAddress(fromAddress);
-        console.log(`${transferId} - nftAlreadyMinted: ${nftAlreadyMinted}`);
+        console.log(`   ${transferId} - nftAlreadyMinted: ${nftAlreadyMinted}`);
         // max 3 NFTs per address
         const maxNftsPerAddress = 3;
         const remainingNftQuota = maxNftsPerAddress - nftAlreadyMinted;
