@@ -4,7 +4,8 @@
     "test": "npx hardhat test",
     "deploy-local": "npx hardhat ignition deploy ./ignition/modules/CirclesTree.ts --network localhost",
     "deploy-test": "npx hardhat ignition deploy ./ignition/modules/CirclesTree.ts --network chiado",
-    "deploy-prod": "npx hardhat ignition deploy ./ignition/modules/CirclesTree.ts --network gnosis"
+    "deploy-prod": "npx hardhat ignition deploy ./ignition/modules/CirclesTree.ts --network gnosis",
+    "verify": "ts-node ./scripts/verifyContract.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
