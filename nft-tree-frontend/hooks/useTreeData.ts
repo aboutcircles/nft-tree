@@ -8,6 +8,6 @@ export const useTreeData = (): TreeDataContextType => {
   if (!context) {
     throw new Error("useTreeData must be used within a ValueProvider");
   }
-  const { consolidateTransfer, donors, supply, nfts, transfers } = context;
-  return { consolidateTransfer, donors, supply, nfts, transfers };
+  const { donors, supply, nfts, transfers, branches } = context;
+  return { donors, supply, nfts, transfers, branches };
 };

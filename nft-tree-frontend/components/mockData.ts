@@ -6,7 +6,7 @@ interface Step {
 }
 
 export function processBranchData(): string[][] {
-  return data.slice(0, 100).map((branch) => {
+  return data.map((branch) => {
     // Parse the JSON string to get the steps array
     const steps: Step[] = JSON.parse(branch.steps);
 
