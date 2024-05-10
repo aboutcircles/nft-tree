@@ -6,9 +6,11 @@ import { useTreeData } from "@/hooks/useTreeData";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Home() {
   const { donors, supply } = useTreeData();
+  const [currentDonor, setCurrentDonor] = useState<string | null>(null);
   return (
     <main className="flex h-screen flex-col items-center">
       <div className="w-full h-full flex flex-col items-center">
@@ -16,11 +18,15 @@ export default function Home() {
           <div className="z-10 absolute right-4 bottom-40 portrait:lg:bottom-64 landscape:top-4 landscape:left-4">
             <CirclesInfo supply={supply} />
           </div>
-          <div className="w-full flex flex-col p-4 landscape:hidden landscape:lg:flex">
-            <Donations donors={donors || []} />
+          <div className="w-fit flex flex-col p-4 landscape:hidden landscape:lg:flex">
+            <Donations
+              donors={donors || []}
+              currentDonor={currentDonor}
+              setCurrentDonor={setCurrentDonor}
+            />
           </div>
-          <div className="h-full w-full flex flex-col justify-end">
-            <Tree />
+          <div className="h-full w-full flex flex-col justify-end p-4">
+            <Tree currentDonor={currentDonor} />
           </div>
           <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
             <div className="flex">
