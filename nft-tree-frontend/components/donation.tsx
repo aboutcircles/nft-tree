@@ -19,7 +19,7 @@ export default function Donation({
     //   href={"https://circles.garden/profile/" + address}
     //   target="_blank"
     // >
-    <div className="w-full flex justify-between items-center border-t border-l border-r border-b lg:border-b-0 lg:last:border-b border-slate-300 p-2 lg:p-2 hover:cursor-pointer">
+    <div className="w-full flex justify-between items-center border lg:border-b-0 lg:last:border-b border-slate-300 p-2 lg:p-4 hover:cursor-pointer">
       {imageUrl ? (
         <Image
           src={imageUrl}
@@ -34,10 +34,10 @@ export default function Donation({
           ?
         </div>
       )}
-      <p className="text-[10px] ml-2">
+      <p className="text-[10px] portrait:lg:text-2xl ml-2">
         {username ? username : truncateAddress(address)}
       </p>
-      <p className="text-nowrap text-[10px] ml-4">{crcAmount} CRC</p>
+      <p className="text-nowrap text-[10px] portrait:lg:text-2xl ml-4">{crcAmount} CRC</p>
       {/* // </Link> */}
     </div>
   );
