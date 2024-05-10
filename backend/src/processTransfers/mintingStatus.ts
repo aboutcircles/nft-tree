@@ -1,17 +1,29 @@
 import sqlite3 from "sqlite3";
+
 export const db = new sqlite3.Database("./mintingStatus.db", (err) => {
   if (err) {
     console.error("Error opening database", err);
   } else {
+    console.log("Database opened successfully");
+    // Ensure table creation is complete before proceeding
     db.run(
       `
       CREATE TABLE IF NOT EXISTS mintingStatus (
-        status: INTEGER DEFAULT 0,
+        status INTEGER DEFAULT 0
       )
     `,
       (err) => {
         if (err) {
           console.error("Failed to create table", err);
+        } else {
+          console.log("Table created or already exists");
+          initializeMintingStatusDB()
+            .then(() => {
+              console.log("Database initialized successfully");
+            })
+            .catch((initErr) => {
+              console.error("Failed to initialize database", initErr);
+            });
         }
       }
     );
@@ -21,7 +33,7 @@ export const db = new sqlite3.Database("./mintingStatus.db", (err) => {
 export const initializeMintingStatusDB = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     db.run(
-      `INSERT INTO mintingStatus (status) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM mintingStatus)`,
+      `INSERT INTO mintingStatus (status) SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM mintingStatus WHERE status IS NOT NULL)`,
       (err) => {
         if (err) {
           reject(err);
@@ -33,12 +45,8 @@ export const initializeMintingStatusDB = (): Promise<void> => {
   });
 };
 
-export const setStatusMintingTrue = () => {
-  db.run(`UPDATE mintingStatus SET status = 1`);
-};
-
-export const setStatusMintingFalse = () => {
-  db.run(`UPDATE mintingStatus SET status = 0`);
+export const setStatusMinting = (status: boolean) => {
+  db.run(`UPDATE mintingStatus SET status = ${status ? 1 : 0}`);
 };
 
 interface MintingStatusRow {
