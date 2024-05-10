@@ -7,7 +7,7 @@ import cors from "cors";
 import {
   getStatusMinting,
   initializeMintingStatusDB,
-} from "processTransfers/mintingStatus.js";
+} from "./processTransfers/mintingStatus.js";
 
 const app = express();
 app.use(cors());
