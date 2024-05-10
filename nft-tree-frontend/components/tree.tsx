@@ -4,12 +4,7 @@ import { type Sketch } from "@p5-wrapper/react";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Address } from "viem";
 import { useEffect, useState } from "react";
-import { processBranchData } from "./mockData";
 import { useTreeData } from "@/hooks/useTreeData";
-
-// interface TreeProps {
-//   nodes: Node[];
-// }
 
 export type Node = {
   id: Address;
@@ -17,8 +12,6 @@ export type Node = {
   parents: Set<Address>;
   children: Set<Address>;
 };
-
-// const branches = processBranchData();
 
 // Define TypeScript types for state
 // interface SketchState {
