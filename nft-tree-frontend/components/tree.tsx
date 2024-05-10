@@ -13,16 +13,15 @@ export type Node = {
   children: Set<Address>;
 };
 
+function wait(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms); // 1000 milliseconds = 1 second
+  });
+}
+
 export default function Tree() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
   const { branches } = useTreeData();
-  const [currentBranchIndex, setCurrentBranchIndex] = useState(0);
-
-  let localCurrentBranchIndex = 0;
-
-  const totalBranches = branches?.length || 0;
-  const framesPerBranch = 1;
 
   useEffect(() => {
     const canvaWrapper = document.getElementById("CanvaWrapper");
@@ -54,7 +53,7 @@ export default function Tree() {
       p5.smooth();
     };
 
-    p5.draw = () => {
+    p5.draw = async () => {
       p5.background(0);
       p5.stroke(231, 179, 210, 150);
 
@@ -126,29 +125,13 @@ export default function Tree() {
       // Map to track line usage
       // const lineUsage: Record<string, number> = {};
 
-      // Draw each branch with a delay
-      for (let i = 0; i <= currentBranchIndex; i++) {
-        drawBranch(branches[i]);
+      for (let i = 0; i < branches.length; i++) {
+        await drawBranch(branches[i]);
       }
 
-      if (p5.frameCount > branches.length) {
-        console.log("done");
-        p5.noLoop();
-      }
-
-      // Increment the branch index every 'framesPerBranch' frames
-      if (
-        p5.frameCount % framesPerBranch === 0 &&
-        currentBranchIndex < totalBranches - 1
-      ) {
-        console.log("setCurrentBranchIndex", currentBranchIndex);
-        setCurrentBranchIndex(currentBranchIndex + 1);
-        p5.redraw(); // Redraw the canvas to reflect new branch
-      }
-
-      function drawBranch(branch: string[]) {
+      async function drawBranch(branch: string[]) {
         let prev: { x: number; y: number } | null = null;
-        branch.forEach((point) => {
+        branch.forEach(async (point) => {
           const current = allPoints[point];
           if (prev) {
             p5.line(prev.x, prev.y, current.x, current.y);
@@ -163,7 +146,12 @@ export default function Tree() {
           p5.drawingContext.shadowBlur = 10;
           p5.drawingContext.shadowColor = "rgba(255, 255, 255, 0.5)";
 
+          p5.stroke(234, 222, 228);
+
+          p5.fill(234, 222, 228);
+
           p5.ellipse(current.x, current.y, 2, 2);
+          p5.stroke(231, 179, 210, 150);
 
           p5.drawingContext.shadowOffsetX = 0;
           p5.drawingContext.shadowOffsetY = 0;
@@ -171,7 +159,9 @@ export default function Tree() {
           p5.drawingContext.shadowColor = "rgba(0, 0, 0, 0)";
 
           prev = current;
+          await wait(20);
         });
+        await wait(30);
       }
     };
   };
