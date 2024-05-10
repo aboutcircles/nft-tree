@@ -3,10 +3,7 @@ import { db } from "../db/models/index.js";
 import { getTransferSteps, getUserData } from "./transferInfo.js";
 // import { getMockTransferSteps } from "./mockData.js";
 import { Transfer } from "types/Transfer.js";
-import {
-  setStatusMintingFalse,
-  setStatusMintingTrue,
-} from "./mintingStatus.js";
+import { setStatusMinting } from "./mintingStatus.js";
 const erc721ABI = [
   {
     inputs: [
@@ -84,7 +81,7 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
           }`
         );
 
-        setStatusMintingTrue();
+        setStatusMinting(true);
         const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for  confirmations or 30 seconds
         if (!txReceipt) {
           console.log(
@@ -117,7 +114,7 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
         );
         console.error(error);
       } finally {
-        setStatusMintingFalse();
+        setStatusMinting(false);
       }
     }
 

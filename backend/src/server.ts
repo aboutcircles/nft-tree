@@ -85,7 +85,7 @@ app.get("/tree-test", (req: Request, res: Response) => {
   );
 });
 
-app.get("/db-transfers", (req: Request, res: Response) => {
+app.get("/db-transfers", async (req: Request, res: Response) => {
   console.log("🟢 GET /db-transfers");
   db.models.Transfer.findAll()
     .then((rows: any) => {
@@ -97,10 +97,10 @@ app.get("/db-transfers", (req: Request, res: Response) => {
     });
 });
 
-app.get("/minting-status", (_: Request, res: Response) => {
+app.get("/minting-status", async (_: Request, res: Response) => {
   console.log("🟢 GET /minting-status");
   try {
-    const status = getStatusMinting();
+    const status = await getStatusMinting();
     res.json(status);
   } catch (error) {
     res.json(false);
