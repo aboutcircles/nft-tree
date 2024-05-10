@@ -13,15 +13,20 @@ export type Node = {
   children: Set<Address>;
 };
 
-function wait(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms); // 1000 milliseconds = 1 second
-  });
-}
-
-export default function Tree() {
+export default function Tree({
+  currentDonor,
+}: {
+  currentDonor: string | null;
+}) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const { branches } = useTreeData();
+
+  function wait(ms: number) {
+    if (currentDonor) return;
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
 
   useEffect(() => {
     const canvaWrapper = document.getElementById("CanvaWrapper");
@@ -53,9 +58,51 @@ export default function Tree() {
       p5.smooth();
     };
 
+    const setColor = (isCurrent: boolean) => {
+      if (isCurrent) {
+        setHighlihtColor();
+      } else {
+        setBaseStrokeColor();
+      }
+    };
+    const setBaseStrokeColor = () => {
+      p5.stroke(231, 179, 210, 150);
+      p5.strokeWeight(0.9);
+    };
+
+    const setHighlihtColor = () => {
+      p5.stroke(34, 197, 94);
+      p5.fill(34, 197, 94);
+      p5.strokeWeight(1.5);
+
+      p5.drawingContext.shadowOffsetX = 3;
+      p5.drawingContext.shadowOffsetY = 3;
+      p5.drawingContext.shadowBlur = 10;
+      p5.drawingContext.shadowColor = "rgba(255, 255, 255, 0.5)";
+    };
+
+    const switchShadow = (on: boolean, isCurrent: boolean) => {
+      p5.drawingContext.shadowOffsetX = on ? (isCurrent ? 3 : 3) : 0;
+      p5.drawingContext.shadowOffsetY = on ? (isCurrent ? 3 : 3) : 0;
+      p5.drawingContext.shadowBlur = on ? (isCurrent ? 10 : 10) : 0;
+      p5.drawingContext.shadowColor = on
+        ? "rgba(255, 255, 255, 0.5)"
+        : "rgba(0, 0, 0, 0)";
+    };
+
+    const setPointsColor = (isCurrent: boolean) => {
+      if (isCurrent) {
+        p5.stroke(34, 197, 94);
+        p5.fill(34, 197, 94);
+      } else {
+        p5.stroke(231, 179, 210, 150);
+        p5.fill(231, 179, 210, 150);
+      }
+    };
+
     p5.draw = async () => {
       p5.background(0);
-      p5.stroke(231, 179, 210, 150);
+      setBaseStrokeColor();
 
       const allPoints: Record<
         string,
@@ -125,13 +172,26 @@ export default function Tree() {
       // Map to track line usage
       // const lineUsage: Record<string, number> = {};
 
+      let currentId;
+
       for (let i = 0; i < branches.length; i++) {
-        await drawBranch(branches[i]);
+        const isCurrent = branches[i][branches[i].length - 1] === currentDonor;
+        if (isCurrent) {
+          currentId = i;
+        }
+        await drawBranch(branches[i], isCurrent);
+      }
+      if (currentId) {
+        await drawBranch(branches[currentId], true);
       }
 
-      async function drawBranch(branch: string[]) {
+      async function drawBranch(branch: string[], isCurrent: boolean) {
+        setColor(isCurrent);
         let prev: { x: number; y: number } | null = null;
+
         branch.forEach(async (point) => {
+          setColor(isCurrent);
+
           const current = allPoints[point];
           if (prev) {
             p5.line(prev.x, prev.y, current.x, current.y);
@@ -140,23 +200,13 @@ export default function Tree() {
             // lineUsage[lineKey] = (lineUsage[lineKey] || 0) + 1;
           }
 
-          // Enable shadow for points
-          p5.drawingContext.shadowOffsetX = 3;
-          p5.drawingContext.shadowOffsetY = 3;
-          p5.drawingContext.shadowBlur = 10;
-          p5.drawingContext.shadowColor = "rgba(255, 255, 255, 0.5)";
-
-          p5.stroke(234, 222, 228);
-
-          p5.fill(234, 222, 228);
-
+          switchShadow(true, isCurrent);
+          setPointsColor(isCurrent);
           p5.ellipse(current.x, current.y, 2, 2);
-          p5.stroke(231, 179, 210, 150);
 
-          p5.drawingContext.shadowOffsetX = 0;
-          p5.drawingContext.shadowOffsetY = 0;
-          p5.drawingContext.shadowBlur = 0;
-          p5.drawingContext.shadowColor = "rgba(0, 0, 0, 0)";
+          // back to "normal" color
+          setColor(isCurrent);
+          switchShadow(false, isCurrent);
 
           prev = current;
           await wait(20);
