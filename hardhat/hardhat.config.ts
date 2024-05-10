@@ -33,7 +33,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       xdai: process.env.GNOSISSCAN_API_KEY || "",
-      chiado: process.env.GNOSISSCAN_CHIADO_API_KEY || "",
+      chiado: process.env.GNOSISSCAN_API_KEY || "",
     },
   },
 };
