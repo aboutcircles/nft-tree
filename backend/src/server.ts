@@ -4,6 +4,10 @@ import { spawn } from "child_process";
 import { db } from "./db/models/index.js";
 import { Op } from "sequelize";
 import cors from "cors";
+import {
+  getStatusMinting,
+  initializeMintingStatusDB,
+} from "processTransfers/mintingStatus.js";
 
 const app = express();
 app.use(cors());
@@ -12,6 +16,7 @@ const PORT = 8000;
 (async () => {
   try {
     await db.sequelize.sync();
+    await initializeMintingStatusDB();
     console.log("Database initialized successfully.");
     // Start your server here or perform other database operations
 
@@ -90,6 +95,16 @@ app.get("/db-transfers", (req: Request, res: Response) => {
       res.status(500).send("Failed to retrieve data from database.");
       console.error(err.message);
     });
+});
+
+app.get("/minting-status", (_: Request, res: Response) => {
+  console.log("🟢 GET /minting-status");
+  try {
+    const status = getStatusMinting();
+    res.json(status);
+  } catch (error) {
+    res.json(false);
+  }
 });
 
 app.listen(PORT, () => {
