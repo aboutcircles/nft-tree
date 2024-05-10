@@ -1,6 +1,7 @@
 "use client";
 import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
+import Loader from "@/components/loader";
 import Tree from "@/components/tree";
 import { useTreeData } from "@/hooks/useTreeData";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
@@ -9,7 +10,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
-  const { donors, supply } = useTreeData();
+  const { donors, supply, mintingStatus } = useTreeData();
+  console.log(mintingStatus);
   const [currentDonor, setCurrentDonor] = useState<string | null>(null);
   return (
     <main className="flex h-screen flex-col items-center">
@@ -19,11 +21,15 @@ export default function Home() {
             <CirclesInfo supply={supply} />
           </div>
           <div className="w-full flex flex-col p-4 landscape:hidden landscape:lg:flex">
-            <Donations
-              donors={donors || []}
-              currentDonor={currentDonor}
-              setCurrentDonor={setCurrentDonor}
-            />
+            {mintingStatus ? (
+              <div className="w-full flex flex-col justify-center items-center gap-y-4 lg:text-2xl">
+                New donation processing...
+                <Loader />
+              </div>
+            ) : (
+              ""
+            )}
+            <Donations donors={donors || []} currentDonor={currentDonor} setCurrentDonor={setCurrentDonor} />
           </div>
           <div className="h-full w-full flex flex-col justify-end">
             <Tree currentDonor={currentDonor} />
@@ -36,17 +42,9 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col text-wrap ml-4">
-                <p className="text-xs font-bold portrait:lg:text-4xl">
-                  DONATE, GET AN NFT, AND GROW THE NETWORK
-                </p>
-                <p className="text-[8px] portrait:lg:text-2xl">
-                  Deposit 100 CRC into this address to mint an exclusive,
-                  DAPPCON 2024 CIRCLES NFT.
-                </p>
-                <p className="text-[8px] portrait:lg:text-2xl mt-2">
-                  By growing our network, you are helping to solidify the
-                  Circles Network.
-                </p>
+                <p className="text-xs font-bold portrait:lg:text-4xl">DONATE, GET AN NFT, AND GROW THE NETWORK</p>
+                <p className="text-[8px] portrait:lg:text-2xl">Deposit 100 CRC into this address to mint an exclusive, DAPPCON 2024 CIRCLES NFT.</p>
+                <p className="text-[8px] portrait:lg:text-2xl mt-2">By growing our network, you are helping to solidify the Circles Network.</p>
               </div>
             </div>
           </div>
