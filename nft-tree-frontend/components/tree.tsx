@@ -5,12 +5,13 @@ import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Address } from "viem";
 import p5 from "p5";
 import { useEffect, useState } from "react";
+import { processBranchData } from "./mockData";
 
 interface TreeProps {
   nodes: Node[];
 }
 
-export const treasuryAddress = "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
+// export const treasuryAddress = "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
 
 export type Node = {
   id: Address;
@@ -18,6 +19,8 @@ export type Node = {
   parents: Set<Address>;
   children: Set<Address>;
 };
+
+const branches = processBranchData();
 
 export default function Tree({ nodes }: TreeProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -46,105 +49,114 @@ export default function Tree({ nodes }: TreeProps) {
   }, []);
 
   const sketch: Sketch = (p5) => {
-    let pathfindersMap = new Map();
-    let rootPathfinder: Pathfinder;
-    let allPathfinder: Pathfinder[] = [];
-
-    class Pathfinder {
-      node: Node;
-      location: p5.Vector;
-      velocity: p5.Vector;
-      diameter: number;
-      level: number;
-      updated: boolean;
-
-      constructor(node: Node, parent?: Pathfinder) {
-        this.node = node;
-        if (parent) {
-          this.location = parent.location.copy();
-          this.velocity = parent.velocity.copy();
-          this.velocity.rotate(p5.random(-p5.QUARTER_PI / 2, p5.QUARTER_PI / 2));
-          this.level = parent.level + 1;
-          this.velocity.setMag(p5.random(100 * Math.pow(0.8, this.level), 120 * Math.pow(0.8, this.level)));
-        } else {
-          this.location = p5.createVector(p5.width / 2, p5.height);
-          this.velocity = p5.createVector(0, -p5.random(1, 5));
-          this.level = 1;
-        }
-        this.diameter = Math.max(0.8, 1 - 0.1 * this.level);
-        this.updated = false;
-      }
-
-      update() {
-        let bump = p5.createVector(p5.random(-1, 1), p5.random(-1, 1));
-        bump.mult(0.1 * (1 / this.level));
-        this.velocity.add(bump);
-        this.location.add(this.velocity);
-        this.updated = true;
-      }
-
-      // adjust() {
-      //   let drift = p5.createVector(p5.random(-0.2, 0.2), p5.random(-0.2, 0.2));
-      //   this.location.add(drift);
-      // }
-
-      draw() {
-        // this.adjust();
-        let bottomColor = p5.color(231, 179, 210);
-        let topColor = p5.color(141, 132, 139);
-        let inter = p5.map(this.location.y, dimensions.height, 0, 0, 1);
-        let c = p5.lerpColor(bottomColor, topColor, inter);
-        p5.strokeWeight(this.diameter);
-        p5.stroke(c);
-        p5.point(this.location.x, this.location.y);
-      }
-    }
-
-    function setupTree(node: Node, pathfinder: Pathfinder) {
-      if (node && node.children.size > 0) {
-        node.children.forEach((childAddress) => {
-          let childNode = nodes.find((n) => n.id === childAddress);
-          if (childNode) {
-            let newBranch;
-            if (pathfindersMap.has(childAddress)) {
-              newBranch = pathfindersMap.get(childAddress);
-            } else {
-              newBranch = new Pathfinder(childNode, pathfinder);
-              pathfindersMap.set(childAddress, newBranch);
-              allPathfinder.push(newBranch);
-            }
-            newBranch.update();
-            setupTree(childNode, newBranch);
-          }
-        });
-      }
-    }
-
     p5.setup = () => {
       p5.createCanvas(dimensions.width, dimensions.height);
+      p5.noLoop();
       p5.smooth();
-      p5.randomSeed(95);
-      const rootNode = nodes.find((n) => n.id === treasuryAddress);
-      if (rootNode) {
-        rootPathfinder = new Pathfinder(rootNode);
-        pathfindersMap.set(treasuryAddress, rootPathfinder);
-        setupTree(rootNode, rootPathfinder);
-      }
     };
 
     p5.draw = () => {
       p5.background(0);
-      allPathfinder.forEach((path) => {
-        path.draw();
+      p5.stroke(231, 179, 210);
+
+      const allPoints: Record<
+        string,
+        {
+          depth: number;
+          x: number;
+          y: number;
+          flex: number;
+          branchLength: number;
+        }
+      > = {};
+      let maxDepth = 0; // To determine the maximum depth across all branches
+
+      // First pass to determine the maximum depth
+      branches.forEach((branch) => {
+        maxDepth = Math.max(maxDepth, branch.length - 1);
       });
-      allPathfinder.forEach((pathfinder) => {
-        pathfinder.node.parents.forEach((parent) => {
-          let parentPathfinder = pathfindersMap.get(parent);
-          if (parentPathfinder) {
-            p5.stroke(231, 179, 210);
-            p5.line(parentPathfinder.location.x, parentPathfinder.location.y, pathfinder.location.x, pathfinder.location.y);
+
+      // Assign depths such that the first element is at the bottom
+      branches.forEach((branch) => {
+        branch.forEach((point, index) => {
+          if (!allPoints[point]) {
+            allPoints[point] = {
+              depth: maxDepth - index,
+              x: 0,
+              y: 0,
+              flex: branch.length - index,
+              branchLength: branch.length,
+            }; // Decrease depth as index increases
           }
         });
+      });
+
+      // Calculate y positions based on depth
+      const margin = 50;
+      const spacing = (p5.height - 2 * margin) / (maxDepth + 1);
+
+      // let accumulatedSpacing = spacing;
+
+      Object.keys(allPoints).forEach((key) => {
+        allPoints[key].y =
+          margin + allPoints[key].depth * spacing + allPoints[key].flex;
+
+        // allPoints[key].y =
+        //   margin +
+        //   (allPoints[key].depth * spacing + allPoints[key].flex) *
+        //     (allPoints[key].flex / allPoints[key].branchLength);
+      });
+
+      allPoints["0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811"].y += 30;
+
+      // Calculate x positions
+      const branchSpacing = p5.width / (branches.length + 1);
+      const centerIndex = Math.floor(branches.length / 2);
+      branches.forEach((branch, index) => {
+        // Calculate position index from the center
+        let positionIndex;
+        if (index % 2 === 0) {
+          positionIndex = centerIndex + Math.floor(index / 2);
+        } else {
+          positionIndex = centerIndex - Math.floor((index + 1) / 2);
+        }
+
+        const baseX = (positionIndex + 1) * branchSpacing;
+        branch.forEach((point) => {
+          if (allPoints[point].x === 0) {
+            allPoints[point].x = baseX; // Set x position for each point
+          }
+        });
+      });
+
+      // Map to track line usage
+      const lineUsage: Record<string, number> = {};
+
+      // Draw lines, points, and labels
+      let i = 0;
+      branches.forEach((branch) => {
+        i++;
+        let prev: { x: number; y: number } | null = null;
+        branch.forEach((point) => {
+          const current = allPoints[point];
+          if (prev) {
+            p5.line(prev.x, prev.y, current.x, current.y);
+            const lineKey = `${prev.x},${prev.y}-${current.x},${current.y}`;
+            lineUsage[lineKey] = (lineUsage[lineKey] || 0) + 1;
+            const weight = lineUsage[lineKey] > 1 ? 3 : 1;
+            // p5.strokeWeight(weight); // Set the line thickness based on usage
+            p5.line(prev.x, prev.y, current.x, current.y);
+          }
+          p5.strokeWeight(1); // Reset the line thickness for points and text
+          p5.ellipse(current.x, current.y, 2, 2);
+          // p5.text(point.slice(2, 5), current.x + 5, current.y + 5);
+          prev = current;
+        });
+        const lastPoint = branch[branch.length - 1];
+        const current = allPoints[lastPoint];
+        // p5.text(i, current.x + 5, current.y - 20);
+        // p5.ellipse(current.x, current.y, 5, 6);
+        // console.log(lastPoint);
       });
     };
   };
