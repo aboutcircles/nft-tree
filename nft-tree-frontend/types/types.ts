@@ -56,5 +56,6 @@ export type TreeDataContextType = {
   nfts: NFT[] | undefined;
   transfers: Transfer[] | undefined;
   supply: number | undefined;
-  consolidateTransfer: Node[] | undefined;
+  branches: string[][] | undefined;
+  // consolidateTransfer: Node[] | undefined;
 };

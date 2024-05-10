@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
-  const { consolidateTransfer, donors, supply } = useTreeData();
+  const { donors, supply } = useTreeData();
   return (
     <main className="flex h-screen flex-col items-center">
       <div className="w-full h-full flex flex-col items-center">
@@ -20,7 +20,7 @@ export default function Home() {
             <Donations donors={donors || []} />
           </div>
           <div className="h-full w-full flex flex-col justify-end p-4">
-            <Tree nodes={consolidateTransfer || []} />
+            <Tree />
           </div>
           <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
             <div className="flex">

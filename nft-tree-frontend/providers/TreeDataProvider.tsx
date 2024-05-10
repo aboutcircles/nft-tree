@@ -4,7 +4,7 @@ import useSWR, { mutate } from "swr";
 import { publicClient } from "@/viem";
 import { Address } from "viem";
 import circlesTreeABI from "@/utils/abis/CirclesTree";
-import { consolidateTransfers } from "@/utils/loadDatas";
+// import { consolidateTransfers } from "@/utils/loadDatas";
 import {
   Donor,
   NFT,
@@ -12,7 +12,7 @@ import {
   TreeData,
   TreeDataContextType,
 } from "@/types/types";
-import { Node } from "@/components/tree";
+// import { Node } from "@/components/tree";
 
 const circlesTreeAddress = (process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
   "") as Address;
@@ -25,6 +25,11 @@ interface TreeDataProviderProps {
   children: React.ReactNode;
 }
 
+interface Step {
+  from: string;
+  to: string;
+}
+
 export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
   children,
 }) => {
@@ -33,7 +38,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
   const URL = "https://plankton-app-gvulz.ondigitalocean.app/tree-data";
   // fetch(`${url}?id=${id}`).then((res) => res.json());
   const fetcher = async ([url, id]: [string, number]) => {
-    console.log("fetcher");
+    // console.log("fetcher");
     return fetch(`${url}`).then((res) => res.json());
   };
 
@@ -42,7 +47,8 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
   const [donors, setDonors] = useState<Donor[]>();
   const [nfts, setNfts] = useState<NFT[]>();
   const [transfers, setTransfers] = useState<Transfer[]>();
-  const [consolidateTransfer, setConsolidateTransfer] = useState<Node[]>();
+  const [branches, setBranches] = useState<string[][]>();
+  // const [consolidateTransfer, setConsolidateTransfer] = useState<Node[]>();
 
   useEffect(() => {
     if (data) {
@@ -80,8 +86,26 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
       );
       setTransfers(_transfers);
 
-      const _consolidateTransfer = consolidateTransfers(_transfers);
-      setConsolidateTransfer(_consolidateTransfer);
+      const _branches: string[][] = data.map((branch: TreeData) => {
+        // Parse the JSON string to get the steps array
+        const steps: Step[] = JSON.parse(branch.steps);
+
+        // Reverse the steps array and map to get only the 'to' field
+
+        const toSteps = Array.from(
+          new Set(steps.reverse().map((step) => step.to))
+        );
+
+        // const toSteps = steps.reverse().map((step) => step.to);
+        toSteps.push(branch.address);
+
+        return toSteps;
+      });
+
+      setBranches(_branches);
+
+      // const _consolidateTransfer = consolidateTransfers(_transfers);
+      // setConsolidateTransfer(_consolidateTransfer);
 
       if (data && data.length > 0 && data[data.length - 1].id > lastId) {
         setLastId(data[data.length - 1].id);
@@ -108,8 +132,9 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
     donors,
     nfts,
     transfers,
-    consolidateTransfer,
+    // consolidateTransfer,
     supply: nfts?.length,
+    branches,
   };
 
   return (
