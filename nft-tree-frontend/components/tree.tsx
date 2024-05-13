@@ -53,7 +53,7 @@ export default function Tree({
 
   const sketch: Sketch = (p5) => {
     p5.setup = () => {
-      p5.createCanvas(dimensions.width, dimensions.height - 150);
+      p5.createCanvas(dimensions.width, dimensions.height);
       p5.noLoop();
       p5.smooth();
     };

@@ -50,8 +50,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="bg-black w-full flex justify-end border-t-2 p-2">
-        <Link className="flex items-center text-sm portrait:lg:text-2xl" href={"/gallery"}>
+      <div className="bg-black w-full flex justify-end border-t-2 p-2 portrait:lg:hidden">
+        <Link className="flex items-center text-sm lg:text-2xl" href={"/gallery"}>
           SEE THE GALLERY
           <ArrowRightIcon width={18} height={18} className="ml-1" />
         </Link>
