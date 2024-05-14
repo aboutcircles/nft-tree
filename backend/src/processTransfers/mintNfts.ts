@@ -59,6 +59,32 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
 
   const transferId = transfer.transactionHash.slice(-5);
 
+  const steps = await getTransferSteps(
+    transfer.transactionHash,
+    transfer.amount
+  );
+
+  if (steps.length === 0) {
+    try {
+      await db.models.Transfer.update(
+        {
+          processed: false,
+          nftMinted: transfer.nftMinted,
+        },
+        {
+          where: {
+            transactionHash: transfer.transactionHash,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(
+        `   ${transferId} ERROR UPDATING TRANSFER ${transfer.transactionHash}`
+      );
+      console.error(error);
+    }
+  }
+
   try {
     const checksumAddress = ethers.getAddress(transfer.fromAddress);
 
@@ -142,10 +168,10 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
       return;
     }
 
-    const steps = await getTransferSteps(
-      transfer.transactionHash,
-      transfer.amount
-    );
+    // const steps = await getTransferSteps(
+    //   transfer.transactionHash,
+    //   transfer.amount
+    // );
     // const steps = await getMockTransferSteps(checksumAddress);
 
     console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
