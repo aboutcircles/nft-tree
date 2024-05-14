@@ -29,10 +29,14 @@ export default function Home() {
             ) : (
               ""
             )}
-            <Donations donors={donors || []} currentDonor={currentDonor} setCurrentDonor={setCurrentDonor} />
+            <Donations
+              donors={donors || []}
+              currentDonor={currentDonor}
+              setCurrentDonor={setCurrentDonor}
+            />
           </div>
           <div className="h-full w-full flex flex-col justify-end">
-            <Tree currentDonor={currentDonor} />
+            <Tree currentDonorChoosen={currentDonor} />
           </div>
           <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
             <div className="flex">
@@ -42,16 +46,27 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col text-wrap ml-4">
-                <p className="text-xs font-bold portrait:lg:text-4xl">DONATE, GET AN NFT, AND GROW THE NETWORK</p>
-                <p className="text-[8px] portrait:lg:text-2xl">Deposit 100 CRC into this address to mint an exclusive, DAPPCON 2024 CIRCLES NFT.</p>
-                <p className="text-[8px] portrait:lg:text-2xl mt-2">By growing our network, you are helping to solidify the Circles Network.</p>
+                <p className="text-xs font-bold portrait:lg:text-4xl">
+                  DONATE, GET AN NFT, AND GROW THE NETWORK
+                </p>
+                <p className="text-[8px] portrait:lg:text-2xl">
+                  Deposit 100 CRC into this address to mint an exclusive,
+                  DAPPCON 2024 CIRCLES NFT.
+                </p>
+                <p className="text-[8px] portrait:lg:text-2xl mt-2">
+                  By growing our network, you are helping to solidify the
+                  Circles Network.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="bg-black w-full flex justify-end border-t-2 p-2 portrait:lg:hidden">
-        <Link className="flex items-center text-sm lg:text-2xl" href={"/gallery"}>
+        <Link
+          className="flex items-center text-sm lg:text-2xl"
+          href={"/gallery"}
+        >
           SEE THE GALLERY
           <ArrowRightIcon width={18} height={18} className="ml-1" />
         </Link>

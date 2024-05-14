@@ -14,12 +14,17 @@ export type Node = {
 };
 
 export default function Tree({
-  currentDonor,
+  currentDonorChoosen,
 }: {
-  currentDonor: string | null;
+  currentDonorChoosen: string | null;
 }) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const { branches } = useTreeData();
+
+  const currentDonor =
+    !currentDonorChoosen && branches
+      ? branches[branches.length - 1][branches[branches.length - 1].length - 1]
+      : currentDonorChoosen;
 
   function wait(ms: number) {
     if (currentDonor) return;
@@ -110,7 +115,7 @@ export default function Tree({
           depth: number;
           x: number;
           y: number;
-          flex: number;
+          // flex: number;
           branchLength: number;
         }
       > = {};
@@ -130,7 +135,7 @@ export default function Tree({
               depth: maxDepth - index,
               x: 0,
               y: 0,
-              flex: branch.length - index,
+              // flex: branch.length - index,
               branchLength: branch.length,
             }; // Decrease depth as index increases
           }
@@ -139,11 +144,11 @@ export default function Tree({
 
       // Calculate y positions based on depth
       const margin = 50;
-      const spacing = (p5.height - 2 * margin) / (maxDepth + 1);
+      const spacing = (p5.height - 2 * margin) / maxDepth;
 
       Object.keys(allPoints).forEach((key) => {
-        allPoints[key].y =
-          margin + allPoints[key].depth * spacing + allPoints[key].flex;
+        allPoints[key].y = margin + allPoints[key].depth * spacing;
+        // margin + allPoints[key].depth * spacing + allPoints[key].flex;
       });
 
       const rootPoint = branches[0][0];
