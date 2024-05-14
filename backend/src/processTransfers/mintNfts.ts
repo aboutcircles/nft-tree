@@ -83,6 +83,8 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
       );
       console.error(error);
     }
+    `   ${transferId} NO TOKENS WERE MINTED TO ${transfer.fromAddress} - didn't fetch steps`;
+    return;
   }
 
   try {
