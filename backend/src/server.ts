@@ -50,7 +50,7 @@ const dbTest = new sqlite3.Database(
 );
 
 app.get("/tree-data", (req: Request, res: Response) => {
-  console.log("🟢 GET /tree-data");
+  // console.log("🟢 GET /tree-data");
   const lastFetchedId = req.query.id || 0;
   db.models.TreeData.findAll({
     where: {
@@ -69,7 +69,7 @@ app.get("/tree-data", (req: Request, res: Response) => {
 });
 
 app.get("/tree-test", (req: Request, res: Response) => {
-  console.log("🟢 GET /tree-test");
+  // console.log("🟢 GET /tree-test");
   const lastFetchedId = req.query.id || 0;
   dbTest.all(
     "SELECT * FROM treeData WHERE id > ?",
@@ -86,7 +86,7 @@ app.get("/tree-test", (req: Request, res: Response) => {
 });
 
 app.get("/db-transfers", async (req: Request, res: Response) => {
-  console.log("🟢 GET /db-transfers");
+  // console.log("🟢 GET /db-transfers");
   db.models.Transfer.findAll()
     .then((rows: any) => {
       res.json(rows);
@@ -98,7 +98,7 @@ app.get("/db-transfers", async (req: Request, res: Response) => {
 });
 
 app.get("/minting-status", async (_: Request, res: Response) => {
-  console.log("🟢 GET /minting-status");
+  // console.log("🟢 GET /minting-status");
   try {
     const status = await getStatusMinting();
     res.json(status);
