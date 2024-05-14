@@ -4,28 +4,17 @@ import useSWR, { mutate } from "swr";
 import { publicClient } from "@/viem";
 import { Address } from "viem";
 import circlesTreeABI from "@/utils/abis/CirclesTree";
-import {
-  Donor,
-  NFT,
-  Transfer,
-  TreeData,
-  TreeDataContextType,
-} from "@/types/types";
+import { Donor, NFT, Transfer, TreeData, TreeDataContextType } from "@/types/types";
 
-const circlesTreeAddress = (process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
-  "") as Address;
+const circlesTreeAddress = (process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS || "") as Address;
 
-export const TreeDataContext = createContext<TreeDataContextType | undefined>(
-  undefined
-);
+export const TreeDataContext = createContext<TreeDataContextType | undefined>(undefined);
 
 interface TreeDataProviderProps {
   children: React.ReactNode;
 }
 
-export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
-  children,
-}) => {
+export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({ children }) => {
   const [lastId, setLastId] = useState<number>(0);
   // const [lastEvent, setLastEvent] = useState<number>(0);
   const URL = "https://plankton-app-gvulz.ondigitalocean.app/tree-data";
@@ -41,6 +30,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
   const [nfts, setNfts] = useState<NFT[]>();
   const [transfers, setTransfers] = useState<Transfer[]>();
   const [branches, setBranches] = useState<string[][]>();
+  const [mintingStatus, setMintingStatus] = useState<boolean>();
 
   useEffect(() => {
     if (data) {
@@ -80,9 +70,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
         });
 
         // Process branches
-        const toSteps = Array.from(
-          new Set(steps.reverse().map((step) => step.to))
-        );
+        const toSteps = Array.from(new Set(steps.reverse().map((step) => step.to)));
         toSteps.push(item.address);
         _branches.push(toSteps);
       });
@@ -115,6 +103,20 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
     return () => unwatch();
   }, [lastId]);
 
+  useEffect(() => {
+    const fetchMintingStatus = async () => {
+      const response = await fetch("https://plankton-app-gvulz.ondigitalocean.app/minting-status");
+      const data = await response.json();
+      setMintingStatus(data);
+    };
+
+    fetchMintingStatus();
+
+    const intervalId = setInterval(fetchMintingStatus, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   const treeData = {
     donors,
     nfts,
@@ -122,11 +124,8 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
     // consolidateTransfer,
     supply: nfts?.length,
     branches,
+    mintingStatus
   };
 
-  return (
-    <TreeDataContext.Provider value={treeData}>
-      {children}
-    </TreeDataContext.Provider>
-  );
+  return <TreeDataContext.Provider value={treeData}>{children}</TreeDataContext.Provider>;
 };
