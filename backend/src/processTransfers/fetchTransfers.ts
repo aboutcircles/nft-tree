@@ -3,7 +3,7 @@ import axios from "axios";
 
 const fetchRealData = async () => {
   const response = await axios.post(
-    "https://circles-rpc.circlesubi.id/",
+    "https://circles-rpc.aboutcircles.com/",
     {
       jsonrpc: "2.0",
       method: "circles_queryHubTransfers",
