@@ -29,10 +29,14 @@ export default function Home() {
             ) : (
               ""
             )}
-            <Donations donors={donors || []} currentDonor={currentDonor} setCurrentDonor={setCurrentDonor} />
+            <Donations
+              donors={donors || []}
+              currentDonor={currentDonor}
+              setCurrentDonor={setCurrentDonor}
+            />
           </div>
           <div className="h-full w-full flex flex-col justify-end">
-            <Tree currentDonor={currentDonor} />
+            <Tree currentDonorChoosen={currentDonor} />
           </div>
           <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
             <div className="flex landscape:lg:w-[720px]">
@@ -42,16 +46,25 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col text-wrap ml-4">
-                <p className="text-xs font-bold lg:text-[30px]">DONATE, GET AN NFT, AND GROW THE NETWORK</p>
-                <p className="text-[8px] lg:text-[16px]">Deposit 100 CRC into this address to mint an exclusive, DAPPCON 2024 CIRCLES NFT.</p>
-                <p className="text-[8px] lg:text-[16px] mt-2">By growing our network, you are helping to solidify the Circles Network.</p>
+                <p className="text-xs font-bold portrait:lg:text-4xl">
+                  DONATE, MINT AND GROW THE CIRCLES NETWORK
+                </p>
+                <p className="text-[8px] portrait:lg:text-2xl">
+                  Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.
+                </p>
+                <p className="text-[8px] portrait:lg:text-2xl mt-2">
+                  Visit dappcon.aboutcircles.com to view the tree and gallery.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="bg-black w-full flex justify-end border-t-2 p-2 portrait:lg:hidden">
-        <Link className="flex items-center text-sm lg:text-2xl" href={"/gallery"}>
+        <Link
+          className="flex items-center text-sm lg:text-2xl"
+          href={"/gallery"}
+        >
           SEE THE GALLERY
           <ArrowRightIcon width={18} height={18} className="ml-1" />
         </Link>

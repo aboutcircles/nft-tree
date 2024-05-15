@@ -79,10 +79,7 @@ export async function processTransfers(): Promise<void> {
               await db.models.Transfer.update(
                 {
                   processed: true,
-                  nftAmount:
-                    dbTransfer.nftAmount === 0
-                      ? nftAmountToMint
-                      : dbTransfer.nftAmount + nftAmountToMint,
+                  nftAmount: nftAmountToMint,
                 },
                 {
                   where: {

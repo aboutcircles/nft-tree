@@ -59,6 +59,34 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
 
   const transferId = transfer.transactionHash.slice(-5);
 
+  const steps = await getTransferSteps(
+    transfer.transactionHash,
+    transfer.amount
+  );
+
+  if (steps.length === 0) {
+    try {
+      await db.models.Transfer.update(
+        {
+          processed: false,
+          nftMinted: transfer.nftMinted,
+        },
+        {
+          where: {
+            transactionHash: transfer.transactionHash,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(
+        `   ${transferId} ERROR UPDATING TRANSFER ${transfer.transactionHash}`
+      );
+      console.error(error);
+    }
+    `   ${transferId} NO TOKENS WERE MINTED TO ${transfer.fromAddress} - didn't fetch steps`;
+    return;
+  }
+
   try {
     const checksumAddress = ethers.getAddress(transfer.fromAddress);
 
@@ -82,7 +110,7 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
         );
 
         setStatusMinting(true);
-        const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for  confirmations or 30 seconds
+        const txReceipt = await provider.waitForTransaction(tx.hash, 2);
         if (!txReceipt) {
           console.log(
             `   ${transferId} Transaction ${tx.hash} is not confirmed...`
@@ -142,10 +170,10 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
       return;
     }
 
-    const steps = await getTransferSteps(
-      transfer.transactionHash,
-      transfer.amount
-    );
+    // const steps = await getTransferSteps(
+    //   transfer.transactionHash,
+    //   transfer.amount
+    // );
     // const steps = await getMockTransferSteps(checksumAddress);
 
     console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
