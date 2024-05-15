@@ -65,7 +65,7 @@ export default function Home() {
         <div className="flex">
           <div className="border-2 p-2">
             <div className="relative w-24 h-24 portrait:lg:w-48 portrait:lg:h-48">
-              <Image src={"/QRcode.png"} alt={""} fill={true} />
+              <Image src={"/QRcode.svg"} alt={""} fill={true} />
             </div>
           </div>
           <div className="flex flex-col text-wrap ml-4">
