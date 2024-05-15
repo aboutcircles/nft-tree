@@ -39,23 +39,21 @@ export default function Home() {
             <Tree currentDonorChoosen={currentDonor} />
           </div>
           <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
-            <div className="flex">
+            <div className="flex landscape:lg:w-[720px]">
               <div className="border-2 p-2">
                 <div className="relative w-24 h-24 portrait:lg:w-48 portrait:lg:h-48">
-                  <Image src={"/QRcode.png"} alt={""} fill={true} />
+                  <Image src={"/QRcode.svg"} alt={""} fill={true} />
                 </div>
               </div>
               <div className="flex flex-col text-wrap ml-4">
                 <p className="text-xs font-bold portrait:lg:text-4xl">
-                  DONATE, GET AN NFT, AND GROW THE NETWORK
+                  DONATE, MINT AND GROW THE CIRCLES NETWORK
                 </p>
                 <p className="text-[8px] portrait:lg:text-2xl">
-                  Deposit 100 CRC into this address to mint an exclusive,
-                  DAPPCON 2024 CIRCLES NFT.
+                  Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.
                 </p>
                 <p className="text-[8px] portrait:lg:text-2xl mt-2">
-                  By growing our network, you are helping to solidify the
-                  Circles Network.
+                  Visit dappcon.aboutcircles.com to view the tree and gallery.
                 </p>
               </div>
             </div>
