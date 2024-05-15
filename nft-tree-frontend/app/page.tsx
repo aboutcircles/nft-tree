@@ -47,15 +47,13 @@ export default function Home() {
               </div>
               <div className="flex flex-col text-wrap ml-4">
                 <p className="text-xs font-bold portrait:lg:text-4xl">
-                  DONATE, GET AN NFT, AND GROW THE NETWORK
+                  DONATE, MINT AND GROW THE CIRCLES NETWORK
                 </p>
                 <p className="text-[8px] portrait:lg:text-2xl">
-                  Deposit 100 CRC into this address to mint an exclusive,
-                  DAPPCON 2024 CIRCLES NFT.
+                  Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.
                 </p>
                 <p className="text-[8px] portrait:lg:text-2xl mt-2">
-                  By growing our network, you are helping to solidify the
-                  Circles Network.
+                  Visit dappcon.aboutcircles.com to view the tree and gallery.
                 </p>
               </div>
             </div>
