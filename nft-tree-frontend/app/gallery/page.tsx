@@ -63,15 +63,15 @@ export default function Home() {
       </div>
       <div className="flex w-full items-end p-2 border-t-2 landscape:hidden">
         <div className="flex">
-          <div className="border-2 p-2">
-            <div className="relative w-24 h-24 portrait:lg:w-48 portrait:lg:h-48">
+          <div className="border-2 p-2 lg:p-2.5">
+            <div className="relative w-24 h-24 lg:w-[160px] lg:h-[160px]">
               <Image src={"/QRcode.svg"} alt={""} fill={true} />
             </div>
           </div>
           <div className="flex flex-col text-wrap ml-4">
-            <p className="text-xs font-bold portrait:lg:text-4xl">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
-            <p className="text-[8px] portrait:lg:text-2xl">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
-            <p className="text-[8px] portrait:lg:text-2xl mt-2">Visit dappcon.aboutcircles.com to view the tree and gallery.</p>
+            <p className="text-xs font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
+            <p className="text-[8px] lg:text-[16px]">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
+            <p className="text-[8px] lg:text-[16px] mt-2">Visit dappcon.aboutcircles.com to view the tree and gallery.</p>
           </div>
         </div>
       </div>

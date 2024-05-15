@@ -1,7 +1,6 @@
 "use client";
 import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
-import Loader from "@/components/loader";
 import Tree from "@/components/tree";
 import { useTreeData } from "@/hooks/useTreeData";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
@@ -24,7 +23,6 @@ export default function Home() {
             {mintingStatus ? (
               <div className="w-full flex flex-col justify-center items-center gap-y-4 lg:text-2xl">
                 New donation processing...
-                <Loader />
               </div>
             ) : (
               ""
@@ -40,19 +38,19 @@ export default function Home() {
           </div>
           <div className="flex w-full items-end p-2 landscape:p-4 border-t-2 landscape:border-0">
             <div className="flex landscape:lg:w-[720px]">
-              <div className="border-2 p-2">
-                <div className="relative w-24 h-24 portrait:lg:w-48 portrait:lg:h-48">
+              <div className="border-2 p-2 lg:p-2.5">
+                <div className="relative w-24 h-24 lg:w-[160px] lg:h-[160px]">
                   <Image src={"/QRcode.svg"} alt={""} fill={true} />
                 </div>
               </div>
-              <div className="flex flex-col text-wrap ml-4">
-                <p className="text-xs font-bold portrait:lg:text-4xl">
+              <div className="flex flex-col h-full ml-4">
+                <p className="text-xs font-bold landscape:lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">
                   DONATE, MINT AND GROW THE CIRCLES NETWORK
                 </p>
-                <p className="text-[8px] portrait:lg:text-2xl">
+                <p className="text-[8px] lg:text-[16px]">
                   Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.
                 </p>
-                <p className="text-[8px] portrait:lg:text-2xl mt-2">
+                <p className="text-[8px] lg:text-[16px] mt-2">
                   Visit dappcon.aboutcircles.com to view the tree and gallery.
                 </p>
               </div>
