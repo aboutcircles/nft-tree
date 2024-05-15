@@ -16,9 +16,9 @@ export default function Donations({ donors, currentDonor, setCurrentDonor }: Don
   return (
     <div className="w-full flex flex-col landscape:p-4 lg:text-[20px] z-20">
       Recent Donations
-      <div className="w-full grid grid-cols-10 landscape:grid-cols-1 portrait:lg:grid-cols-3 gap-x-2 portrait:gap-y-2 landscape:flex-col mt-2 portrait:overflow-x-scroll">
+      <div className="w-full flex landscape:flex-col portrait:lg:grid portrait:lg:grid-cols-3 gap-x-2 portrait:gap-y-2 landscape:flex-col mt-2 portrait:overflow-x-scroll">
         {donors.slice(0, 10).map((donor, index) => (
-          <div key={index} className={`${index >= 6 ? "w-full hidden landscape:block" : "w-full"} ${(currentDonor && currentDonor === donor.address) || (!currentDonor && index === 0) ? "text-green-500" : ""}`} onClick={() => handleClick(donor.address)}>
+          <div key={index} className={`${index >= 6 ? "w-full block portrait:lg:hidden" : "w-full"} ${(currentDonor && currentDonor === donor.address) || (!currentDonor && index === 0) ? "text-green-500" : ""}`} onClick={() => handleClick(donor.address)}>
             <Donation key={index} address={donor.address} imageUrl={donor.imageUrl} username={donor.username} crcAmount={donor.crcAmount} />
           </div>
         ))}
