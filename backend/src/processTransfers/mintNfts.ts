@@ -110,7 +110,7 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
         );
 
         setStatusMinting(true);
-        const txReceipt = await provider.waitForTransaction(tx.hash, 3, 30000); // Wait for  confirmations or 30 seconds
+        const txReceipt = await provider.waitForTransaction(tx.hash, 2);
         if (!txReceipt) {
           console.log(
             `   ${transferId} Transaction ${tx.hash} is not confirmed...`
