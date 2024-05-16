@@ -18,9 +18,9 @@ export default function Donations({
   };
 
   return (
-    <div className="w-full flex flex-col landscape:p-4 lg:text-[20px] z-20 landscape:h-full overflow-y-scroll">
+    <div className="w-full flex flex-col landscape:p-4 lg:text-[20px] z-20 landscape:h-full overflow-y-hidden">
       Recent Donations
-      <div className="w-full flex landscape:flex-col portrait:lg:grid portrait:lg:grid-cols-3 gap-x-2 portrait:gap-y-2 mt-2 portrait:overflow-x-scroll overflow-y-scroll">
+      <div className="w-full flex landscape:flex-col portrait:lg:grid portrait:lg:grid-cols-3 gap-x-2 portrait:gap-y-2 mt-2 portrait:overflow-x-scroll overflow-y-hidden">
         {donors.slice(0, 10).map((donor, index) => (
           <div
             key={index}

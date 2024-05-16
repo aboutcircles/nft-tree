@@ -39,7 +39,7 @@ export default function Tree({
       console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
       setDimensions({
         width: canvaWrapper.offsetWidth,
-        height: canvaWrapper.offsetHeight - 160,
+        height: canvaWrapper.offsetHeight,
       });
     }
 
