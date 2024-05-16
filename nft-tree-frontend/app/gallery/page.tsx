@@ -62,14 +62,14 @@ export default function Home() {
             filteredNfts.map((nft, index) => <GalleryItem key={index} address={nft.address} imageUrl={nft.imageUrl} username={nft.username} nftId={nft.nftId} timestamp={nft.timestamp} />)}
       </div>
       <div className="flex w-full items-end p-2 border-t-2 landscape:hidden">
-        <div className="flex">
+        <div className="flex items-center portrait:lg:items-start">
           <div className="relative aspect-square w-24 h-24 lg:w-[160px] lg:h-[160px] border-2 p-2 lg:p-2.5">
             <Image src={"/QRcode.svg"} alt={""} fill={true} />
           </div>
           <div className="flex flex-col text-wrap ml-4">
-            <p className="text-xs font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
-            <p className="text-[8px] lg:text-[16px]">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
-            <p className="text-[8px] lg:text-[16px] mt-2">Visit dappcon.aboutcircles.com to view the tree and gallery.</p>
+            <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
+            <p className="text-xs lg:text-[16px]">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
+            <p className="text-xs lg:text-[16px] mt-2">Visit dappcon.aboutcircles.com to view the tree and gallery.</p>
           </div>
         </div>
       </div>

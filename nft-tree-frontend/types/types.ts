@@ -58,5 +58,6 @@ export type TreeDataContextType = {
   supply: number | undefined;
   branches: string[][] | undefined;
   mintingStatus: boolean | undefined;
+  mintingBranches: string[][] | undefined;
   // consolidateTransfer: Node[] | undefined;
 };

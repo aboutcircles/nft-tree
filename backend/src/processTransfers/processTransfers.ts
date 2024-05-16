@@ -56,9 +56,9 @@ export async function processTransfers(): Promise<void> {
         const crcAmount = convertToHumanCrc(amount, timestamp);
         console.log(`   ${transferId} - crcAmount: ${crcAmount}`);
         const nftAmountFromTransfer = getNftAmount(crcAmount);
-        console.log(
-          `   ${transferId} - nftAmountFromTransfer: ${nftAmountFromTransfer}`
-        );
+        // console.log(
+        //   `   ${transferId} - nftAmountFromTransfer: ${nftAmountFromTransfer}`
+        // );
         const nftAlreadyMinted = await getTotalNftAmountForAddress(fromAddress);
         console.log(`   ${transferId} - nftAlreadyMinted: ${nftAlreadyMinted}`);
         // max 3 NFTs per address
@@ -69,7 +69,7 @@ export async function processTransfers(): Promise<void> {
           remainingNftQuota,
           maxNftsPerAddress
         );
-        console.log(`${transferId} - nftAmountToMint: ${nftAmountToMint}`);
+        // console.log(`${transferId} - nftAmountToMint: ${nftAmountToMint}`);
         if (nftAmountToMint > 0) {
           console.log("✨✨✨🚀");
           console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);

@@ -19,7 +19,9 @@ export default function Tree({
   currentDonorChoosen: string | null;
 }) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const { branches } = useTreeData();
+  const { branches, mintingBranches } = useTreeData();
+
+  const branchesAll = [...(branches || []), ...(mintingBranches || [])];
 
   const currentDonor =
     !currentDonorChoosen && branches
@@ -36,7 +38,7 @@ export default function Tree({
   useEffect(() => {
     const canvaWrapper = document.getElementById("CanvaWrapper");
     if (canvaWrapper) {
-      // console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
+      console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
       setDimensions({
         width: canvaWrapper.offsetWidth,
         height: canvaWrapper.offsetHeight,
@@ -106,6 +108,7 @@ export default function Tree({
     };
 
     p5.draw = async () => {
+      if (branchesAll.length === 0) return;
       p5.background(0);
       setBaseStrokeColor();
 
@@ -121,14 +124,14 @@ export default function Tree({
       > = {};
       let maxDepth = 0; // To determine the maximum depth across all branches
 
-      if (!branches) return;
+      if (!branchesAll) return;
       // First pass to determine the maximum depth
-      branches.forEach((branch) => {
+      branchesAll.forEach((branch) => {
         maxDepth = Math.max(maxDepth, branch.length - 1);
       });
 
       // Assign depths such that the first element is at the bottom
-      branches.forEach((branch) => {
+      branchesAll.forEach((branch) => {
         branch.forEach((point, index) => {
           if (!allPoints[point]) {
             allPoints[point] = {
@@ -151,13 +154,13 @@ export default function Tree({
         // margin + allPoints[key].depth * spacing + allPoints[key].flex;
       });
 
-      const rootPoint = branches[0][0];
+      const rootPoint = branchesAll[0][0];
       allPoints[rootPoint].y += 30;
 
       // Calculate x positions
-      const branchSpacing = p5.width / (branches.length + 1);
-      const centerIndex = Math.floor(branches.length / 2);
-      branches.forEach((branch, index) => {
+      const branchSpacing = p5.width / (branchesAll.length + 1);
+      const centerIndex = Math.floor(branchesAll.length / 2);
+      branchesAll.forEach((branch, index) => {
         // Calculate position index from the center
         let positionIndex;
         if (index % 2 === 0) {
@@ -179,18 +182,53 @@ export default function Tree({
 
       let currentId;
 
-      for (let i = 0; i < branches.length; i++) {
-        const isCurrent = branches[i][branches[i].length - 1] === currentDonor;
-        if (isCurrent) {
-          currentId = i;
+      if (branches) {
+        for (let i = 0; i < branches.length; i++) {
+          const isCurrent =
+            branches[i][branches[i].length - 1] === currentDonor;
+          if (isCurrent) {
+            currentId = i;
+          }
+          await drawBranch(branches[i], isCurrent);
         }
-        await drawBranch(branches[i], isCurrent);
-      }
-      if (currentId) {
-        await drawBranch(branches[currentId], true);
+        if (currentId) {
+          await drawBranch(branches[currentId], true);
+        }
       }
 
-      async function drawBranch(branch: string[], isCurrent: boolean) {
+      if (mintingBranches) {
+        for (let i = 0; i < mintingBranches.length; i++) {
+          await drawBranch(mintingBranches[i], true, true);
+        }
+      }
+
+      function drawDashedLine(
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number,
+        len: number,
+        gap: number
+      ) {
+        const distance = p5.dist(x1, y1, x2, y2);
+        const dashNumber = distance / (len + gap);
+        const deltaX = (x2 - x1) / dashNumber;
+        const deltaY = (y2 - y1) / dashNumber;
+
+        for (let i = 0; i < dashNumber; i++) {
+          const x = x1 + deltaX * i;
+          const y = y1 + deltaY * i;
+          if (i % 2 === 0) {
+            p5.line(x, y, x + deltaX, y + deltaY);
+          }
+        }
+      }
+
+      async function drawBranch(
+        branch: string[],
+        isCurrent: boolean,
+        isMinting: boolean = false
+      ) {
         setColor(isCurrent);
         let prev: { x: number; y: number } | null = null;
 
@@ -199,7 +237,11 @@ export default function Tree({
 
           const current = allPoints[point];
           if (prev) {
-            p5.line(prev.x, prev.y, current.x, current.y);
+            if (isMinting) {
+              drawDashedLine(prev.x, prev.y, current.x, current.y, 5, 5);
+            } else {
+              p5.line(prev.x, prev.y, current.x, current.y);
+            }
 
             // const lineKey = `${prev.x},${prev.y}-${current.x},${current.y}`;
             // lineUsage[lineKey] = (lineUsage[lineKey] || 0) + 1;

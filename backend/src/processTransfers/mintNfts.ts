@@ -87,9 +87,28 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
     return;
   }
 
-  try {
-    const checksumAddress = ethers.getAddress(transfer.fromAddress);
+  const checksumAddress = ethers.getAddress(transfer.fromAddress);
+  const senderData = await getUserData(checksumAddress);
 
+  let treeData;
+
+  try {
+    treeData = await db.models.TreeData.create({
+      nftIds: JSON.stringify([]),
+      crcAmount: transfer.crcAmount,
+      address: checksumAddress,
+      username: senderData?.username || "",
+      imageUrl: senderData?.avatarUrl || "",
+      steps: JSON.stringify(steps),
+    });
+  } catch (error) {
+    console.error(
+      `   ${transferId} ERROR STORING TREE PRE-MINT DATA FOR ${checksumAddress}`
+    );
+    console.error(error);
+  }
+
+  try {
     const nftIds = [];
     for (let i = 0; i < toMint; i++) {
       try {
@@ -110,7 +129,7 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
         );
 
         setStatusMinting(true);
-        const txReceipt = await provider.waitForTransaction(tx.hash, 2);
+        const txReceipt = await provider.waitForTransaction(tx.hash, 1);
         if (!txReceipt) {
           console.log(
             `   ${transferId} Transaction ${tx.hash} is not confirmed...`
@@ -178,20 +197,23 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
 
     console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
 
-    const senderData = await getUserData(checksumAddress);
-
     try {
-      await db.models.TreeData.create({
-        nftIds: JSON.stringify(nftIds),
-        crcAmount: transfer.crcAmount,
-        address: checksumAddress,
-        username: senderData?.username || "",
-        imageUrl: senderData?.avatarUrl || "",
-        steps: JSON.stringify(steps),
-      });
+      await db.models.TreeData.update(
+        {
+          nftIds: JSON.stringify(nftIds),
+          crcAmount: transfer.crcAmount,
+          address: checksumAddress,
+          username: senderData?.username || "",
+          imageUrl: senderData?.avatarUrl || "",
+          steps: JSON.stringify(steps),
+        },
+        {
+          where: { id: treeData?.id },
+        }
+      );
     } catch (error) {
       console.error(
-        `   ${transferId} ERROR STORING NFT DATA FOR ${checksumAddress}`
+        `   ${transferId} ERROR UPDATING NFT DATA FOR ${checksumAddress}`
       );
       console.error(error);
     }
