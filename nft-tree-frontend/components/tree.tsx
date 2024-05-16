@@ -24,12 +24,15 @@ export default function Tree({
   const branchesAll = [...(branches || []), ...(mintingBranches || [])];
 
   const currentDonor =
-    !currentDonorChoosen && branches
+    !currentDonorChoosen &&
+    branches &&
+    branches[branches.length - 1] &&
+    mintingBranches?.length === 0
       ? branches[branches.length - 1][branches[branches.length - 1].length - 1]
       : currentDonorChoosen;
 
   function wait(ms: number) {
-    if (currentDonor) return;
+    if (currentDonorChoosen) return;
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
@@ -198,11 +201,11 @@ export default function Tree({
 
       if (mintingBranches) {
         for (let i = 0; i < mintingBranches.length; i++) {
-          await drawBranch(mintingBranches[i], true, true);
+          await drawMintingBranch(mintingBranches[i], true, true);
         }
       }
 
-      function drawDashedLine(
+      async function drawDashedLine(
         x1: number,
         y1: number,
         x2: number,
@@ -211,17 +214,53 @@ export default function Tree({
         gap: number
       ) {
         const distance = p5.dist(x1, y1, x2, y2);
-        const dashNumber = distance / (len + gap);
-        const deltaX = (x2 - x1) / dashNumber;
-        const deltaY = (y2 - y1) / dashNumber;
+        let currentX = x1;
+        let currentY = y1;
+        const lenRatio = len / (len + gap);
+        const gapRatio = gap / (len + gap);
 
-        for (let i = 0; i < dashNumber; i++) {
-          const x = x1 + deltaX * i;
-          const y = y1 + deltaY * i;
-          if (i % 2 === 0) {
-            p5.line(x, y, x + deltaX, y + deltaY);
+        while (p5.dist(currentX, currentY, x2, y2) > gap) {
+          const nextX = currentX + (((x2 - x1) * lenRatio) / distance) * len;
+          const nextY = currentY + (((y2 - y1) * lenRatio) / distance) * len;
+          p5.stroke(0); // Black color for dash
+          p5.line(currentX, currentY, nextX, nextY);
+
+          currentX = nextX + (((x2 - x1) * gapRatio) / distance) * gap;
+          currentY = nextY + (((y2 - y1) * gapRatio) / distance) * gap;
+
+          if (p5.dist(currentX, currentY, x2, y2) > len) {
+            setHighlihtColor(); // Set color for gap
+            p5.line(nextX, nextY, currentX, currentY);
+            await wait(10);
           }
         }
+      }
+
+      async function drawMintingBranch(branch: string[], isCurrent: boolean) {
+        setColor(isCurrent);
+        let prev: { x: number; y: number } | null = null;
+
+        const reversedBranch = [...branch].reverse();
+
+        for (let point of reversedBranch) {
+          setColor(isCurrent);
+
+          const current = allPoints[point];
+          if (prev) {
+            await drawDashedLine(prev.x, prev.y, current.x, current.y, 3, 5);
+          }
+
+          switchShadow(true, isCurrent);
+          setPointsColor(isCurrent);
+          p5.ellipse(current.x, current.y, 2, 2);
+          // back to "normal" color
+          setColor(isCurrent);
+          switchShadow(false, isCurrent);
+
+          prev = current;
+          await wait(400);
+        }
+        // await wait(50);
       }
 
       async function drawBranch(
@@ -238,7 +277,8 @@ export default function Tree({
           const current = allPoints[point];
           if (prev) {
             if (isMinting) {
-              drawDashedLine(prev.x, prev.y, current.x, current.y, 5, 5);
+              drawDashedLine(prev.x, prev.y, current.x, current.y, 3, 5);
+              // await wait(10);
             } else {
               p5.line(prev.x, prev.y, current.x, current.y);
             }
@@ -250,15 +290,14 @@ export default function Tree({
           switchShadow(true, isCurrent);
           setPointsColor(isCurrent);
           p5.ellipse(current.x, current.y, 2, 2);
-
           // back to "normal" color
           setColor(isCurrent);
           switchShadow(false, isCurrent);
 
           prev = current;
-          await wait(20);
+          await wait(500);
         });
-        await wait(30);
+        await wait(50);
       }
     };
   };

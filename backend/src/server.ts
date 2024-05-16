@@ -58,6 +58,7 @@ app.get("/tree-data", (req: Request, res: Response) => {
         [Op.gt]: lastFetchedId,
       },
     },
+    order: [["id", "ASC"]],
   })
     .then((rows: any) => {
       res.json(rows);
