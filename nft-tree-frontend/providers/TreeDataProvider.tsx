@@ -44,6 +44,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
   const [transfers, setTransfers] = useState<Transfer[]>();
   const [branches, setBranches] = useState<string[][]>();
   const [mintingStatus, setMintingStatus] = useState<boolean>();
+  const [mintingBranches, setMintingBranches] = useState<string[][]>();
 
   useEffect(() => {
     if (data) {
@@ -51,6 +52,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
       const _nfts: NFT[] = [];
       const _transfers: Transfer[] = [];
       const _branches: string[][] = [];
+      const _mintingBranches: string[][] = [];
 
       data.forEach((item: TreeData) => {
         // Process donors
@@ -63,15 +65,17 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
 
         // Process NFTs
         const nftArray = JSON.parse(item.nftIds);
-        nftArray.forEach((nft: { nftId: string; timestamp: number }) => {
-          _nfts.push({
-            address: item.address,
-            imageUrl: item.imageUrl,
-            username: item.username,
-            nftId: parseInt(nft.nftId),
-            timestamp: nft.timestamp.toString(),
+        if (nftArray.length > 0) {
+          nftArray.forEach((nft: { nftId: string; timestamp: number }) => {
+            _nfts.push({
+              address: item.address,
+              imageUrl: item.imageUrl,
+              username: item.username,
+              nftId: parseInt(nft.nftId),
+              timestamp: nft.timestamp.toString(),
+            });
           });
-        });
+        }
 
         // Process transfers
         const steps = JSON.parse(item.steps) as Transfer[];
@@ -87,7 +91,11 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
           new Set(steps.reverse().map((step) => step.to))
         );
         toSteps.push(item.address);
-        _branches.push(toSteps);
+        if (nftArray.length > 0) {
+          _branches.push(toSteps);
+        } else {
+          _mintingBranches.push(toSteps);
+        }
       });
 
       // Reverse the arrays to maintain the original order
@@ -95,6 +103,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
       setNfts(_nfts.reverse());
       setTransfers(_transfers);
       setBranches(_branches);
+      setMintingBranches(_mintingBranches);
 
       // Update lastId if necessary
       if (data.length > 0 && data[data.length - 1].id > lastId) {
@@ -142,6 +151,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
     supply: nfts?.length,
     branches,
     mintingStatus,
+    mintingBranches,
   };
 
   return (
