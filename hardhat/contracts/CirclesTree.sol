@@ -112,30 +112,44 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         _maxMintPerAddress = maxMint;
     }
 
+   function _isApprovedOrOwner(address spender, uint256 tokenId) internal view returns (bool) {
+        address owner = ERC721.ownerOf(tokenId);
+        return (spender == owner || getApproved(tokenId) == spender || isApprovedForAll(owner, spender));
+    }
 
     function transferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) public virtual override(ERC721, IERC721) {
-        revert("Transfers are disabled.");
-    }
+    address from,
+    address to,
+    uint256 tokenId
+) public virtual override(ERC721, IERC721) {
+    require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
+    _transfer(from, to, tokenId);
+}
 
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId,
-        bytes memory _data
-    ) public virtual override(ERC721, IERC721) {
-        revert("Transfers are disabled.");
-    }
+function safeTransferFrom(
+    address from,
+    address to,
+    uint256 tokenId,
+    bytes memory _data
+) public virtual override(ERC721, IERC721) {
+    require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
+    _safeTransfer(from, to, tokenId, _data);
+}
 
-    function approve(
-        address to,
-        uint256 tokenId
-    ) public virtual override(ERC721, IERC721) {
-        revert("Approvals are disabled.");
-    }
+function approve(
+    address to,
+    uint256 tokenId
+) public virtual override(ERC721, IERC721) {
+    address owner = ERC721.ownerOf(tokenId);
+    require(to != owner, "ERC721: approval to current owner");
+
+    require(
+        _msgSender() == owner || isApprovedForAll(owner, _msgSender()),
+        "ERC721: approve caller is not owner nor approved for all"
+    );
+
+    _approve(to, tokenId);
+}
 
     // function _burn(
     //     uint256 tokenId
