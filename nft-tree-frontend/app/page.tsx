@@ -36,15 +36,15 @@ export default function Home() {
           <div className="h-[80vh] landscape:lg:h-full w-full flex flex-col justify-end">
             <Tree currentDonorChoosen={currentDonor} />
           </div>
-          <div className="lg:z-10 lg:absolute portrait:lg:bottom-52 portrait:lg:right-4 landscape:top-4 landscape:left-4">
+          <div className="landscape:z-10 lg:z-10 landscape:absolute lg:absolute portrait:lg:bottom-52 portrait:lg:right-4 landscape:top-4 landscape:left-4">
             <CirclesInfo supply={supply} />
           </div>
           <div className="flex portrait:lg:absolute portrait:lg:bottom-0 w-full items-end p-2 landscape:p-4 mt-4 lg:mt-0 portrait:lg:border-t-2">
-            <div className="flex w-full flex-col lg:flex-row lg:items-end portrait:lg:items-start 2xl:items-start landscape:7xl:w-[720px]">
+            <div className="flex w-full flex-col landscape:flex-row lg:flex-row lg:items-end landscape:items-end portrait:lg:items-start 2xl:items-start landscape:7xl:w-[720px]">
               <div className="relative aspect-square w-28 h-28 lg:w-[160px] lg:h-[160px] border-2 p-2 lg:p-2.5">
                 <Image src={"/QRcode.svg"} alt={""} fill={true} />
               </div>
-              <div className="flex flex-col h-full mt-4 lg:ml-4 lg:mt-0">
+              <div className="flex flex-col h-full mt-4 landscape:ml-4 landscape:mt-0 lg:mt-0">
                 <p className="text-sm font-bold landscape:lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">
                   DONATE, MINT AND GROW THE CIRCLES NETWORK
                 </p>
