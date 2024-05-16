@@ -36,10 +36,10 @@ export default function Tree({
   useEffect(() => {
     const canvaWrapper = document.getElementById("CanvaWrapper");
     if (canvaWrapper) {
-      // console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
+      console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
       setDimensions({
         width: canvaWrapper.offsetWidth,
-        height: canvaWrapper.offsetHeight,
+        height: canvaWrapper.offsetHeight - 160,
       });
     }
 
