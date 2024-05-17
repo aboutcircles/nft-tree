@@ -184,8 +184,6 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
       console.error(error);
     }
 
-    console.log(nftIds, nftIds.length === 0);
-
     if (nftIds.length === 0) {
       `   ${transferId} NO TOKENS WERE MINTED TO ${transfer.fromAddress}`;
 
@@ -195,12 +193,6 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
       });
       return;
     }
-
-    // const steps = await getTransferSteps(
-    //   transfer.transactionHash,
-    //   transfer.amount
-    // );
-    // const steps = await getMockTransferSteps(checksumAddress);
 
     console.log(`   ${transferId} Minted ${nftIds.length} nfts`);
 

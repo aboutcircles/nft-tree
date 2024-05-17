@@ -48,6 +48,8 @@ export async function processTransfers(): Promise<void> {
           blockNumber,
         } = donation;
 
+        if (Number(timestamp) < 1716156000) continue;
+
         let dbTransfer = await findTransfer(transactionHash);
         if (dbTransfer && dbTransfer.processed) continue; // already processed
 
