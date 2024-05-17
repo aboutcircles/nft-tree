@@ -201,7 +201,7 @@ export default function Tree({
 
       if (mintingBranches) {
         for (let i = 0; i < mintingBranches.length; i++) {
-          await drawMintingBranch(mintingBranches[i], true, true);
+          await drawMintingBranch(mintingBranches[i], true);
         }
       }
 

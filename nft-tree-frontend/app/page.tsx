@@ -17,8 +17,14 @@ export default function Home() {
       <div className="w-full h-full flex flex-col items-center overflow-y-scroll">
         <div className="h-full w-full flex flex-col relative landscape:flex-row-reverse">
           <div className="flex flex-col py-4 portrait:p-4 landscape:lg:flex landscape:h-full landscape:max-w-[40%]">
-            <Donations donors={donors || []} currentDonor={currentDonor} setCurrentDonor={setCurrentDonor} />
-            <div className="7xl:text-2xl h-[24px] 7xl:h-[40px] text-right portrait:text-left whitespace-normal m-4 ml-0">{mintingStatus ? "New donation processing..." : ""}</div>
+            <Donations
+              donors={donors || []}
+              currentDonor={currentDonor}
+              setCurrentDonor={setCurrentDonor}
+            />
+            <div className="7xl:text-2xl h-[24px] 7xl:h-[40px] text-right portrait:text-left whitespace-normal m-4 ml-0">
+              {mintingStatus ? "New donation processing..." : ""}
+            </div>
           </div>
           <div className="h-[72vh] landscape:lg:h-full w-full flex flex-col justify-end">
             <Tree currentDonorChoosen={currentDonor} />
@@ -32,10 +38,18 @@ export default function Home() {
                 <Image src={"/QRcode.svg"} alt={""} fill={true} />
               </div>
               <div className="flex flex-col h-full mt-4 ml-2 landscape:ml-4 landscape:mt-0 md:mt-0">
-                <p className="text-sm font-bold landscape:text-[24px] landscape:xl:text-[30px] portrait:md:text-[24px] portrait:lg:text-[32px] md:leading-7 lg:leading-7 mb-2">DONATE, MINT AND GROW THE CIRCLES NETWORK</p>
-                <p className="text-xs md:text-[14px] lg:text-[16px]">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
+                <p className="text-sm font-bold landscape:text-[24px] landscape:xl:text-[30px] portrait:md:text-[24px] portrait:lg:text-[32px] md:leading-7 lg:leading-7 mb-2">
+                  DONATE, MINT AND GROW THE CIRCLES NETWORK
+                </p>
+                <p className="text-xs md:text-[14px] lg:text-[16px]">
+                  Send 100 CRC via the QR code to mint your unique DAPPCON24
+                  NFT.
+                </p>
                 <p className="text-xs md:text-[14px] lg:text-[16px] mt-2">
-                  View the tree and gallery at <Link href={"https://dappcon.aboutcircles.com/"}>dappcon.aboutcircles.com</Link>
+                  View the tree and gallery at{" "}
+                  <Link href={"https://dappcon.aboutcircles.com/"}>
+                    dappcon.aboutcircles.com
+                  </Link>
                 </p>
               </div>
             </div>
@@ -43,7 +57,10 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-black w-full flex justify-end border-t-2 p-2 portrait:md:hidden">
-        <Link className="flex items-center text-sm lg:text-2xl" href={"/gallery"}>
+        <Link
+          className="flex items-center text-sm lg:text-2xl"
+          href={"/gallery"}
+        >
           SEE THE GALLERY
           <ArrowRightIcon width={18} height={18} className="ml-1" />
         </Link>
