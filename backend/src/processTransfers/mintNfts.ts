@@ -184,6 +184,8 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
       console.error(error);
     }
 
+    console.log(nftIds, nftIds.length === 0);
+
     if (nftIds.length === 0) {
       `   ${transferId} NO TOKENS WERE MINTED TO ${transfer.fromAddress}`;
 
