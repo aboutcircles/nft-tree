@@ -9,7 +9,7 @@ export default function Donation({
   crcAmount,
 }: Donor) {
   return (
-    <div className="w-full flex items-center border lg:border-b-0 lg:last:border-b border-slate-300 p-2 lg:p-4 hover:cursor-pointer portrait:min-w-[280px] landscape:7xl:min-w-[300px] landscape:lg:w-[250px]">
+    <div className="w-full flex items-center border lg:border-b-0 lg:last:border-b border-slate-300 p-2 lg:p-4 hover:cursor-pointer portrait:min-w-[200px] landscape:lg:min-w-[300px] landscape:md:w-[250px]">
       {imageUrl ? (
         <Image
           src={imageUrl}

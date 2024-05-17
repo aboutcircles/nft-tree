@@ -16,11 +16,11 @@ export default function Home() {
 
   useEffect(() => {
     // Check screen size on mount
-    setIsSmallScreen(window.innerWidth <= 768);
+    setIsSmallScreen(window.innerWidth <= 680);
 
     // Update screen size on resize
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 768);
+      setIsSmallScreen(window.innerWidth <= 680);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -69,11 +69,11 @@ export default function Home() {
           <div className="flex flex-col text-wrap ml-4">
             <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
             <p className="text-xs lg:text-[16px]">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
-            <p className="text-xs lg:text-[16px] mt-2">Visit dappcon.aboutcircles.com to view the tree and gallery.</p>
+            <p className="text-xs lg:text-[16px] mt-2">View the tree and gallery at <Link href={"https://dappcon.aboutcircles.com/"}>dappcon.aboutcircles.com</Link></p>
           </div>
         </div>
       </div>
-      <div className="w-full flex border-t-2 p-2 portrait:lg:hidden">
+      <div className="w-full flex border-t-2 p-2 portrait:md:hidden">
         <Link className="flex items-center text-sm lg:text-2xl" href={"/"}>
           <ArrowLeftIcon width={18} height={18} className="mr-1" />
           BACK TO THE TREE
