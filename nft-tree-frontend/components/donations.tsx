@@ -20,12 +20,12 @@ export default function Donations({
   return (
     <div className="w-full flex flex-col landscape:p-4 lg:text-[20px] z-20 landscape:h-full overflow-y-hidden">
       Recent Donations
-      <div className="w-full flex landscape:flex-col portrait:lg:grid portrait:lg:grid-cols-3 gap-x-2 portrait:gap-y-2 mt-2 portrait:overflow-x-scroll overflow-y-hidden">
+      <div className="w-full flex landscape:flex-col portrait:md:grid portrait:md:grid-cols-3 gap-x-2 portrait:gap-y-2 mt-2 portrait:overflow-x-scroll overflow-y-hidden">
         {donors.slice(0, 10).map((donor, index) => (
           <div
             key={index}
             className={`${
-              index >= 6 ? "w-full block portrait:lg:hidden" : "w-full"
+              index >= 6 ? "w-full block portrait:md:hidden" : "w-full"
             } ${
               (currentDonor && currentDonor === donor.address) ||
               (!currentDonor && index === 0)

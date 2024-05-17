@@ -16,11 +16,11 @@ export default function Home() {
 
   useEffect(() => {
     // Check screen size on mount
-    setIsSmallScreen(window.innerWidth <= 768);
+    setIsSmallScreen(window.innerWidth <= 680);
 
     // Update screen size on resize
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 768);
+      setIsSmallScreen(window.innerWidth <= 680);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -73,7 +73,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full flex border-t-2 p-2 portrait:lg:hidden">
+      <div className="w-full flex border-t-2 p-2 portrait:md:hidden">
         <Link className="flex items-center text-sm lg:text-2xl" href={"/"}>
           <ArrowLeftIcon width={18} height={18} className="mr-1" />
           BACK TO THE TREE
