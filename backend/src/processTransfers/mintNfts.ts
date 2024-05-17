@@ -186,6 +186,11 @@ export async function mintNfts(transfer: Transfer, toMint: number) {
 
     if (nftIds.length === 0) {
       `   ${transferId} NO TOKENS WERE MINTED TO ${transfer.fromAddress}`;
+
+      // delete "branch in minting" from Tree Data
+      await db.models.TreeData.destroy({
+        where: { id: treeData?.id },
+      });
       return;
     }
 
