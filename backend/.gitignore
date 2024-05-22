@@ -12,3 +12,5 @@ data
 
 ca-certificate.*
 ca-cert.*
+
+test.ts
