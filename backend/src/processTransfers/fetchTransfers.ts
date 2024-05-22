@@ -9,6 +9,7 @@ const fetchRealData = async () => {
       method: "circles_queryHubTransfers",
       params: [
         {
+          Limit: 1000,
           ToAddress: process.env.DONATION_ADDRESS,
         },
       ],
