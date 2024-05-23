@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Mono } from "next/font/google";
 import "./globals.css";
 import { TreeDataProvider } from "@/providers/TreeDataProvider";
+import { CirclesDataProvider } from "@/providers/CirclesDataProvider";
 
 const space_mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={space_mono.className}>
         <TreeDataProvider>
-          <div className="bg-black w-full h-full text-white">{children} </div>
+          <CirclesDataProvider>
+            <div className="bg-black w-full h-full text-white">{children} </div>
+          </CirclesDataProvider>
         </TreeDataProvider>
       </body>
     </html>

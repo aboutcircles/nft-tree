@@ -1,7 +1,9 @@
 "use client";
+
 import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
 import Tree from "@/components/tree";
+import { useCirclesData } from "@/hooks/useCirclesData";
 import { useTreeData } from "@/hooks/useTreeData";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
@@ -10,6 +12,7 @@ import { useState } from "react";
 
 export default function Home() {
   const { donors, supply, mintingStatus } = useTreeData();
+  const { circlesAmount } = useCirclesData();
   console.log(mintingStatus);
   const [currentDonor, setCurrentDonor] = useState<string | null>(null);
   return (
@@ -30,7 +33,7 @@ export default function Home() {
             <Tree currentDonorChoosen={currentDonor} />
           </div>
           <div className="landscape:z-10 md:z-10 landscape:absolute md:absolute portrait:md:bottom-52 portrait:md:right-4 landscape:top-4 landscape:left-4">
-            <CirclesInfo supply={supply} />
+            <CirclesInfo supply={supply} circlesAmount={circlesAmount} />
           </div>
           <div className="flex portrait:md:absolute portrait:md:bottom-0 w-full items-end p-2 landscape:p-4 mt-4 md:mt-0 portrait:md:border-t-2">
             <div className="flex w-full flex-col landscape:flex-row md:flex-row md:items-end landscape:items-end portrait:md:items-start landscape:2xl:items-start landscape:7xl:w-[720px]">

@@ -61,3 +61,7 @@ export type TreeDataContextType = {
   mintingBranches: string[][] | undefined;
   // consolidateTransfer: Node[] | undefined;
 };
+
+export type CirclesDataContextType = {
+  circlesAmount: number | undefined;
+};

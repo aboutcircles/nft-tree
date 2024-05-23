@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@circles/timecircles": "^1.0.6",
     "@heroicons/react": "^2.1.3",
     "@p5-wrapper/next": "^1.0.3",
     "@p5-wrapper/react": "^4.4.0",
@@ -21,6 +22,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/three": "^0.163.0",
+    "axios": "^1.7.2",
     "next": "^14.2.1",
     "react": "^18",
     "react-dom": "^18",
