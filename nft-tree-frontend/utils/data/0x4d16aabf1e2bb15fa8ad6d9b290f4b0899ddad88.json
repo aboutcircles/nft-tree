@@ -1,0 +1,55 @@
+{
+  "requestedAmount": "100000000000000000000",
+  "flow": "100000000000000000000",
+  "transfers": [
+    {
+      "from": "0x4D16AabF1e2BB15fA8Ad6d9B290f4b0899DDad88",
+      "to": "0x27BCc6993fD78E6dE7B44fc54c4f95DF46c86684",
+      "tokenOwner": "0x4D16AabF1e2BB15fA8Ad6d9B290f4b0899DDad88",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x27BCc6993fD78E6dE7B44fc54c4f95DF46c86684",
+      "to": "0xA725939F6de67146B85245B785dbf033703F5bA6",
+      "tokenOwner": "0x27BCc6993fD78E6dE7B44fc54c4f95DF46c86684",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0xA725939F6de67146B85245B785dbf033703F5bA6",
+      "to": "0x992Eb0aeB2635f8BFb4fA4F94d85AFCE19992602",
+      "tokenOwner": "0xA725939F6de67146B85245B785dbf033703F5bA6",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x992Eb0aeB2635f8BFb4fA4F94d85AFCE19992602",
+      "to": "0xa3c280966Bf79dc347F1828005b63D634e5d1a1D",
+      "tokenOwner": "0x992Eb0aeB2635f8BFb4fA4F94d85AFCE19992602",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0xa3c280966Bf79dc347F1828005b63D634e5d1a1D",
+      "to": "0x6FF840eeeFFec0C35F52bB6031a9Ae34524a05b6",
+      "tokenOwner": "0xa3c280966Bf79dc347F1828005b63D634e5d1a1D",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x6FF840eeeFFec0C35F52bB6031a9Ae34524a05b6",
+      "to": "0x2762B964912Ca520C1fa77CE75c5BbD07268718e",
+      "tokenOwner": "0x6FF840eeeFFec0C35F52bB6031a9Ae34524a05b6",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x2762B964912Ca520C1fa77CE75c5BbD07268718e",
+      "to": "0x6FAe976eb90127B895ceDdf8311864cdA42AC6Ac",
+      "tokenOwner": "0x2762B964912Ca520C1fa77CE75c5BbD07268718e",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x6FAe976eb90127B895ceDdf8311864cdA42AC6Ac",
+      "to": "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811",
+      "tokenOwner": "0x6FAe976eb90127B895ceDdf8311864cdA42AC6Ac",
+      "value": "100000000000000000000"
+    }
+  ],
+  "isValid": true
+}

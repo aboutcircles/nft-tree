@@ -1,0 +1,16 @@
+node_modules
+.env
+
+transfers.db
+mintingStatus.db
+
+.vscode
+.DS_Store
+
+dist
+data
+
+ca-certificate.*
+ca-cert.*
+
+test.ts

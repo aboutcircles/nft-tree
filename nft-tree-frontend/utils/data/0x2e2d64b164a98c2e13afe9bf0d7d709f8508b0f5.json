@@ -1,0 +1,115 @@
+{
+  "requestedAmount": "100000000000000000000",
+  "flow": "100000000000000000000",
+  "transfers": [
+    {
+      "from": "0x2E2d64b164a98C2E13afe9BF0d7d709F8508B0f5",
+      "to": "0x50314D2B813351bB6fB207940585c7BA2eC89128",
+      "tokenOwner": "0x2E2d64b164a98C2E13afe9BF0d7d709F8508B0f5",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x50314D2B813351bB6fB207940585c7BA2eC89128",
+      "to": "0x0aC0598118dEe0C5dc2A1E583e0E853e0F567483",
+      "tokenOwner": "0x50314D2B813351bB6fB207940585c7BA2eC89128",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x0aC0598118dEe0C5dc2A1E583e0E853e0F567483",
+      "to": "0x8A56a0fF334e304fd4cb9D53EEa0fbC0157712C7",
+      "tokenOwner": "0x0aC0598118dEe0C5dc2A1E583e0E853e0F567483",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x8A56a0fF334e304fd4cb9D53EEa0fbC0157712C7",
+      "to": "0x784c6B9dB1Bda3645443dF3126977B7F5a78Ff84",
+      "tokenOwner": "0x8A56a0fF334e304fd4cb9D53EEa0fbC0157712C7",
+      "value": "100000000000000000000"
+    },
+    {
+      "from": "0x784c6B9dB1Bda3645443dF3126977B7F5a78Ff84",
+      "to": "0x873eDe70D809BCc5e97ecA618055995314d6379f",
+      "tokenOwner": "0x784c6B9dB1Bda3645443dF3126977B7F5a78Ff84",
+      "value": "27707454695926750310"
+    },
+    {
+      "from": "0x784c6B9dB1Bda3645443dF3126977B7F5a78Ff84",
+      "to": "0xcD5C33B21e0262DD7689e77A9260faec009af886",
+      "tokenOwner": "0x784c6B9dB1Bda3645443dF3126977B7F5a78Ff84",
+      "value": "72292545304073249690"
+    },
+    {
+      "from": "0x873eDe70D809BCc5e97ecA618055995314d6379f",
+      "to": "0x9Ef603478AB273E988FF7ec6b3b44959C7FB9BBb",
+      "tokenOwner": "0x873eDe70D809BCc5e97ecA618055995314d6379f",
+      "value": "27707454695926750310"
+    },
+    {
+      "from": "0xcD5C33B21e0262DD7689e77A9260faec009af886",
+      "to": "0x3699b482888Eb74B4275Beb5cE19aAB13fCc41Ef",
+      "tokenOwner": "0xcD5C33B21e0262DD7689e77A9260faec009af886",
+      "value": "36121049839137885281"
+    },
+    {
+      "from": "0x3699b482888Eb74B4275Beb5cE19aAB13fCc41Ef",
+      "to": "0x9Dc6169402229852fFE71cEcae7e04fbb958c0B5",
+      "tokenOwner": "0x3699b482888Eb74B4275Beb5cE19aAB13fCc41Ef",
+      "value": "36121049839137885281"
+    },
+    {
+      "from": "0x9Dc6169402229852fFE71cEcae7e04fbb958c0B5",
+      "to": "0x7656bC21a681783250b071f3c6ca023AEc923711",
+      "tokenOwner": "0x9Dc6169402229852fFE71cEcae7e04fbb958c0B5",
+      "value": "36121049839137885281"
+    },
+    {
+      "from": "0x7656bC21a681783250b071f3c6ca023AEc923711",
+      "to": "0x42cEDde51198D1773590311E2A340DC06B24cB37",
+      "tokenOwner": "0x7656bC21a681783250b071f3c6ca023AEc923711",
+      "value": "36121049839137885281"
+    },
+    {
+      "from": "0xcD5C33B21e0262DD7689e77A9260faec009af886",
+      "to": "0x9Ef603478AB273E988FF7ec6b3b44959C7FB9BBb",
+      "tokenOwner": "0xcD5C33B21e0262DD7689e77A9260faec009af886",
+      "value": "36171495464935364409"
+    },
+    {
+      "from": "0x9Ef603478AB273E988FF7ec6b3b44959C7FB9BBb",
+      "to": "0x6FF840eeeFFec0C35F52bB6031a9Ae34524a05b6",
+      "tokenOwner": "0x9Ef603478AB273E988FF7ec6b3b44959C7FB9BBb",
+      "value": "63878950160862114719"
+    },
+    {
+      "from": "0x6FF840eeeFFec0C35F52bB6031a9Ae34524a05b6",
+      "to": "0x02B50e87C577084b9659a625870b4A6e8a8E9238",
+      "tokenOwner": "0x6FF840eeeFFec0C35F52bB6031a9Ae34524a05b6",
+      "value": "28629755544294647002"
+    },
+    {
+      "from": "0x02B50e87C577084b9659a625870b4A6e8a8E9238",
+      "to": "0x42cEDde51198D1773590311E2A340DC06B24cB37",
+      "tokenOwner": "0x02B50e87C577084b9659a625870b4A6e8a8E9238",
+      "value": "28629755544294647002"
+    },
+    {
+      "from": "0x42cEDde51198D1773590311E2A340DC06B24cB37",
+      "to": "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811",
+      "tokenOwner": "0x42cEDde51198D1773590311E2A340DC06B24cB37",
+      "value": "64750805383432532283"
+    },
+    {
+      "from": "0x6FF840eeeFFec0C35F52bB6031a9Ae34524a05b6",
+      "to": "0x052b4793d50d37FD3BFcBf93AAC9Cda6292F81Fa",
+      "tokenOwner": "0x4a9aFfA9249F36fd0629f342c182A4e94A13C2e0",
+      "value": "35249194616567467717"
+    },
+    {
+      "from": "0x052b4793d50d37FD3BFcBf93AAC9Cda6292F81Fa",
+      "to": "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811",
+      "tokenOwner": "0x14c16ce62d26Fd51582A646e2e30a3267b1E6D7E",
+      "value": "35249194616567467717"
+    }
+  ],
+  "isValid": true
+}
