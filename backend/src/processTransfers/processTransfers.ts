@@ -33,12 +33,14 @@ const getTotalNftAmountForAddress = async (
 };
 
 export async function processTransfers(): Promise<void> {
+  // give 1 more day to process transfers
+  if (Date.now() / 1000 > Number(process.env.END_TIME) + 86400000) return;
+
   try {
     const response = await fetchTransfers();
     if (response.data && response.data.result) {
       let i = 1;
       for (const donation of response.data.result) {
-        // console.log(`iteration ${i++} of ${response.data.result.length}`);
         const {
           transactionHash,
           fromAddress,
@@ -48,8 +50,10 @@ export async function processTransfers(): Promise<void> {
           blockNumber,
         } = donation;
 
-        if (Number(timestamp) < 1716242400) continue; // start
-        if (Number(timestamp) > 1716516000) continue; // end
+        if (Number(timestamp) < Number(process.env.START_TIME) || 1716242400)
+          continue; // start
+        if (Number(timestamp) > Number(process.env.END_TIME) || 1716516000)
+          continue; // end
 
         let dbTransfer = await findTransfer(transactionHash);
         if (dbTransfer && dbTransfer.processed) continue; // already processed
