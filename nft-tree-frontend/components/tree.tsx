@@ -150,11 +150,27 @@ export default function Tree({
 
       // Calculate y positions based on depth
       const margin = 50;
-      const spacing = (p5.height - 2 * margin) / maxDepth;
+      const height = p5.height - 2 * margin;
+      const gap = height / ((maxDepth * (maxDepth + 1)) / 2);
+
+      const spacings: { [key: number]: number } = {
+        [0]: 0,
+      };
+      let acc = 0;
+      for (let i = 1; i <= maxDepth; i++) {
+        acc += gap * i;
+        spacings[i] = acc;
+      }
 
       Object.keys(allPoints).forEach((key) => {
-        allPoints[key].y = margin + allPoints[key].depth * spacing;
-        // margin + allPoints[key].depth * spacing + allPoints[key].flex;
+        const spacing = allPoints[key].depth * gap;
+        const randomOffset =
+          allPoints[key].depth === 7
+            ? 0
+            : p5.random(-0.4 * spacing, 0.4 * spacing);
+
+        allPoints[key].y =
+          margin + spacings[allPoints[key].depth] + randomOffset;
       });
 
       const rootPoint = branchesAll[0][0];
@@ -179,9 +195,6 @@ export default function Tree({
           }
         });
       });
-
-      // Map to track line usage
-      // const lineUsage: Record<string, number> = {};
 
       let currentId;
 
@@ -258,9 +271,8 @@ export default function Tree({
           switchShadow(false, isCurrent);
 
           prev = current;
-          await wait(400);
+          await wait(10);
         }
-        // await wait(50);
       }
 
       async function drawBranch(
@@ -268,23 +280,20 @@ export default function Tree({
         isCurrent: boolean,
         isMinting: boolean = false
       ) {
+        // console.log(allPoints[branch[0]], branch[0]);
         setColor(isCurrent);
         let prev: { x: number; y: number } | null = null;
 
-        branch.forEach(async (point) => {
+        for (let point of branch) {
           setColor(isCurrent);
 
           const current = allPoints[point];
           if (prev) {
             if (isMinting) {
-              drawDashedLine(prev.x, prev.y, current.x, current.y, 3, 5);
-              // await wait(10);
+              await drawDashedLine(prev.x, prev.y, current.x, current.y, 3, 5);
             } else {
-              p5.line(prev.x, prev.y, current.x, current.y);
+              drawCurvedLine(prev.x, prev.y, current.x, current.y);
             }
-
-            // const lineKey = `${prev.x},${prev.y}-${current.x},${current.y}`;
-            // lineUsage[lineKey] = (lineUsage[lineKey] || 0) + 1;
           }
 
           switchShadow(true, isCurrent);
@@ -295,9 +304,18 @@ export default function Tree({
           switchShadow(false, isCurrent);
 
           prev = current;
-          await wait(500);
-        });
-        await wait(50);
+          await wait(10);
+        }
+        await wait(10);
+      }
+
+      function drawCurvedLine(x1: number, y1: number, x2: number, y2: number) {
+        const controlX1 = x1;
+        const controlY1 = y2;
+        const controlX2 = x2;
+        const controlY2 = y1 + (2 * (y2 - y1)) / 3;
+        p5.noFill();
+        p5.bezier(x1, y1, controlX1, controlY1, controlX2, controlY2, x2, y2);
       }
     };
   };

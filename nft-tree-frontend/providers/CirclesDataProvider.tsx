@@ -8,7 +8,9 @@ import { Address, formatEther } from "viem";
 
 // const circlesTreeAddress = (process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS || "") as Address;
 
-export const CirclesDataContext = createContext<CirclesDataContextType | undefined>(undefined);
+export const CirclesDataContext = createContext<
+  CirclesDataContextType | undefined
+>(undefined);
 
 interface CirclesRpcProviderProps {
   children: React.ReactNode;
@@ -16,7 +18,7 @@ interface CirclesRpcProviderProps {
 
 function roundToNearest(number: number, decimals: number = 0) {
   const factor = Math.pow(10, decimals);
-  console.log((number * factor) / factor);
+  // console.log((number * factor) / factor);
   return Math.round(Math.ceil(number * factor) / factor / 10) * 10;
 }
 
@@ -27,7 +29,9 @@ const convertToHumanCrc = (crcAmountInWei: string, timestamp: string) => {
   return roundToNearest(tcAmount);
 };
 
-export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({ children }) => {
+export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({
+  children,
+}) => {
   const [circlesAmount, setCirclesAmount] = useState(0);
 
   const fetchRealData = async () => {
@@ -52,7 +56,9 @@ export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({ childre
     const fetchData = async () => {
       console.log("fetching circles amount...");
       const data = await fetchRealData();
-      setCirclesAmount(convertToHumanCrc(data.data.result, (Date.now() / 1000).toString()));
+      setCirclesAmount(
+        convertToHumanCrc(data.data.result, (Date.now() / 1000).toString())
+      );
     };
 
     const intervalId = setInterval(fetchData, 5000);
@@ -62,5 +68,9 @@ export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({ childre
 
   const circlesData = { circlesAmount };
 
-  return <CirclesDataContext.Provider value={circlesData}>{children}</CirclesDataContext.Provider>;
+  return (
+    <CirclesDataContext.Provider value={circlesData}>
+      {children}
+    </CirclesDataContext.Provider>
+  );
 };
