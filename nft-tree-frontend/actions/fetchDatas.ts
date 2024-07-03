@@ -48,9 +48,8 @@ export async function fetchFilesData() {
 }
 
 export async function fetchServerData() {
-  const res = await fetch(
-    "https://plankton-app-gvulz.ondigitalocean.app/tree-data"
-  );
+  const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "";
+  const res = await fetch(`${SERVER_URL}/tree-data`);
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");

@@ -22,17 +22,28 @@ export function consolidateTransfers(transfers: Transfer[]): Node[] {
 
   transfers.forEach(({ from, to }) => {
     if (!nodesMap.has(from)) {
-      nodesMap.set(from, { id: from, parents: new Set(), children: new Set(), level: -1});
+      nodesMap.set(from, {
+        id: from,
+        parents: new Set(),
+        children: new Set(),
+        level: -1,
+      });
     }
     if (!nodesMap.has(to)) {
-      nodesMap.set(to, { id: to, parents: new Set(), children: new Set(), level: -1});
+      nodesMap.set(to, {
+        id: to,
+        parents: new Set(),
+        children: new Set(),
+        level: -1,
+      });
     }
 
     nodesMap.get(to)?.children.add(from);
     nodesMap.get(from)?.parents.add(to);
   });
 
-  const rootAddress = "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
+  const rootAddress = (process.env.NEXT_PUBLIC_CIRCLES_TREE_ADDRESS ||
+    "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811") as Address;
   const root = nodesMap.get(rootAddress);
   if (root) {
     root.level = 0;
@@ -51,7 +62,10 @@ function computeLevels(nodesMap: Map<Address, Node>, root: Node) {
     if (currentNode) {
       currentNode.children.forEach((childId) => {
         const childNode = nodesMap.get(childId);
-        if (childNode && (childNode.level === -1 || currentLevel + 1 < childNode.level)) {
+        if (
+          childNode &&
+          (childNode.level === -1 || currentLevel + 1 < childNode.level)
+        ) {
           childNode.level = currentLevel + 1;
           queue.push([childId, currentLevel + 1]);
         }

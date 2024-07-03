@@ -12,6 +12,8 @@ import {
   TreeDataContextType,
 } from "@/types/types";
 
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "";
+
 const circlesTreeAddress = (process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
   "") as Address;
 
@@ -27,11 +29,8 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
   children,
 }) => {
   const [lastId, setLastId] = useState<number>(0);
-  // const [lastEvent, setLastEvent] = useState<number>(0);
-  const URL = "https://plankton-app-gvulz.ondigitalocean.app/tree-data";
-  // fetch(`${url}?id=${id}`).then((res) => res.json());
+  const URL = `${SERVER_URL}/tree-data`;
   const fetcher = async ([url, id]: [string, number]) => {
-    // console.log("fetcher");
     return fetch(`${url}`).then((res) => res.json());
   };
 
@@ -125,13 +124,11 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
     });
 
     return () => unwatch();
-  }, [lastId]);
+  }, [URL, lastId]);
 
   useEffect(() => {
     const fetchMintingStatus = async () => {
-      const response = await fetch(
-        "https://plankton-app-gvulz.ondigitalocean.app/minting-status"
-      );
+      const response = await fetch(`${SERVER_URL}/minting-status`);
       const data = await response.json();
       setMintingStatus(data);
     };

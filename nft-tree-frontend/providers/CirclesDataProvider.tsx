@@ -35,12 +35,15 @@ export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({
   const [circlesAmount, setCirclesAmount] = useState(0);
 
   const fetchRealData = async () => {
+    const circlesTreeAddress =
+      process.env.NEXT_PUBLIC_CIRCLES_TREE_ADDRESS ||
+      "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
     const response = await axios.post(
       "https://circles-rpc.aboutcircles.com/",
       {
         jsonrpc: "2.0",
         method: "circles_getTotalBalance",
-        params: ["0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811"],
+        params: [circlesTreeAddress],
         id: 1,
       },
       {
