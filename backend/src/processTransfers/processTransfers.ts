@@ -34,6 +34,9 @@ const getTotalNftAmountForAddress = async (
 
 export async function processTransfers(): Promise<void> {
   // give 1 more day to process transfers
+  console.log("processTransfers");
+  console.log("Date now", Date.now() / 1000);
+  console.log("END_TIME", process.env.END_TIME);
   if (Date.now() / 1000 > Number(process.env.END_TIME) + 86400000) return;
 
   try {
