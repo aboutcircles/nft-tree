@@ -25,9 +25,9 @@ export default function Tree({
 
   const currentDonor =
     !currentDonorChoosen &&
-    branches &&
-    branches[branches.length - 1] &&
-    mintingBranches?.length === 0
+      branches &&
+      branches[branches.length - 1] &&
+      mintingBranches?.length === 0
       ? branches[branches.length - 1][branches[branches.length - 1].length - 1]
       : currentDonorChoosen;
 
@@ -62,10 +62,12 @@ export default function Tree({
   }, []);
 
   const sketch: Sketch = (p5) => {
+    const seed = 12345;
     p5.setup = () => {
       p5.createCanvas(dimensions.width, dimensions.height);
       p5.noLoop();
       p5.smooth();
+      p5.randomSeed(seed);
     };
 
     const setColor = (isCurrent: boolean) => {
@@ -153,7 +155,7 @@ export default function Tree({
       const height = p5.height - 2 * margin;
       const gap = height / ((maxDepth * (maxDepth + 1)) / 2);
 
-      const spacings: { [key: number]: number } = {
+      const spacings: { [key: number]: number; } = {
         [0]: 0,
       };
       let acc = 0;
@@ -251,7 +253,7 @@ export default function Tree({
 
       async function drawMintingBranch(branch: string[], isCurrent: boolean) {
         setColor(isCurrent);
-        let prev: { x: number; y: number } | null = null;
+        let prev: { x: number; y: number; } | null = null;
 
         const reversedBranch = [...branch].reverse();
 
@@ -282,7 +284,7 @@ export default function Tree({
       ) {
         // console.log(allPoints[branch[0]], branch[0]);
         setColor(isCurrent);
-        let prev: { x: number; y: number } | null = null;
+        let prev: { x: number; y: number; } | null = null;
 
         for (let point of branch) {
           setColor(isCurrent);
