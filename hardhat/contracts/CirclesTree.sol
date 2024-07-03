@@ -20,14 +20,15 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     uint256 public startTime;
     uint256 public endTime;
 
-     constructor(
-        address initialOwner
-        ) ERC721("CirclesTree", "CTR") Ownable(initialOwner) {
-        _tokenIdCounter = 1;
-        // startTime = _startTime;
-        // endTime = _endTime;
-    }
-
+    constructor(
+    address initialOwner,
+    uint256 _startTime,
+    uint256 _endTime
+) ERC721("CirclesTree", "CTR") Ownable(initialOwner) {
+    _tokenIdCounter = 1;
+    startTime = _startTime;
+    endTime = _endTime;
+}
 
     function getNFTID(uint256 tokenId) public pure returns (string memory) {
         return tokenId.toString();
@@ -52,6 +53,7 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
 
     function safeMint(address to) public onlyOwner {
+        require(block.timestamp >= startTime && block.timestamp <= endTime, "Minting is not allowed at this time");
         require(totalSupply() < _maxSupply, "Maximum supply reached");
         require(_mintCounts[to] < _maxMintPerAddress, "Address has reached the maximum mint limit");
         
@@ -63,18 +65,6 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         _mintCounts[to]++;
     }
 
-    // function safeMint(address to) public onlyOwner {
-    //     require(block.timestamp >= startTime && block.timestamp <= endTime, "Minting is not allowed at this time");
-    //     require(totalSupply() < _maxSupply, "Maximum supply reached");
-    //     require(_mintCounts[to] < _maxMintPerAddress, "Address has reached the maximum mint limit");
-        
-    //     uint256 tokenId = _tokenIdCounter;
-    //     _tokenIdCounter += 1;
-    //     _safeMint(to, tokenId);
-    //     _setTokenURI(tokenId, getTokenURI(tokenId));
-        
-    //     _mintCounts[to]++;
-    // }
     
     function setMaxMintPerAddress(uint256 maxMint) external onlyOwner {
         _maxMintPerAddress = maxMint;
