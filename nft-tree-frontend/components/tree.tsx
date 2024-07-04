@@ -25,9 +25,9 @@ export default function Tree({
 
   const currentDonor =
     !currentDonorChoosen &&
-      branches &&
-      branches[branches.length - 1] &&
-      mintingBranches?.length === 0
+    branches &&
+    branches[branches.length - 1] &&
+    mintingBranches?.length === 0
       ? branches[branches.length - 1][branches[branches.length - 1].length - 1]
       : currentDonorChoosen;
 
@@ -143,9 +143,8 @@ export default function Tree({
               depth: maxDepth - index,
               x: 0,
               y: 0,
-              // flex: branch.length - index,
               branchLength: branch.length,
-            }; // Decrease depth as index increases
+            };
           }
         });
       });
@@ -155,7 +154,7 @@ export default function Tree({
       const height = p5.height - 2 * margin;
       const gap = height / ((maxDepth * (maxDepth + 1)) / 2);
 
-      const spacings: { [key: number]: number; } = {
+      const spacings: { [key: number]: number } = {
         [0]: 0,
       };
       let acc = 0;
@@ -224,45 +223,21 @@ export default function Tree({
         x1: number,
         y1: number,
         x2: number,
-        y2: number,
-        len: number,
-        gap: number
+        y2: number
       ) {
-        const distance = p5.dist(x1, y1, x2, y2);
-        let currentX = x1;
-        let currentY = y1;
-        const lenRatio = len / (len + gap);
-        const gapRatio = gap / (len + gap);
-
-        while (p5.dist(currentX, currentY, x2, y2) > gap) {
-          const nextX = currentX + (((x2 - x1) * lenRatio) / distance) * len;
-          const nextY = currentY + (((y2 - y1) * lenRatio) / distance) * len;
-          p5.stroke(0); // Black color for dash
-          p5.line(currentX, currentY, nextX, nextY);
-
-          currentX = nextX + (((x2 - x1) * gapRatio) / distance) * gap;
-          currentY = nextY + (((y2 - y1) * gapRatio) / distance) * gap;
-
-          if (p5.dist(currentX, currentY, x2, y2) > len) {
-            setHighlihtColor(); // Set color for gap
-            p5.line(nextX, nextY, currentX, currentY);
-            await wait(10);
-          }
-        }
+        await drawDashedBezierLine(x2, y2, x1, y1);
       }
 
       async function drawMintingBranch(branch: string[], isCurrent: boolean) {
         setColor(isCurrent);
-        let prev: { x: number; y: number; } | null = null;
+        let prev: { x: number; y: number } | null = null;
 
-        const reversedBranch = [...branch].reverse();
-
-        for (let point of reversedBranch) {
+        for (let point of branch) {
           setColor(isCurrent);
 
           const current = allPoints[point];
           if (prev) {
-            await drawDashedLine(prev.x, prev.y, current.x, current.y, 3, 5);
+            await drawDashedLine(current.x, current.y, prev.x, prev.y);
           }
 
           switchShadow(true, isCurrent);
@@ -282,9 +257,8 @@ export default function Tree({
         isCurrent: boolean,
         isMinting: boolean = false
       ) {
-        // console.log(allPoints[branch[0]], branch[0]);
         setColor(isCurrent);
-        let prev: { x: number; y: number; } | null = null;
+        let prev: { x: number; y: number } | null = null;
 
         for (let point of branch) {
           setColor(isCurrent);
@@ -292,7 +266,7 @@ export default function Tree({
           const current = allPoints[point];
           if (prev) {
             if (isMinting) {
-              await drawDashedLine(prev.x, prev.y, current.x, current.y, 3, 5);
+              await drawDashedLine(prev.x, prev.y, current.x, current.y);
             } else {
               drawCurvedLine(prev.x, prev.y, current.x, current.y);
             }
@@ -318,6 +292,29 @@ export default function Tree({
         const controlY2 = y1 + (2 * (y2 - y1)) / 3;
         p5.noFill();
         p5.bezier(x1, y1, controlX1, controlY1, controlX2, controlY2, x2, y2);
+      }
+
+      async function drawDashedBezierLine(
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number
+      ) {
+        const controlX1 = x1;
+        const controlY1 = y2;
+        const controlX2 = x2;
+        const controlY2 = y1 + (2 * (y2 - y1)) / 3;
+        p5.noFill();
+
+        const steps = 100; // Number of points along the curve
+        const dotSize = 0.5; // Size of each dot
+
+        for (let t = 0; t <= 1; t += 1 / steps) {
+          const x = p5.bezierPoint(x1, controlX1, controlX2, x2, t);
+          const y = p5.bezierPoint(y1, controlY1, controlY2, y2, t);
+          p5.ellipse(x, y, dotSize, dotSize);
+          await wait(10);
+        }
       }
     };
   };
