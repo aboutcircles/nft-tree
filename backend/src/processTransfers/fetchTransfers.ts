@@ -2,6 +2,7 @@ import axios from "axios";
 // import { fetchMockData } from "./mockData.js";
 
 const fetchRealData = async () => {
+  console.log("fetch from", process.env.DONATION_ADDRESS);
   const response = await axios.post(
     "https://circles-rpc.aboutcircles.com/",
     {
@@ -21,6 +22,7 @@ const fetchRealData = async () => {
       },
     }
   );
+  console.log(response.data);
   return response;
 };
 

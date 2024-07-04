@@ -36,8 +36,14 @@ export async function processTransfers(): Promise<void> {
   // give 1 more day to process transfers
   console.log("processTransfers");
   console.log("Date now", Date.now() / 1000);
-  console.log("END_TIME", process.env.END_TIME);
-  if (Date.now() / 1000 > Number(process.env.END_TIME) + 86400000) return;
+  const START_TIME = Number(process.env.START_TIME) || 1716242400;
+  const END_TIME = Number(process.env.END_TIME) || 1716516000;
+  console.log("START_TIME", START_TIME);
+  console.log("END_TIME", END_TIME);
+  console.log(Date.now() / 1000 > END_TIME + 86400000);
+  if (Date.now() / 1000 > END_TIME + 86400000) return;
+
+  console.log(" try to fetch");
 
   try {
     const response = await fetchTransfers();
@@ -53,10 +59,11 @@ export async function processTransfers(): Promise<void> {
           blockNumber,
         } = donation;
 
-        if (Number(timestamp) < Number(process.env.START_TIME) || 1716242400)
-          continue; // start
-        if (Number(timestamp) > Number(process.env.END_TIME) || 1716516000)
-          continue; // end
+        console.log(`${i++} of ${response.data.result.length}`);
+        console.log(Number(timestamp), START_TIME, END_TIME);
+
+        if (Number(timestamp) < START_TIME) continue; // start
+        if (Number(timestamp) > END_TIME) continue; // end
 
         let dbTransfer = await findTransfer(transactionHash);
         if (dbTransfer && dbTransfer.processed) continue; // already processed
