@@ -71,27 +71,27 @@ export default function Home() {
       <div className="w-full overflow-y-scroll p-4 landscape:px-16 grid grid-cols-2 landscape:grid-cols-5 gap-4">
         {searchQuery === ""
           ? // If searchQuery is empty, render all nfts
-            nfts?.map((nft, index) => (
-              <GalleryItem
-                key={index}
-                address={nft.address}
-                imageUrl={nft.imageUrl}
-                username={nft.username}
-                nftId={nft.nftId}
-                timestamp={nft.timestamp}
-              />
-            ))
+          nfts?.map((nft, index) => (
+            <GalleryItem
+              key={index}
+              address={nft.address}
+              imageUrl={nft.imageUrl}
+              username={nft.username}
+              nftId={nft.nftId}
+              timestamp={nft.timestamp}
+            />
+          ))
           : // If searchQuery is not empty, render filtered nfts
-            filteredNfts.map((nft, index) => (
-              <GalleryItem
-                key={index}
-                address={nft.address}
-                imageUrl={nft.imageUrl}
-                username={nft.username}
-                nftId={nft.nftId}
-                timestamp={nft.timestamp}
-              />
-            ))}
+          filteredNfts.map((nft, index) => (
+            <GalleryItem
+              key={index}
+              address={nft.address}
+              imageUrl={nft.imageUrl}
+              username={nft.username}
+              nftId={nft.nftId}
+              timestamp={nft.timestamp}
+            />
+          ))}
       </div>
       <div className="flex w-full items-end p-2 border-t-2 landscape:hidden">
         <div className="flex items-center portrait:lg:items-start">
@@ -100,7 +100,7 @@ export default function Home() {
           </div>
           <div className="flex flex-col text-wrap ml-4">
             <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">
-              DONATE, MINT, AND GROW THE CIRCLES NETWORK
+              MINT AND GROW THE CIRCLES NETWORK
             </p>
             <p className="text-xs lg:text-[16px]">
               Send 100 CRC via the QR code to mint your unique EthCC24 NFT.
