@@ -41,7 +41,7 @@ export default function Tree({
   useEffect(() => {
     const canvaWrapper = document.getElementById("CanvaWrapper");
     if (canvaWrapper) {
-      console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
+      // console.log(canvaWrapper.offsetWidth, canvaWrapper.offsetHeight);
       setDimensions({
         width: canvaWrapper.offsetWidth,
         height: canvaWrapper.offsetHeight,
@@ -248,7 +248,7 @@ export default function Tree({
           switchShadow(false, isCurrent);
 
           prev = current;
-          await wait(10);
+          await wait(5);
         }
       }
 
@@ -282,7 +282,7 @@ export default function Tree({
           prev = current;
           await wait(10);
         }
-        await wait(10);
+        // await wait(10);
       }
 
       function drawCurvedLine(x1: number, y1: number, x2: number, y2: number) {

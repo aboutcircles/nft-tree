@@ -5,7 +5,7 @@ import { Donor } from "@/actions/fetchDatas";
 interface DonationsProps {
   donors: Donor[];
   currentDonor: string | null;
-  setCurrentDonor: (address: string) => void;
+  setCurrentDonor: (address: string | null) => void;
 }
 
 export default function Donations({
@@ -14,7 +14,11 @@ export default function Donations({
   setCurrentDonor,
 }: DonationsProps) {
   const handleClick = (address: string) => {
-    setCurrentDonor(address);
+    if (currentDonor === address) {
+      setCurrentDonor(null);
+    } else {
+      setCurrentDonor(address);
+    }
   };
 
   return (

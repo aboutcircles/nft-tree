@@ -31,11 +31,14 @@ export default function Home() {
     const filtered = nfts?.filter((nft) => {
       if (!isNaN(Number(searchQuery))) {
         // If searchQuery is a number, filter based on nftId
-        console.log(searchQuery);
+        // console.log(searchQuery);
         return nft.nftId === parseInt(searchQuery);
       } else {
         // If searchQuery is not a number, filter based on address or username
-        return nft.address.includes(searchQuery) || nft.username.includes(searchQuery);
+        return (
+          nft.address.includes(searchQuery) ||
+          nft.username.includes(searchQuery)
+        );
       }
     });
     setFilteredNfts(filtered || []);
@@ -43,12 +46,23 @@ export default function Home() {
 
   return (
     <main className="flex flex-col h-screen w-full bg-black text-white">
-      <div className="p-2 flex flex-col items-center justify-center portrait:lg:text-4xl">DAPPCON 2024 MINTER GALLERY</div>
+      <div className="p-2 flex flex-col items-center justify-center portrait:lg:text-4xl">
+        ETHCC 2024 MINTER GALLERY
+      </div>
       {isSmallScreen && (
         <div className="p-4 flex flex-col items-center justify-center border-b-2 border-white">
           <div className="flex items-center">
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search by NFT ID, address, or username" className="border rounded px-2 py-1 bg-black text-white mr-2" />
-            <button onClick={() => setSearchQuery("")} className="bg-transparent text-white px-2 py-1 rounded border border-white">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by NFT ID, address, or username"
+              className="border rounded px-2 py-1 bg-black text-white mr-2"
+            />
+            <button
+              onClick={() => setSearchQuery("")}
+              className="bg-transparent text-white px-2 py-1 rounded border border-white"
+            >
               Clear
             </button>
           </div>
@@ -57,9 +71,27 @@ export default function Home() {
       <div className="w-full overflow-y-scroll p-4 landscape:px-16 grid grid-cols-2 landscape:grid-cols-5 gap-4">
         {searchQuery === ""
           ? // If searchQuery is empty, render all nfts
-            nfts?.map((nft, index) => <GalleryItem key={index} address={nft.address} imageUrl={nft.imageUrl} username={nft.username} nftId={nft.nftId} timestamp={nft.timestamp} />)
+            nfts?.map((nft, index) => (
+              <GalleryItem
+                key={index}
+                address={nft.address}
+                imageUrl={nft.imageUrl}
+                username={nft.username}
+                nftId={nft.nftId}
+                timestamp={nft.timestamp}
+              />
+            ))
           : // If searchQuery is not empty, render filtered nfts
-            filteredNfts.map((nft, index) => <GalleryItem key={index} address={nft.address} imageUrl={nft.imageUrl} username={nft.username} nftId={nft.nftId} timestamp={nft.timestamp} />)}
+            filteredNfts.map((nft, index) => (
+              <GalleryItem
+                key={index}
+                address={nft.address}
+                imageUrl={nft.imageUrl}
+                username={nft.username}
+                nftId={nft.nftId}
+                timestamp={nft.timestamp}
+              />
+            ))}
       </div>
       <div className="flex w-full items-end p-2 border-t-2 landscape:hidden">
         <div className="flex items-center portrait:lg:items-start">
@@ -67,9 +99,18 @@ export default function Home() {
             <Image src={"/QRcode.svg"} alt={""} fill={true} />
           </div>
           <div className="flex flex-col text-wrap ml-4">
-            <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
-            <p className="text-xs lg:text-[16px]">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
-            <p className="text-xs lg:text-[16px] mt-2">View the tree and gallery at <Link href={"https://dappcon.aboutcircles.com/"}>dappcon.aboutcircles.com</Link></p>
+            <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">
+              DONATE, MINT, AND GROW THE CIRCLES NETWORK
+            </p>
+            <p className="text-xs lg:text-[16px]">
+              Send 100 CRC via the QR code to mint your unique EthCC24 NFT.
+            </p>
+            <p className="text-xs lg:text-[16px] mt-2">
+              View the tree and gallery at{" "}
+              <Link href={"https://ethcc.aboutcircles.com/"}>
+                ethcc.aboutcircles.com
+              </Link>
+            </p>
           </div>
         </div>
       </div>

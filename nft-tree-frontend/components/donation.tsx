@@ -16,7 +16,7 @@ export default function Donation({
           alt={""}
           width={25}
           height={25}
-          objectFit="cover"
+          style={{ objectFit: "cover" }}
           className="border-white border w-6 h-6 lg:w-9 lg:h-9"
         />
       ) : (

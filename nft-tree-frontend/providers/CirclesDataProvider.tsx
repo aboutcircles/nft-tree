@@ -6,7 +6,9 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { Address, formatEther } from "viem";
 
-// const circlesTreeAddress = (process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS || "") as Address;
+const CIRCLES_TREE_ADDRESS =
+  process.env.NEXT_PUBLIC_CIRCLES_TREE_ADDRESS ||
+  ("0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811" as Address);
 
 export const CirclesDataContext = createContext<
   CirclesDataContextType | undefined
@@ -35,15 +37,12 @@ export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({
   const [circlesAmount, setCirclesAmount] = useState(0);
 
   const fetchRealData = async () => {
-    const circlesTreeAddress =
-      process.env.NEXT_PUBLIC_CIRCLES_TREE_ADDRESS ||
-      "0x8B8b4BedBea9345be8E2477ADB80Db7D4aA59811";
     const response = await axios.post(
       "https://circles-rpc.aboutcircles.com/",
       {
         jsonrpc: "2.0",
         method: "circles_getTotalBalance",
-        params: [circlesTreeAddress],
+        params: [CIRCLES_TREE_ADDRESS],
         id: 1,
       },
       {
@@ -57,7 +56,7 @@ export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetching circles amount...");
+      // console.log("fetching circles amount...");
       const data = await fetchRealData();
       setCirclesAmount(
         convertToHumanCrc(data.data.result, (Date.now() / 1000).toString())
