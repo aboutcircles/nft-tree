@@ -2,15 +2,14 @@
 
 import CirclesInfo from "@/components/CirclesInfo";
 import Donations from "@/components/donations";
+import MintingStatus from "@/components/mintingStatus";
 import Tree from "@/components/tree";
-import { useTreeData } from "@/hooks/useTreeData";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
-  const { donors, mintingStatus } = useTreeData();
   const [currentDonor, setCurrentDonor] = useState<string | null>(null);
   return (
     <main className="flex flex-col items-center md:h-screen">
@@ -18,12 +17,12 @@ export default function Home() {
         <div className="h-full w-full flex flex-col relative landscape:flex-row-reverse">
           <div className="flex flex-col py-4 portrait:p-4 landscape:lg:flex landscape:h-full landscape:max-w-[40%]">
             <Donations
-              donors={donors || []}
+              // donors={donors || []}
               currentDonor={currentDonor}
               setCurrentDonor={setCurrentDonor}
             />
             <div className="7xl:text-2xl h-[24px] 7xl:h-[40px] text-right portrait:text-left whitespace-normal m-4 ml-0">
-              {mintingStatus ? "New donation processing..." : ""}
+              <MintingStatus />
             </div>
           </div>
           <div className="portrait:h-[72vh] landscape:h-full w-full flex flex-col justify-end">
