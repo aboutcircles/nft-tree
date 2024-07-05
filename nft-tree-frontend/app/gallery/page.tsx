@@ -96,7 +96,7 @@ export default function Home() {
       <div className="flex w-full items-end p-2 border-t-2 landscape:hidden">
         <div className="flex items-center portrait:lg:items-start">
           <div className="relative aspect-square w-24 h-24 lg:w-[160px] lg:h-[160px] border-2 p-2 lg:p-2.5">
-            <Image src={"/QRcode.svg"} alt={""} fill={true} />
+            <Image src={"/QRcode.png"} alt={""} fill={true} />
           </div>
           <div className="flex flex-col text-wrap ml-4">
             <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">

@@ -34,7 +34,7 @@ export default function Home() {
           <div className="flex portrait:md:absolute portrait:md:bottom-0 w-full items-end p-2 landscape:p-4 mt-4 md:mt-0 portrait:md:border-t-2">
             <div className="flex w-full flex-col landscape:flex-row md:flex-row md:items-end landscape:items-end portrait:md:items-start landscape:2xl:items-start landscape:7xl:w-[720px]">
               <div className="relative hidden md:flex aspect-square min-w-28 min-h-28 xl:w-[160px] xl:h-[160px] border-2 p-2 lg:p-2.5">
-                <Image src={"/QRcode.svg"} alt={""} fill={true} />
+                <Image src={"/QRcode.png"} alt={""} fill={true} />
               </div>
               <div className="flex flex-col h-full mt-4 ml-2 landscape:ml-4 landscape:mt-0 md:mt-0">
                 <p className="text-sm font-bold landscape:text-[24px] landscape:xl:text-[30px] portrait:md:text-[24px] portrait:lg:text-[32px] md:leading-7 lg:leading-7 mb-2">

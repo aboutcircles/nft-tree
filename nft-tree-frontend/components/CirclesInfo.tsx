@@ -12,7 +12,7 @@ export default function CirclesInfo() {
       </div>
       <div className="flex flex-col items-end landscape:items-start">
         <p className="text-sm md:text-lg lg:text-2xl">NFTS MINTED</p>{" "}
-        <p className="text-md md:text-2xl lg:text-4xl">{supply || 0}/1000</p>
+        <p className="text-md md:text-2xl lg:text-4xl">{supply || 0}/500</p>
       </div>
       <div className="flex flex-col items-end landscape:items-start">
         <p className="text-sm md:text-lg lg:text-2xl">TOTAL DONATED</p>{" "}
