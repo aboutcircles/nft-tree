@@ -25,7 +25,7 @@ export default function Home() {
               <MintingStatus />
             </div>
           </div>
-          <div className="portrait:h-[72vh] landscape:h-full w-[550px] flex flex-col justify-end">
+          <div className="portrait:h-[72vh] landscape:h-full w-full flex flex-col justify-end">
             <Tree currentDonorChoosen={currentDonor} />
           </div>
           <div className="landscape:z-10 md:z-10 landscape:absolute md:absolute portrait:md:bottom-40 portrait:md:right-4 landscape:top-4 landscape:left-4">
