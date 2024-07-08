@@ -175,7 +175,7 @@ export default function Tree({
       });
 
       const rootPoint = branchesAll[0][0];
-      allPoints[rootPoint].y += 30;
+      // allPoints[rootPoint].y += 10;
 
       // Calculate x positions
       const branchSpacing = p5.width / (branchesAll.length + 1);
