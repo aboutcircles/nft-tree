@@ -41,10 +41,11 @@ export default function Home() {
                   MINT AND GROW THE CIRCLES NETWORK
                 </p>
                 <p className="text-xs md:text-[14px] lg:text-[16px]">
-                  Send 100 CRC via the QR code to mint your unique EthCC24 NFT.
-                  View the tree and gallery at{" "}
-                  <Link href={"https://ethcc.aboutcircles.com/"}>
-                    ethcc.aboutcircles.com
+                  Send 100 CRC via the QR code to mint your unique Circles Builders NFT.</p>
+                <p className="text-xs md:text-[14px] lg:text-[16px] mt-2">
+                  View the tree and gallery at
+                  <Link href={"http://builders24.aboutcircles.com/"}>
+                    builders24.aboutcircles.com
                   </Link>
                 </p>
               </div>

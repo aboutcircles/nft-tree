@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <main className="flex flex-col h-screen w-full bg-black text-white">
       <div className="p-2 flex flex-col items-center justify-center portrait:lg:text-4xl">
-        ETHCC 2024 MINTER GALLERY
+        BUILDERS 2024 MINTER GALLERY
       </div>
       {isSmallScreen && (
         <div className="p-4 flex flex-col items-center justify-center border-b-2 border-white">
@@ -103,12 +103,12 @@ export default function Home() {
               MINT AND GROW THE CIRCLES NETWORK
             </p>
             <p className="text-xs lg:text-[16px]">
-              Send 100 CRC via the QR code to mint your unique EthCC24 NFT.
+              Send 100 CRC via the QR code to mint your unique Circles Builders NFT.
             </p>
             <p className="text-xs lg:text-[16px] mt-2">
               View the tree and gallery at{" "}
-              <Link href={"https://ethcc.aboutcircles.com/"}>
-                ethcc.aboutcircles.com
+              <Link href={"http://builders24.aboutcircles.com/"}>
+                builders24.aboutcircles.com
               </Link>
             </p>
           </div>

@@ -17,14 +17,14 @@ export default function GalleryItem({
       target="_blank"
     >
       <div className="aspect-square w-full flex flex-col justify-between border-b p-1">
-        EthCC 2024
+        Builders 2024
         <div className="w-full flex justify-center my-2">
           <Image
-            src={"/circlesIcon.svg"}
+            src={"/nftIcon.gif"}
             alt={""}
-            width={80}
-            height={80}
-            className="w-20 h-20 portrait:lg:w-44 portrait:lg:h-44"
+            width={100}
+            height={100}
+            className="w-44 h-44 portrait:lg:w-44 portrait:lg:h-44"
           />
         </div>
         <div className="w-full flex justify-between">
