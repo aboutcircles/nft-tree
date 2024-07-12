@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 // import { fetchMockData } from "./mockData.js";
 
 const fetchRealData = async () => {
-  console.log("fetch from", process.env.DONATION_ADDRESS);
+  console.log('fetch from', process.env.DONATION_ADDRESS);
   const response = await axios.post(
-    "https://circles-rpc.aboutcircles.com/",
+    'https://circles-rpc.aboutcircles.com/',
     {
-      jsonrpc: "2.0",
-      method: "circles_queryHubTransfers",
+      jsonrpc: '2.0',
+      method: 'circles_queryHubTransfers',
       params: [
         {
           Limit: 1000,
@@ -18,11 +18,10 @@ const fetchRealData = async () => {
     },
     {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
-  console.log(response.data);
   return response;
 };
 
