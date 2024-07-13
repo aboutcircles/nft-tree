@@ -34,7 +34,7 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         return tokenId.toString();
     }
 
-    string private constant baseURI = "ipfs://bafybeieukurvkaxyglqmwe2fsf5ewgqc6tjbqzk2nec22jgvur533qx3p4";
+    string private constant baseURI = "ipfs://bafybeicaxrmpnfqivag5a7afzel2eeacifpdy6qkk5a7cquit6dcsda7me/";
     function getTokenURI(uint256 tokenId) public pure returns (string memory) {
     return string(abi.encodePacked(
         "data:application/json;base64,",
