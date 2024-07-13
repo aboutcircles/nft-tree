@@ -42,7 +42,7 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
             abi.encodePacked(
                 "{",
                 '"name": "Token of Appreciation NFT#', tokenId.toString(), '",',
-                '"description": "Minted in Eth CC for donating Circles on Gnosis Chain",',
+                '"description": "Minted at Builders 24 for donating Circles on Gnosis Chain",',
                 '"image": "', baseURI, '"',
                 "}"
             )
