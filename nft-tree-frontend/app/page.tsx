@@ -45,13 +45,13 @@ export default function Home() {
                   DONATE, MINT AND GROW THE CIRCLES NETWORK
                 </p>
                 <p className="text-xs md:text-[14px] lg:text-[16px]">
-                  Send 100 CRC via the QR code to mint your unique DAPPCON24
+                  Send 100 CRC via the QR code to mint your unique BKK24
                   NFT.
                 </p>
                 <p className="text-xs md:text-[14px] lg:text-[16px] mt-2">
                   View the tree and gallery at{" "}
-                  <Link href={"https://dappcon.aboutcircles.com/"}>
-                    dappcon.aboutcircles.com
+                  <Link href={"https://devcon.aboutcircles.com/"}>
+                    devcon.aboutcircles.com
                   </Link>
                 </p>
               </div>

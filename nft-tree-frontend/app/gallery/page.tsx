@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col h-screen w-full bg-black text-white">
-      <div className="p-2 flex flex-col items-center justify-center portrait:lg:text-4xl">DAPPCON 2024 MINTER GALLERY</div>
+      <div className="p-2 flex flex-col items-center justify-center portrait:lg:text-4xl">DEVCON 2024 MINTER GALLERY</div>
       {isSmallScreen && (
         <div className="p-4 flex flex-col items-center justify-center border-b-2 border-white">
           <div className="flex items-center">
@@ -68,8 +68,8 @@ export default function Home() {
           </div>
           <div className="flex flex-col text-wrap ml-4">
             <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
-            <p className="text-xs lg:text-[16px]">Send 100 CRC via the QR code to mint your unique DAPPCON24 NFT.</p>
-            <p className="text-xs lg:text-[16px] mt-2">View the tree and gallery at <Link href={"https://dappcon.aboutcircles.com/"}>dappcon.aboutcircles.com</Link></p>
+            <p className="text-xs lg:text-[16px]">Send 100 CRC via the QR code to mint your unique BKK24 NFT.</p>
+            <p className="text-xs lg:text-[16px] mt-2">View the tree and gallery at <Link href={"https://devcon.aboutcircles.com/"}>devcon.aboutcircles.com</Link></p>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function GalleryItem({ address, imageUrl, username, nftId, timest
   return (
     <Link className="min-w-42 max-w-[1570px] flex flex-col justify-between items-center border border-slate-300 text-xs hover:cursor-pointer portrait:lg:text-4xl" href={"https://circles.garden/profile/" + address} target="_blank">
       <div className="aspect-square w-full flex flex-col justify-between border-b p-1">
-        DAPPCON 2024
+        DEVCON 2024
         <div className="w-full flex justify-center my-2">
           <Image src={"/circlesIcon.svg"} alt={""} width={80} height={80} className="w-20 h-20 portrait:lg:w-44 portrait:lg:h-44"/>
         </div>
