@@ -35,18 +35,26 @@ const getTotalNftAmountForAddress = async (
 export async function processTransfers(): Promise<void> {
   try {
     const response = await fetchTransfers();
-    if (response.data && response.data.result) {
+    if (response.data && response.data.result && response.data.result.rows) {
+
+      // console.log("RESULT (truncated):", JSON.stringify(response.data.result, null, 2).substring(0, 2000));
       let i = 1;
-      for (const donation of response.data.result) {
-        // console.log(`iteration ${i++} of ${response.data.result.length}`);
-        const {
-          transactionHash,
-          fromAddress,
-          toAddress,
-          timestamp,
-          amount,
+      for (const donation of response.data.result.rows) {
+        console.log(donation);
+        const [
           blockNumber,
-        } = donation;
+          timestamp,
+          transactionIndex,
+          logIndex,
+          batchIndex,
+          transactionHash,
+          operator,
+          from,
+          to,
+          id,
+          amount,
+          tokenAddress
+         ] = donation;
 
         if (Number(timestamp) < 1716242400) continue; // start
         if (Number(timestamp) > 1716516000) continue; // end
@@ -62,10 +70,10 @@ export async function processTransfers(): Promise<void> {
         // console.log(
         //   `   ${transferId} - nftAmountFromTransfer: ${nftAmountFromTransfer}`
         // );
-        const nftAlreadyMinted = await getTotalNftAmountForAddress(fromAddress);
+        const nftAlreadyMinted = await getTotalNftAmountForAddress(from);
         console.log(`   ${transferId} - nftAlreadyMinted: ${nftAlreadyMinted}`);
-        // max 3 NFTs per address
-        const maxNftsPerAddress = 3;
+        // max 1 NFTs per address
+        const maxNftsPerAddress = 1;
         const remainingNftQuota = maxNftsPerAddress - nftAlreadyMinted;
         const nftAmountToMint = Math.min(
           nftAmountFromTransfer,
@@ -75,7 +83,7 @@ export async function processTransfers(): Promise<void> {
         // console.log(`${transferId} - nftAmountToMint: ${nftAmountToMint}`);
         if (nftAmountToMint > 0) {
           console.log("✨✨✨🚀");
-          console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
+          console.log(`${transferId} - FOUND NEW TRANSFER FROM ${from}`);
 
           try {
             if (dbTransfer) {
@@ -93,8 +101,8 @@ export async function processTransfers(): Promise<void> {
             } else {
               dbTransfer = await db.models.Transfer.create({
                 transactionHash,
-                fromAddress,
-                toAddress,
+                from,
+                to,
                 timestamp,
                 amount,
                 crcAmount,
@@ -120,8 +128,8 @@ export async function processTransfers(): Promise<void> {
           try {
             await db.models.Transfer.upsert({
               transactionHash,
-              fromAddress,
-              toAddress,
+              from,
+              to,
               timestamp,
               amount,
               crcAmount,
@@ -138,9 +146,9 @@ export async function processTransfers(): Promise<void> {
           }
         }
       }
-      // console.log(
-      //   `finish iteration for ${response.data.result.length} transfers`
-      // );
+      console.log(
+        `finish iteration for ${response.data.result.rows.length} transfers`
+      );
     }
   } catch (error) {
     console.error("Error fetching data", error);

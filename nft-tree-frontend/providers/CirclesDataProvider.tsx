@@ -32,7 +32,7 @@ export const CirclesDataProvider: React.FC<CirclesRpcProviderProps> = ({ childre
 
   const fetchRealData = async () => {
     const response = await axios.post(
-      "https://circles-rpc.aboutcircles.com/",
+      "https://rpc.aboutcircles.com/",
       {
         jsonrpc: "2.0",
         method: "circles_getTotalBalance",
