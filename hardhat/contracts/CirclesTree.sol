@@ -17,7 +17,7 @@ contract CirclesTree is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     uint256 private _maxMintPerAddress = 1;
     mapping(address => uint256) private _mintCounts;
     uint256 public startTime;            // unix starttime 1731110400  
-    uint256 public endTime;             // unix endtime 1731801600
+    uint256 public endTime;             // unix endtime 1731844800
 
     constructor(
     address initialOwner,
