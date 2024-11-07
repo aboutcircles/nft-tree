@@ -56,8 +56,8 @@ export async function processTransfers(): Promise<void> {
           tokenAddress
          ] = donation;
 
-        if (Number(timestamp) < 1716242400) continue; // start
-        if (Number(timestamp) > 1716516000) continue; // end
+        if (Number(timestamp) < 1731110400) continue; // start
+        if (Number(timestamp) > 1731844800) continue; // end
 
         let dbTransfer = await findTransfer(transactionHash);
         if (dbTransfer && dbTransfer.processed) continue; // already processed
