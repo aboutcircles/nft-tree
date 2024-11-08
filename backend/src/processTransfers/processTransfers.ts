@@ -35,12 +35,10 @@ const getTotalNftAmountForAddress = async (
 export async function processTransfers(): Promise<void> {
   try {
     const response = await fetchTransfers();
+    console.log("DONATION", response.data.result.rows);
     if (response.data && response.data.result && response.data.result.rows) {
-
-      // console.log("RESULT (truncated):", JSON.stringify(response.data.result, null, 2).substring(0, 2000));
       let i = 1;
       for (const donation of response.data.result.rows) {
-        console.log(donation);
         const [
           blockNumber,
           timestamp,
@@ -54,7 +52,7 @@ export async function processTransfers(): Promise<void> {
           id,
           amount,
           tokenAddress
-         ] = donation;
+        ] = donation;
 
         if (Number(timestamp) < 1731110400) continue; // start
         if (Number(timestamp) > 1731844800) continue; // end

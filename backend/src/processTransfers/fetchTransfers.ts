@@ -16,15 +16,28 @@ const fetchRealData = async () => {
     //   id: 1,
     // },
     {
-      "jsonrpc": "2.0",
-      "id": 1,
-      "method": "circles_query",
-      "params": [
+      jsonrpc: "2.0",
+      id: 1,
+      method: "circles_query",
+      params: [
         {
           Namespace: "CrcV2",
           Table: "StreamCompleted",
           Limit: 10000,
-          To: process.env.DONATION_ADDRESS,
+          Filter: [
+            {
+              Type: "Conjunction",
+              ConjunctionType: "And",
+              Predicates: [
+                {
+                  Type: "FilterPredicate",
+                  FilterType: "Equals",
+                  Column: "to",
+                  Value: process.env.DONATION_ADDRESS
+                }
+              ]
+            }
+          ]
         }
       ]
     },
