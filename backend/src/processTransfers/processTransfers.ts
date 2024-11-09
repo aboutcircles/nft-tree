@@ -1,9 +1,9 @@
-import { db } from "../db/models/index.js";
-import { mintNfts } from "./mintNfts.js";
-import convertToHumanCrc from "../utils/convertToHumanCrc.js";
-import { fetchTransfers } from "./fetchTransfers.js";
-import getNftAmount from "../utils/getNftAmount.js";
-import { Transfer } from "../types/Transfer.js";
+import { db } from '../db/models/index.js';
+import { mintNfts } from './mintNfts.js';
+import { convertCrc } from '../utils/convertToHumanCrc.js';
+import { fetchTransfers } from './fetchTransfers.js';
+import getNftAmount from '../utils/getNftAmount.js';
+import { Transfer } from '../types/Transfer.js';
 
 const findTransfer = async (
   transactionHash: string
@@ -18,7 +18,7 @@ const getTotalNftAmountForAddress = async (
   try {
     const transfers: Transfer[] = await db.models.Transfer.findAll({
       where: { fromAddress: fromAddress },
-      attributes: ["nftMinted"],
+      attributes: ['nftMinted'],
     });
 
     const totalNftAmount = transfers.reduce(
@@ -27,7 +27,7 @@ const getTotalNftAmountForAddress = async (
     );
     return totalNftAmount;
   } catch (err) {
-    console.error("Error fetching NFT amounts", err);
+    console.error('Error fetching NFT amounts', err);
     throw err;
   }
 };
@@ -35,7 +35,6 @@ const getTotalNftAmountForAddress = async (
 export async function processTransfers(): Promise<void> {
   try {
     const response = await fetchTransfers();
-    console.log("DONATION", response.data.result.rows);
     if (response.data && response.data.result && response.data.result.rows) {
       let i = 1;
       for (const donation of response.data.result.rows) {
@@ -47,11 +46,11 @@ export async function processTransfers(): Promise<void> {
           batchIndex,
           transactionHash,
           operator,
-          from,
-          to,
+          fromAddress,
+          toAddress,
           id,
           amount,
-          tokenAddress
+          tokenAddress,
         ] = donation;
 
         if (Number(timestamp) < 1731110400) continue; // start
@@ -60,15 +59,18 @@ export async function processTransfers(): Promise<void> {
         let dbTransfer = await findTransfer(transactionHash);
         if (dbTransfer && dbTransfer.processed) continue; // already processed
 
+        console.log('DONATION', response.data.result.rows);
+
         const transferId = transactionHash.slice(-5);
 
-        const crcAmount = convertToHumanCrc(amount, timestamp);
+        // const crcAmount = convertToHumanCrc(amount, timestamp);
+        const crcAmount = convertCrc(amount);
         console.log(`   ${transferId} - crcAmount: ${crcAmount}`);
         const nftAmountFromTransfer = getNftAmount(crcAmount);
         // console.log(
         //   `   ${transferId} - nftAmountFromTransfer: ${nftAmountFromTransfer}`
         // );
-        const nftAlreadyMinted = await getTotalNftAmountForAddress(from);
+        const nftAlreadyMinted = await getTotalNftAmountForAddress(fromAddress);
         console.log(`   ${transferId} - nftAlreadyMinted: ${nftAlreadyMinted}`);
         // max 1 NFTs per address
         const maxNftsPerAddress = 1;
@@ -80,8 +82,8 @@ export async function processTransfers(): Promise<void> {
         );
         // console.log(`${transferId} - nftAmountToMint: ${nftAmountToMint}`);
         if (nftAmountToMint > 0) {
-          console.log("✨✨✨🚀");
-          console.log(`${transferId} - FOUND NEW TRANSFER FROM ${from}`);
+          console.log('✨✨✨🚀');
+          console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
 
           try {
             if (dbTransfer) {
@@ -99,8 +101,8 @@ export async function processTransfers(): Promise<void> {
             } else {
               dbTransfer = await db.models.Transfer.create({
                 transactionHash,
-                from,
-                to,
+                fromAddress,
+                toAddress,
                 timestamp,
                 amount,
                 crcAmount,
@@ -126,8 +128,8 @@ export async function processTransfers(): Promise<void> {
           try {
             await db.models.Transfer.upsert({
               transactionHash,
-              from,
-              to,
+              fromAddress,
+              toAddress,
               timestamp,
               amount,
               crcAmount,
@@ -149,6 +151,6 @@ export async function processTransfers(): Promise<void> {
       );
     }
   } catch (error) {
-    console.error("Error fetching data", error);
+    console.error('Error fetching data', error);
   }
 }

@@ -8,7 +8,7 @@
     "build": "tsc -p tsconfig.json",
     "server": "npm run prestart && node dist/server.js",
     "dev-processes": "node --loader ts-node/esm src/processes/index.ts",
-    "dev-server": "npm run prestart-dev && node --loader ts-node/esm src/server.ts",
+    "dev-server": "tsc -p tsconfig.json && npm run prestart-dev && node --loader ts-node/esm src/server.ts",
     "db": "node --loader ts-node/esm src/testData/logTablesData.ts",
     "fill-test-db": "node --loader ts-node/esm src/testData/fillTestData.ts",
     "dev": "rm transfers.db && npm run build && npm run server",
