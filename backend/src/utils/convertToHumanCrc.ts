@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
-import { crcToTc } from "@circles/timecircles";
+import { ethers } from 'ethers';
+import { crcToTc } from '@circles/timecircles';
 
 function roundToNearest(number: number, decimals: number = 0) {
   const factor = Math.pow(10, decimals);
@@ -14,6 +14,10 @@ const convertToHumanCrc = (crcAmountInWei: string, timestamp: string) => {
     return roundToNearest(tcAmount, 2); // only for test
   }
   return roundToNearest(tcAmount);
+};
+
+export const convertCrc = (crcAmountInWei: string) => {
+  return Number(ethers.formatEther(crcAmountInWei.toString()));
 };
 
 export default convertToHumanCrc;
