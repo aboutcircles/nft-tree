@@ -9,11 +9,37 @@ export async function getTransferSteps(
   try {
     const response = await axios.post(
       "https://rpc.aboutcircles.com/",
+      // {
+      //   jsonrpc: "2.0",
+      //   method: "circles_queryCrcTransfers",
+      //   params: [{ transactionHash }],
+      //   id: 1,
+      // },
       {
-        jsonrpc: "2.0",
-        method: "circles_queryCrcTransfers",
-        params: [{ transactionHash }],
+        jsonrpc: '2.0',
         id: 1,
+        method: 'circles_query',
+        params: [
+          {
+            Namespace: 'CrcV2',
+            Table: 'TransferSingle',
+            Limit: 10000,
+            Filter: [
+              {
+                Type: 'Conjunction',
+                ConjunctionType: 'And',
+                Predicates: [
+                  {
+                    Type: 'FilterPredicate',
+                    FilterType: 'Equals',
+                    Column: 'transactionHash',
+                    Value: transactionHash,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       {
         headers: {
@@ -24,8 +50,10 @@ export async function getTransferSteps(
 
     const steps = [];
 
-    let currentAddress = response.data.result[0].fromAddress;
-    for (let step of response.data.result) {
+    console.log(response.data.result.rows);
+    // let currentAddress = response.data.result[0].fromAddress;
+    let currentAddress = response.data.result.rows[0].fromAddress;
+    for (let step of response.data.result.rows) {
       if (step.fromAddress === currentAddress) {
         steps.push({
           from: step.fromAddress,

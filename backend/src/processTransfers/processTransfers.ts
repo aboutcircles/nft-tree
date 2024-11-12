@@ -53,13 +53,15 @@ export async function processTransfers(): Promise<void> {
           tokenAddress,
         ] = donation;
 
+        console.log('DONATION', donation);
+
         if (Number(timestamp) < 1731110400) continue; // start
         if (Number(timestamp) > 1731844800) continue; // end
 
         let dbTransfer = await findTransfer(transactionHash);
         if (dbTransfer && dbTransfer.processed) continue; // already processed
 
-        console.log('DONATION', response.data.result.rows);
+       
 
         const transferId = transactionHash.slice(-5);
 
@@ -80,7 +82,7 @@ export async function processTransfers(): Promise<void> {
           remainingNftQuota,
           maxNftsPerAddress
         );
-        // console.log(`${transferId} - nftAmountToMint: ${nftAmountToMint}`);
+        console.log(`${transferId} - nftAmountToMint: ${nftAmountToMint}`);
         if (nftAmountToMint > 0) {
           console.log('✨✨✨🚀');
           console.log(`${transferId} - FOUND NEW TRANSFER FROM ${fromAddress}`);
