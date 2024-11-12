@@ -4,6 +4,9 @@
   "description": "",
   "main": "src/index.ts",
   "type": "module",
+  "engines": {
+    "yarn": "1.22.22"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "server": "npm run prestart && node dist/server.js",
