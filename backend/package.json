@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "engines": {
-    "node": "0.4.0"
+    "yarn": "1.22.22"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
