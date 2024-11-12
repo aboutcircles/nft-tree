@@ -28,7 +28,7 @@ export const TreeDataProvider: React.FC<TreeDataProviderProps> = ({
 }) => {
   const [lastId, setLastId] = useState<number>(0);
   // const [lastEvent, setLastEvent] = useState<number>(0);
-  const URL = "https://plankton-app-gvulz.ondigitalocean.app/tree-data";
+  const URL = "https://shark-app-pmjqo.ondigitalocean.app/tree-data";
   // fetch(`${url}?id=${id}`).then((res) => res.json());
   const fetcher = async ([url, id]: [string, number]) => {
     // console.log("fetcher");

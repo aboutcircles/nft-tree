@@ -54,6 +54,7 @@ export async function getTransferSteps(
     // let currentAddress = response.data.result[0].fromAddress;
     let currentAddress = response.data.result.rows[0].fromAddress;
     for (let step of response.data.result.rows) {
+      if (step.toAddress == "0x0000000000000000000000000000000000000000") continue;
       if (step.fromAddress === currentAddress) {
         steps.push({
           from: step.fromAddress,
