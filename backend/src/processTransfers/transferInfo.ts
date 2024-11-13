@@ -8,7 +8,7 @@ export async function getTransferSteps(
 
   try {
     const response = await axios.post(
-      "https://rpc.aboutcircles.com/",
+      "https://static.94.138.251.148.clients.your-server.de/rpc/",
       // {
       //   jsonrpc: "2.0",
       //   method: "circles_queryCrcTransfers",
