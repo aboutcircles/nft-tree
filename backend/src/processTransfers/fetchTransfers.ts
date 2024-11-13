@@ -4,7 +4,7 @@ import axios from 'axios';
 const fetchRealData = async () => {
   console.log('fetching for', process.env.DONATION_ADDRESS);
   const response = await axios.post(
-    'https://rpc.aboutcircles.com/',
+    'https://static.94.138.251.148.clients.your-server.de/rpc/',
     {
       jsonrpc: '2.0',
       id: 1,
