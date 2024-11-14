@@ -9,7 +9,7 @@ export default function GalleryItem({ address, imageUrl, username, nftId, timest
       <div className="aspect-square w-full flex flex-col justify-between border-b p-1">
         DEVCON 2024
         <div className="w-full flex justify-center my-2">
-          <Image src={"/circlesIcon.svg"} alt={""} width={80} height={80} className="w-20 h-20 portrait:lg:w-44 portrait:lg:h-44"/>
+          <Image src={"/circlesNft.svg"} alt={""} width={80} height={80} className="w-20 h-20 portrait:lg:w-44 portrait:lg:h-44"/>
         </div>
         <div className="w-full flex justify-between">
           <p className="">CIRCLES</p>
