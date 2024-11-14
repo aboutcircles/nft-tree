@@ -15,7 +15,7 @@ export default function CirclesInfo({ supply, circlesAmount }: CirclesInfoProps)
         <p className="text-sm md:text-lg lg:text-2xl">NFTS MINTED</p> <p className="text-md md:text-2xl lg:text-4xl">{supply || 0}/1000</p>
       </div>
       <div className="flex flex-col items-end landscape:items-start">
-        <p className="text-sm md:text-lg lg:text-2xl">TOTAL DONATED</p> <p className="text-md md:text-2xl lg:text-4xl md:portrait:mb-2">{circlesAmount || 0} CRC</p>
+        <p className="text-sm md:text-lg lg:text-2xl">TOTAL COLLECTED</p> <p className="text-md md:text-2xl lg:text-4xl md:portrait:mb-2">{circlesAmount || 0} CRC</p>
       </div>
     </div>
   );

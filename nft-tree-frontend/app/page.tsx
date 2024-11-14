@@ -42,7 +42,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col h-full mt-4 ml-2 landscape:ml-4 landscape:mt-0 md:mt-0">
                 <p className="text-sm font-bold landscape:text-[24px] landscape:xl:text-[30px] portrait:md:text-[24px] portrait:lg:text-[32px] md:leading-7 lg:leading-7 mb-2">
-                  DONATE, MINT AND GROW THE CIRCLES NETWORK
+                  SEND, MINT AND GROW THE CIRCLES NETWORK
                 </p>
                 <p className="text-xs md:text-[14px] lg:text-[16px]">
                   Send 100 CRC via the QR code to mint your unique BKK24

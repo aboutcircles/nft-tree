@@ -67,7 +67,7 @@ export default function Home() {
             <Image src={"/QRcode.svg"} alt={""} fill={true} />
           </div>
           <div className="flex flex-col text-wrap ml-4">
-            <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">DONATE, MINT, AND GROW THE CIRCLES NETWORK</p>
+            <p className="text-sm font-bold lg:text-[30px] portrait:lg:text-[32px] lg:leading-7 mb-2">SEND, MINT, AND GROW THE CIRCLES NETWORK</p>
             <p className="text-xs lg:text-[16px]">Send 100 CRC via the QR code to mint your unique BKK24 NFT.</p>
             <p className="text-xs lg:text-[16px] mt-2">View the tree and gallery at <Link href={"https://devcon.aboutcircles.com/"}>devcon.aboutcircles.com</Link></p>
           </div>
